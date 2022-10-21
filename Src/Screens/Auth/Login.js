@@ -3,7 +3,7 @@ import React from 'react';
 import {fonts} from '../../Constants/Fonts';
 import {hp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
-import CustomTextInput from '../../Components/CustomTextInput';
+// import CustomTextInput from '../../Components/CustomTextInput';
 
 export default function Login() {
   return (
@@ -16,7 +16,7 @@ export default function Login() {
         style={{fontFamily: fonts.regular, fontSize: hp(2), marginTop: hp(2)}}>
         Sign to Continue
       </Text>
-      <CustomTextInput />
+      {/* <CustomTextInput /> */}
     </View>
   );
 }
