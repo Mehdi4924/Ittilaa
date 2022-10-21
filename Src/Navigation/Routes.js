@@ -9,9 +9,10 @@ export default function Routes() {
   const MainStack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <MainStack.Navigator>
+      <MainStack.Navigator screenOptions={{headerShown: false}}>
         <MainStack.Screen name="AuthStack" component={AuthStack} />
         <MainStack.Screen name="BottomNavigator" component={BottomNavigator} />
+      
       </MainStack.Navigator>
     </NavigationContainer>
   );

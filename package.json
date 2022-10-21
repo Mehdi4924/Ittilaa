@@ -3,19 +3,22 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "adb": "adb devices",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
     "start": "react-native start",
+    "ios": "react-native run-ios",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native-stack": "^6.9.1",
+    "@rneui/themed": "^4.0.0-rc.6",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-safe-area-context": "^4.4.1",
-    "react-native-screens": "^3.18.2"
+    "react-native-screens": "^3.18.2",
+    "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.6",
