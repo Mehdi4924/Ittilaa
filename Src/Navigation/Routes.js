@@ -8,8 +8,11 @@ export default function Routes() {
   const MainStack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <MainStack.Navigator>
-        <MainStack.Screen name="AuthStack" component={AuthStack} />
+      <MainStack.Navigator screenOptions={{headerShown: false}}>
+        <MainStack.Screen
+          name="AuthStack"
+          component={AuthStack}
+        />
       </MainStack.Navigator>
     </NavigationContainer>
   );
