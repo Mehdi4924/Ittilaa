@@ -1,4 +1,4 @@
 export const fonts = {
-  bold: 'bold',
-  regular: 'regular',
+  bold: 'Poppins-Bold',
+  regular: 'Poppins-Regular',
 };

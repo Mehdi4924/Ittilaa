@@ -1,26 +1,88 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import * as React from 'react';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {fonts} from '../../Constants/Fonts';
-import {hp} from '../../Constants/Responsive';
+import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomTextInput from '../../Components/CustomTextInput';
+import CustomButton from '../../Components/CustomButton';
 
-export default function Login() {
+export default function Login(props) {
+  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [password, setPassword] = React.useState('');
   return (
-    <View style={styles.container}>
-      <Text
-        style={{fontFamily: fonts.bold, fontSize: hp(2.5), marginTop: hp(10)}}>
-        Welcome Back
-      </Text>
-      <Text
-        style={{fontFamily: fonts.regular, fontSize: hp(2), marginTop: hp(2)}}>
-        Sign to Continue
-      </Text>
-      <CustomTextInput />
-    </View>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <Text style={styles.welcomeText}>Welcome Back</Text>
+        <Text style={styles.continueText}>Sign to Continue</Text>
+        <CustomTextInput
+          iconName={'mobile-phone'}
+          iconType="font-awesome"
+          topText="Phone"
+          placeholder="Please Enter Number"
+          value={phoneNumber}
+          onChangeText={t => setPhoneNumber(t)}
+          textInputContainer={{marginVertical: hp(2), marginTop: hp(4)}}
+        />
+        <CustomTextInput
+          iconName={'lock'}
+          iconType="font-awesome"
+          placeholder="Please Enter Password"
+          topText="Password"
+          value={password}
+          onChangeText={t => setPassword(t)}
+          textInputContainer={{marginVertical: hp(1)}}
+          iconSize={hp(4)}
+        />
+        <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}}>
+          <Text
+            style={{
+              color: colors.primary,
+              fontSize: hp(1.7),
+              fontFamily: fonts.bold,
+            }}>
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
+        <View style={{alignItems: 'center'}}>
+          <CustomButton
+            btnText="Login"
+            indicator={false}
+            onPress={() => null}
+            btnContainer={{marginTop: hp(20)}}
+          />
+          <Text
+            style={{
+              color: colors.secondary,
+              fontFamily: fonts.regular,
+              fontSize: hp(2.2),
+              marginVertical: hp(2),
+            }}>
+            - OR -
+          </Text>
+          <CustomButton
+            btnText="Register Your Agency"
+            indicator={false}
+            onPress={() => props.navigation.navigate('RegisterAgency')}
+            btnContainer={styles.btnContainer}
+          />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.white, alignItems: 'center'},
+  continueText: {fontFamily: fonts.regular, fontSize: hp(2), marginTop: hp(1)},
+  welcomeText: {fontFamily: fonts.bold, fontSize: hp(2.5), marginTop: hp(20)},
+  btnContainer: {
+    backgroundColor: colors.secondary,
+  },
 });

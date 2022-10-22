@@ -6,20 +6,21 @@ import {colors} from '../Constants/Colors';
 import {Icon} from '@rneui/themed';
 export default function CustomTextInput(props) {
   return (
-    <View style={styles.textInputContainer}>
-      <Text style={styles.inputHeading}>Phone</Text>
+    <View style={[styles.textInputContainer, props.textInputContainer]}>
+      <Text style={styles.inputHeading}>{props.topText || 'N/A'}</Text>
       <View style={styles.textInputView}>
         <Icon
           name={props.iconName}
           type={props.iconType}
           color={colors.primary}
-          size={hp(5)}
+          size={props.iconSize ? props.iconSize : hp(5)}
+          style={props.iconStyles}
         />
         <TextInput
           placeholder={props.placeholder}
           value={props.value}
           placeholderTextColor={colors.grey}
-          style={styles.textInputStyles}
+          style={[styles.textInputStyles, props.textInputStyles]}
           onChangeText={props.onChangeText}
         />
       </View>
@@ -30,7 +31,8 @@ export default function CustomTextInput(props) {
 const styles = StyleSheet.create({
   textInputContainer: {
     width: wp(90),
-    flex: 1 / 10,
+    height: hp(8),
+    // flex: 1 / 10,
     justifyContent: 'center',
     paddingHorizontal: wp(5),
     borderRadius: 5,
