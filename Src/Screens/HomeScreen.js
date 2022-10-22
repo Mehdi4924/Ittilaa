@@ -3,13 +3,14 @@ import React from 'react';
 import CustomHeader from '../Components/CustomHeader';
 import {hp, wp} from '../Constants/Responsive';
 import {colors} from '../Constants/Colors';
+import { allImages } from '../Constants/Images';
 
 export default function HomeScreen() {
   return (
     <View>
       <CustomHeader
         headerStyle={styles.headerStyle}
-        leftImage={require('../Assets/Images/logo2.png')}
+        leftImage={allImages.logo1}
         leftImageStyle={{width: wp(50), height: hp(10)}}
         rightIconName='queue'
         rightIconType='material'
