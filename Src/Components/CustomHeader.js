@@ -29,7 +29,8 @@ export default function CustomHeader(props) {
         />
         <TextInput style={props.textInputStyle}
         numberOfLine={1}
-        placeHolder={props.placeHolder}
+        placeholder={props.placeholder}
+        placeholderTextColor={props.placeholderTextColor}
         />
       </View>
     </View>
