@@ -41,31 +41,16 @@ export default function Login(props) {
           iconSize={hp(4)}
         />
         <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}}>
-          <Text
-            style={{
-              color: colors.primary,
-              fontSize: hp(1.7),
-              fontFamily: fonts.bold,
-            }}>
-            Forgot Password?
-          </Text>
+          <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>
           <CustomButton
             btnText="Login"
             indicator={false}
-            onPress={() => null}
+            onPress={() => props.navigation.navigate('BottomNavigator')}
             btnContainer={{marginTop: hp(20)}}
           />
-          <Text
-            style={{
-              color: colors.secondary,
-              fontFamily: fonts.regular,
-              fontSize: hp(2.2),
-              marginVertical: hp(2),
-            }}>
-            - OR -
-          </Text>
+          <Text style={styles.orText}>- OR -</Text>
           <CustomButton
             btnText="Register Your Agency"
             indicator={false}
@@ -84,5 +69,16 @@ const styles = StyleSheet.create({
   welcomeText: {fontFamily: fonts.bold, fontSize: hp(2.5), marginTop: hp(20)},
   btnContainer: {
     backgroundColor: colors.secondary,
+  },
+  forgotText: {
+    color: colors.primary,
+    fontSize: hp(1.7),
+    fontFamily: fonts.bold,
+  },
+  orText: {
+    color: colors.secondary,
+    fontFamily: fonts.regular,
+    fontSize: hp(2.2),
+    marginVertical: hp(2),
   },
 });
