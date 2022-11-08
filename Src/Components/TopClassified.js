@@ -9,32 +9,46 @@ export default function TopClassified(props) {
   return (
     <View>
       <FlatList
-        contentContainerStyle={styles.flatListStyle}
+        contentContainerStyle={props.classifiedFlatListStyle}
         horizontal={props.horizontal}
         showsHorizontalScrollIndicator={false}
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
-          <View key={index} style={styles.cardStyle}>
+          <View key={index} style={props.classifiedCardStyle}>
             <Image
               source={item.image}
-              style={styles.imageStyle}
+              style={props.classifiedImageStyle}
               resizeMode="contain"
             />
-            <View style={styles.titlePriceContainer}>
-              <Text style={styles.titleText}>{item.name}</Text>
-              <Text style={styles.priceText}>{item.price}</Text>
+            <View style={props.classifiedTitlePrice}>
+              <Text style={props.classifiedTitleText}>{item.name}</Text>
+              <Text style={props.classifiedPriceText}>{item.price}</Text>
             </View>
-            <Text style={styles.addressStyle}>{item.address}</Text>
-            <View style={styles.amenitiesContainer}>
-              <View style={styles.amenities}>
+            <View></View>
+            <Text style={props.classifiedAddressStyle}>{item.address}</Text>
+            <View style={styles.classifiedAmenitiesContainer}>
+              <View style={props.classifiedAmenities}>
                 <Icon
                   type="font-awesome"
                   name="bed"
-                  size={10}
+                  size={props.amenitiesIconSize}
                   color={colors.white}
                 />
-                <Text style={styles.amenitiesText}>{item.bedroom}</Text>
+                <Text style={props.classifiedAmenitiesText}>{item.bedRoom}</Text>
+              </View>
+              <View style={props.classifiedAmenities}>
+                <Icon
+                  type="font-awesome"
+                  name="bed"
+                  size={props.amenitiesIconSize}
+                  color={colors.white}
+                />
+                <Text style={props.classifiedAmenitiesText}>{item.bedRoom}</Text>
+              </View>
+              <View style={props.classifiedAmenities}>
+               
+                <Text style={props.classifiedAmenitiesText}>{item.bedRoom}Marla</Text>
               </View>
             </View>
           </View>
@@ -45,56 +59,11 @@ export default function TopClassified(props) {
 }
 
 const styles = StyleSheet.create({
-  cardStyle: {
-    width: wp(40),
-    height: hp(20),
-    backgroundColor: colors.white,
-    elevation: 1,
-    borderRadius: 10,
-    marginRight: wp(3),
-    alignItems: 'center',
-  },
-  flatListStyle: {
-    marginHorizontal: wp(5),
-  },
-  imageStyle: {
-    width: wp(36),
-    height: hp(10),
-    borderRadius: 10,
-    marginTop: hp(1),
-  },
-  titlePriceContainer: {
-    flexDirection: 'row',
-    width: wp(36),
-    justifyContent: 'space-between',
-    marginTop: hp(0.5),
-    alignItems: 'center',
-  },
-  titleText: {
-    fontFamily: fonts.bold,
-    fontSize: hp(1.4),
-    color: colors.secondary,
-    maxWidth: wp(25),
-  },
-  priceText: {
-    fontFamily: fonts.bold,
-    fontSize: hp(1.4),
-    color: colors.primary,
-    textAlign: 'right',
-  },
-  addressStyle: {
-    fontFamily: fonts.regular,
-    fontSize: hp(1),
-    color: colors.grey,
-  },
-  amenities: {
-    paddingHorizontal: wp(2),
-    paddingVertical: hp(1),
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-  },
-  amenitiesText: {
-    fontFamily: fonts.semiBold,
-    fontSize: hp(1.4),
-  },
+  classifiedAmenitiesContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    width:wp(35),
+    
+  }
 });

@@ -1,14 +1,26 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import CustomHeader from '../../Components/CustomHeader';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import {allImages} from '../../Constants/Images';
 import TitaniumFlatlist from '../../Components/TitaniumFlatlist';
-import {titanium, topClassified, topInventories} from '../../Constants/dummyData';
+import {
+  Featured,
+  titanium,
+  topClassified,
+  topInventories,
+} from '../../Constants/dummyData';
 import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
 import TopClassified from '../../Components/TopClassified';
+import FeaturedProjectList from '../../Components/FeaturedProjectList';
 
 export default function HomeScreen() {
   return (
@@ -53,12 +65,45 @@ export default function HomeScreen() {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Classified</Text>
-          <Text style={styles.viewAllText}>View all</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
         </View>
         <TopClassified
           data={topClassified}
           horizontal={true}
+          classifiedFlatListStyle={styles.flatListStyle}
+          classifiedCardStyle={styles.classifiedCardStyle}
+          classifiedImageStyle={styles.classifiedImageStyle}
+          classifiedTitlePrice={styles.classifiedTitlePrice}
+          classifiedTitleText={styles.classifiedTitleText}
+          classifiedPriceText={styles.classifiedPriceText}
+          classifiedAddressStyle={styles.classifiedAddressStyle}
+          classifiedAmenities={styles.classifiedAmenities}
+          classifiedAmenitiesText={styles.classifiedAmenitiesText}
+          amenitiesIconSize={10}
         />
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Featured Projects</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
+        </View>
+        <FeaturedProjectList
+          data={Featured}
+          horizontal={true}
+          featureCard={styles.featureCard}
+          featureImageStyle={styles.featureImageStyle}
+          featureNameText={styles.featureNameText}
+          flatListStyle={styles.flatListStyle}
+        />
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Featured Projects</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{height: hp(4)}}></View>
       </ScrollView>
     </View>
   );
@@ -99,7 +144,7 @@ const styles = StyleSheet.create({
     // marginHorizontal:wp(5),
     marginTop: hp(2),
   },
-  flatListStyle: {marginHorizontal: wp(5)},
+  flatListStyle: {marginHorizontal: wp(5), paddingRight:wp(6)},
   listTitleStyle: {
     maxWidth: wp(20),
     fontFamily: fonts.regular,
@@ -131,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     elevation: 2,
     borderRadius: 14,
-    marginTop:hp(2)
+    marginTop: hp(2),
   },
   profileImgStyle: {
     width: wp(12),
@@ -143,8 +188,86 @@ const styles = StyleSheet.create({
     height: hp(7),
     borderRadius: wp(7),
     backgroundColor: colors.white,
-    elevation:1,
-    alignItems:'center',
-    justifyContent:'center'
+    elevation: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  classifiedCardStyle: {
+    width: wp(40),
+    backgroundColor: colors.white,
+    elevation: 1,
+    borderRadius: 10,
+    marginRight: wp(3),
+    alignItems: 'center',
+    paddingBottom: hp(1),
+  },
+  
+  classifiedImageStyle: {
+    width: wp(36),
+    height: hp(10),
+    borderRadius: 10,
+    marginTop: hp(1),
+  },
+  classifiedTitlePrice: {
+    flexDirection: 'row',
+    width: wp(36),
+    justifyContent: 'space-between',
+    marginTop: hp(0.5),
+    alignItems: 'center',
+  },
+  classifiedTitleText: {
+    fontFamily: fonts.bold,
+    fontSize: hp(1.4),
+    color: colors.secondary,
+    maxWidth: wp(25),
+  },
+  classifiedPriceText: {
+    fontFamily: fonts.bold,
+    fontSize: hp(1.4),
+    color: colors.primary,
+    textAlign: 'right',
+  },
+  classifiedAddressStyle: {
+    fontFamily: fonts.regular,
+    fontSize: hp(1),
+    color: colors.grey,
+    width: wp(35),
+  },
+  classifiedAmenities: {
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(0.2),
+    backgroundColor: colors.primary,
+    flexDirection: 'row',
+    borderRadius: 4,
+    marginTop: hp(1),
+  },
+  classifiedAmenitiesText: {
+    fontFamily: fonts.semiBold,
+    fontSize: hp(1.2),
+    color: 'white',
+    marginLeft: wp(0.5),
+  },
+  featureCard: {
+    width: wp(26),
+    height: hp(15),
+    backgroundColor: colors.white,
+    marginRight: wp(3),
+    alignItems: 'center',
+    borderRadius: hp(1),
+  
+  },
+  featureImageStyle: {
+    width: wp(26),
+    height: hp(8),
+    borderTopRightRadius: hp(1),
+    borderTopLeftRadius: hp(1),
+  },
+  featureNameText: {
+    fontFamily: fonts.medium,
+    fontSize: hp(1.2),
+    color: colors.black,
+    alignSelf: 'flex-start',
+    marginHorizontal: wp(1),
+    marginTop: hp(0.5),
   },
 });
