@@ -5,7 +5,8 @@ import {hp, wp} from '../Constants/Responsive';
 import {colors} from '../Constants/Colors';
 import { allImages } from '../Constants/Images';
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
+  // console.log(props);
   return (
     <View>
       <CustomHeader
@@ -22,7 +23,7 @@ export default function HomeScreen() {
         
 
       />
-      <Text>HomeScreen</Text>
+      <Text onPress={()=> props.navigation.navigate("AppFlow")}>HomeScreen</Text>
     </View>
   );
 }
