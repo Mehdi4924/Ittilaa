@@ -5,7 +5,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthStack from './AuthStack';
 import BottomNavigator from './BottomNavigator';
 import AppFlow from './AppFlow';
-import UserStack from './UserFlow'
 
 export default function Routes() {
   const MainStack = createNativeStackNavigator();
@@ -15,7 +14,6 @@ export default function Routes() {
         <MainStack.Screen name="AuthStack" component={AuthStack} />
         <MainStack.Screen name="BottomNavigator" component={BottomNavigator} />
         <MainStack.Screen name="AppFlow" component={AppFlow} />
-        <MainStack.Screen name="UserStack" component={UserStack} />
       </MainStack.Navigator>
     </NavigationContainer>
   );

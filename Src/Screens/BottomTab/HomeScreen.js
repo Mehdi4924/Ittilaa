@@ -20,8 +20,8 @@ import {
 } from '../../Constants/dummyData';
 import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
-import TopClassified from '../../Components/TopClassified';
 import CustomFlatList from '../../Components/CustomFlatList'
+import TopClassifiedComp from '../../Components/TopClassifiedComp';
 export default function HomeScreen(props) {
   return (
     <View style={styles.mainContainer}>
@@ -38,6 +38,7 @@ export default function HomeScreen(props) {
           textInputStyle={styles.textInputStyle}
           placeholder="Search"
           placeholderTextColor={colors.grey}
+          iconContainer={styles.iconContainer}
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Titanium Agency</Text>
@@ -69,11 +70,11 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Classified</Text>
-          <TouchableOpacity onPress={()=>props.navigation.navigate('UserStack',{Screen:'TopClassified'})}>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'TopClassified'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
-        <TopClassified
+        <TopClassifiedComp
           data={topClassified}
           horizontal={true}
           classifiedFlatListStyle={styles.flatListStyle}
@@ -143,6 +144,12 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     width: wp(75),
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: wp(5),
   },
   cardStyle: {
     height: hp(12),
