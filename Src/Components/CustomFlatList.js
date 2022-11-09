@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, FlatList, Image, Pressable} from 'react-native';
 import React from 'react';
 
-export default function FeaturedProjectList(props) {
+export default function CustomFlatList(props) {
   return (
     <View>
       <FlatList

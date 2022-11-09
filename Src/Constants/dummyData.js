@@ -179,3 +179,35 @@ export const Featured = [
     image: require('../Assets/Images/feature1.jpg'),
   },
 ];
+export const News = [
+  {
+    id: '0',
+    name: 'Sumsung  Housing Schem',
+    image: require('../Assets/Images/news1.jpg'),
+  },
+  {
+    id: '1',
+    name: 'Independence Day of Pakistan',
+    image: require('../Assets/Images/news2.jpg'),
+  },
+  {
+    id: '2',
+    name: 'Sumsung  Housing Schem',
+    image: require('../Assets/Images/news1.jpg'),
+  },
+  {
+    id: '3',
+    name: 'Independence Day of Pakistan',
+    image: require('../Assets/Images/news2.jpg'),
+  },
+  {
+    id: '4',
+    name: 'Sumsung  Housing Schem',
+    image: require('../Assets/Images/news1.jpg'),
+  },
+  {
+    id: '5',
+    name: 'Independence Day of Pakistan',
+    image: require('../Assets/Images/news2.jpg'),
+  },
+];

@@ -8,11 +8,18 @@ export default function CustomHeader(props) {
   return (
     <View style={props.headerStyle}>
       <View style={styles.iconContainer}>
-        <Image
+      {props.leftImage?( <Image
           source={props.leftImage}
           style={props.leftImageStyle}
           resizeMode="contain"
+        />):null}
+        <Icon
+          name={props.leftIconName}
+          type={props.leftIconType}
+          color={props.leftIconColor}
+          size={props.leftIconSize}
         />
+       
         <Icon
           name={props.rightIconName}
           type={props.rightIconType}
