@@ -6,7 +6,7 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import CustomButton from '../../Components/CustomButton';
 
-export default function Inventories() {
+export default function Inventories(props) {
   const listData = [
     {
       company: 'IronStone Equities',
@@ -60,7 +60,11 @@ export default function Inventories() {
                   <CustomButton
                     btnText="See Details"
                     indicator={false}
-                    onPress={() => null}
+                    onPress={() =>
+                      props.navigation.navigate('AppFlow', {
+                        screen: 'InventoryDetails',
+                      })
+                    }
                     btnContainer={styles.btnContainer}
                     btnTextStyles={styles.btnTextStyles}
                   />

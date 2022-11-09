@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
@@ -8,7 +8,7 @@ import {fonts} from '../../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 import CustomLoader from '../../Components/CustomLoader';
 
-export default function Classified() {
+export default function Classified(props) {
   return (
     <View style={styles.container}>
       <Text>Classified</Text>
@@ -16,7 +16,13 @@ export default function Classified() {
       <FlatList
         data={[1, 23, 4, 5, 5, 5, 6]}
         renderItem={({item, index}) => (
-          <View style={styles.listContainer}>
+          <TouchableOpacity
+            style={styles.listContainer}
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {
+                screen: 'ClassifiedDetails',
+              })
+            }>
             <ImageBackground
               style={styles.listImage}
               imageStyle={{
@@ -76,7 +82,7 @@ export default function Classified() {
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
