@@ -10,10 +10,10 @@ import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomHeader from '../../Components/CustomHeader';
 import {fonts} from '../../Constants/Fonts';
-import {topClassified} from '../../Constants/dummyData';
-import TopClassifiedComp from '../../Components/TopClassifiedComp';
+import CustomFlatList from '../../Components/CustomFlatList';
+import {NewsData} from '../../Constants/dummyData';
 
-export default function TopClassified(props) {
+export default function News(props) {
   return (
     <View style={styles.mainContainer}>
       <CustomHeader
@@ -23,30 +23,25 @@ export default function TopClassified(props) {
         leftIconType="material"
         leftIconColor={colors.white}
         leftIconSize={30}
-        onLeftIconPress={()=>props.navigation.goBack()}
+        onLeftIconPress={() => props.navigation.goBack()}
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
         placeholderTextColor={colors.grey}
-        screenTitle="Top Classified"
+        screenTitle="Featured Projects"
         screenTitleStyle={styles.screenTitleStyle}
       />
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Top Classified</Text>
+        <Text style={styles.titleText}>Featured Projects</Text>
       </View>
-      <TopClassifiedComp
-        data={topClassified}
-        numColumns={2}
-        classifiedFlatListStyle={styles.flatListStyle}
-        classifiedCardStyle={styles.classifiedCardStyle}
-        classifiedImageStyle={styles.classifiedImageStyle}
-        classifiedTitlePrice={styles.classifiedTitlePrice}
-        classifiedTitleText={styles.classifiedTitleText}
-        classifiedPriceText={styles.classifiedPriceText}
-        classifiedAddressStyle={styles.classifiedAddressStyle}
-        classifiedAmenities={styles.classifiedAmenities}
-        classifiedAmenitiesText={styles.classifiedAmenitiesText}
-        amenitiesIconSize={10}
+      <CustomFlatList
+        data={NewsData}
+        numColumns={3}
+        featureCard={styles.newsCard}
+        featureImageStyle={styles.newsImageStyle}
+        featureNameText={styles.newsNameText}
+        flatListStyle={styles.flatListStyle}
+        onPress={()=>props.navigation.navigate('NewsDetails')}
       />
     </View>
   );
@@ -104,62 +99,33 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.primary,
   },
-  flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30)},
-  classifiedCardStyle: {
-    width: wp(43),
-    backgroundColor: colors.white,
-    borderRadius: 10,
-    marginHorizontal: wp(2),
-    alignItems: 'center',
-    paddingBottom: hp(1),
-    marginBottom: hp(1.8),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)'
-  },
 
-  classifiedImageStyle: {
-    width: wp(39),
-    height: hp(12),
-    borderRadius: 10,
-    marginTop: hp(1),
-  },
-  classifiedTitlePrice: {
-    flexDirection: 'row',
-    width: wp(36),
-    justifyContent: 'space-between',
-    marginTop: hp(0.5),
+  flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30)},
+  newsCard: {
+    width: wp(28),
+    backgroundColor: colors.white,
+    marginHorizontal: wp(1.5),
     alignItems: 'center',
+    borderRadius: hp(1),
+    borderWidth: 1,
+    borderColor: colors.primary,
+    paddingTop: hp(0.7),
+    paddingBottom: hp(2),
+    marginBottom: hp(1.8),
+    
   },
-  classifiedTitleText: {
-    fontFamily: fonts.bold,
-    fontSize: hp(1.4),
-    color: colors.secondary,
-    maxWidth: wp(25),
+  newsImageStyle: {
+    width: wp(25),
+    height: hp(8),
+    borderRadius: hp(1),
   },
-  classifiedPriceText: {
-    fontFamily: fonts.bold,
-    fontSize: hp(1.4),
-    color: colors.primary,
-    textAlign: 'right',
-  },
-  classifiedAddressStyle: {
-    fontFamily: fonts.regular,
-    fontSize: hp(1),
-    color: colors.grey,
-    width: wp(35),
-  },
-  classifiedAmenities: {
-    paddingHorizontal: wp(2),
-    paddingVertical: hp(0.2),
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-    borderRadius: 4,
-    marginTop: hp(1),
-  },
-  classifiedAmenitiesText: {
-    fontFamily: fonts.semiBold,
-    fontSize: hp(1.2),
-    color: 'white',
-    marginLeft: wp(0.5),
+  newsNameText: {
+    width: wp(23),
+    fontFamily: fonts.medium,
+    fontSize: hp(1.3),
+    color: colors.black,
+    alignSelf: 'flex-start',
+    marginHorizontal: wp(1),
+    marginTop: hp(0.5),
   },
 });

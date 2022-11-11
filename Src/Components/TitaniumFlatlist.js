@@ -9,6 +9,7 @@ export default function TitaniumFlatlist(props) {
       contentContainerStyle={props.flatListStyle}
         horizontal={props.horizontal}
         showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (

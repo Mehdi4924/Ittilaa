@@ -13,7 +13,7 @@ import {allImages} from '../../Constants/Images';
 import TitaniumFlatlist from '../../Components/TitaniumFlatlist';
 import {
   Featured,
-  News,
+  NewsData,
   titanium,
   topClassified,
   topInventories,
@@ -56,7 +56,7 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Inventories</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'TopInventories'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
@@ -75,7 +75,7 @@ export default function HomeScreen(props) {
           </TouchableOpacity>
         </View>
         <TopClassifiedComp
-          data={topClassified}
+          data={topClassified.slice(0,4)}
           horizontal={true}
           classifiedFlatListStyle={styles.flatListStyle}
           classifiedCardStyle={styles.classifiedCardStyle}
@@ -90,12 +90,12 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Featured Projects</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'FeaturedProjects'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
         <CustomFlatList
-          data={Featured}
+          data={Featured.slice(0,5)}
           horizontal={true}
           featureCard={styles.featureCard}
           featureImageStyle={styles.featureImageStyle}
@@ -104,12 +104,12 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>News</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'News'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
         <CustomFlatList
-          data={News}
+          data={NewsData}
           horizontal={true}
           featureCard={styles.newsCard}
           featureImageStyle={styles.newsImageStyle}
@@ -194,9 +194,12 @@ const styles = StyleSheet.create({
     width: wp(75),
     height: hp(30),
     backgroundColor: colors.white,
-    elevation: 2,
+    // elevation: 1,
     borderRadius: 14,
     marginTop: hp(2),
+    marginRight:wp(8),
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.08)'
   },
   profileImgStyle: {
     width: wp(12),
@@ -215,11 +218,12 @@ const styles = StyleSheet.create({
   classifiedCardStyle: {
     width: wp(40),
     backgroundColor: colors.white,
-    elevation: 1,
     borderRadius: 10,
     marginRight: wp(3),
     alignItems: 'center',
     paddingBottom: hp(1),
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.09)'
   },
 
   classifiedImageStyle: {
@@ -274,6 +278,8 @@ const styles = StyleSheet.create({
     marginRight: wp(3),
     alignItems: 'center',
     borderRadius: hp(1),
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.09)'
   },
   featureImageStyle: {
     width: wp(26),

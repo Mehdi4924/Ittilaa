@@ -237,8 +237,38 @@ export const Featured = [
     name: 'Elite Homes Toheed Developersy',
     image: require('../Assets/Images/feature1.jpg'),
   },
+  {
+    id: '6',
+    name: 'Victoria City',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '7',
+    name: 'Elite Homes Toheed Developersy',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '8',
+    name: 'Victoria City',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '9',
+    name: 'Elite Homes Toheed Developersy',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '10',
+    name: 'Victoria City',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '11',
+    name: 'Elite Homes Toheed Developersy',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
 ];
-export const News = [
+export const NewsData = [
   {
     id: '0',
     name: 'Sumsung  Housing Schem',

@@ -10,8 +10,8 @@ import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomHeader from '../../Components/CustomHeader';
 import {fonts} from '../../Constants/Fonts';
-import {topClassified} from '../../Constants/dummyData';
-import TopClassifiedComp from '../../Components/TopClassifiedComp';
+import {Featured} from '../../Constants/dummyData';
+import CustomFlatList from '../../Components/CustomFlatList';
 
 export default function TopClassified(props) {
   return (
@@ -23,30 +23,24 @@ export default function TopClassified(props) {
         leftIconType="material"
         leftIconColor={colors.white}
         leftIconSize={30}
-        onLeftIconPress={()=>props.navigation.goBack()}
+        onLeftIconPress={() => props.navigation.goBack()}
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
         placeholderTextColor={colors.grey}
-        screenTitle="Top Classified"
+        screenTitle="Featured Projects"
         screenTitleStyle={styles.screenTitleStyle}
       />
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Top Classified</Text>
+        <Text style={styles.titleText}>Featured Projects</Text>
       </View>
-      <TopClassifiedComp
-        data={topClassified}
-        numColumns={2}
-        classifiedFlatListStyle={styles.flatListStyle}
-        classifiedCardStyle={styles.classifiedCardStyle}
-        classifiedImageStyle={styles.classifiedImageStyle}
-        classifiedTitlePrice={styles.classifiedTitlePrice}
-        classifiedTitleText={styles.classifiedTitleText}
-        classifiedPriceText={styles.classifiedPriceText}
-        classifiedAddressStyle={styles.classifiedAddressStyle}
-        classifiedAmenities={styles.classifiedAmenities}
-        classifiedAmenitiesText={styles.classifiedAmenitiesText}
-        amenitiesIconSize={10}
+      <CustomFlatList
+        data={Featured}
+        numColumns={3}
+        featureCard={styles.featureCard}
+        featureImageStyle={styles.featureImageStyle}
+        featureNameText={styles.featureNameText}
+        flatListStyle={styles.flatListStyle}
       />
     </View>
   );
@@ -104,17 +98,41 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.primary,
   },
+  featureCard: {
+    width: wp(26),
+    height: hp(15),
+    backgroundColor: colors.white,
+    marginHorizontal: wp(1.5),
+    alignItems: 'center',
+    borderRadius: hp(1),
+    marginBottom:hp(1.5),
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.08)'
+  },
+  featureImageStyle: {
+    width: wp(26),
+    height: hp(8),
+    borderTopRightRadius: hp(1),
+    borderTopLeftRadius: hp(1),
+  },
+  featureNameText: {
+    fontFamily: fonts.medium,
+    fontSize: hp(1.2),
+    color: colors.black,
+    alignSelf: 'flex-start',
+    marginHorizontal: wp(1),
+    marginTop: hp(0.5),
+  },
   flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30)},
   classifiedCardStyle: {
     width: wp(43),
     backgroundColor: colors.white,
+    elevation: 1,
     borderRadius: 10,
     marginHorizontal: wp(2),
     alignItems: 'center',
     paddingBottom: hp(1),
     marginBottom: hp(1.8),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)'
   },
 
   classifiedImageStyle: {

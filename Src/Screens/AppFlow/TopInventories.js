@@ -10,10 +10,10 @@ import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomHeader from '../../Components/CustomHeader';
 import {fonts} from '../../Constants/Fonts';
-import {topClassified} from '../../Constants/dummyData';
-import TopClassifiedComp from '../../Components/TopClassifiedComp';
+import { topInventories} from '../../Constants/dummyData';
+import InventoriesComp from '../../Components/InventoriesComp';
 
-export default function TopClassified(props) {
+export default function TopInventories(props) {
   return (
     <View style={styles.mainContainer}>
       <CustomHeader
@@ -28,26 +28,19 @@ export default function TopClassified(props) {
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
         placeholderTextColor={colors.grey}
-        screenTitle="Top Classified"
+        screenTitle="Top Inventories"
         screenTitleStyle={styles.screenTitleStyle}
       />
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Top Classified</Text>
+        <Text style={styles.titleText}>Top Inventories</Text>
       </View>
-      <TopClassifiedComp
-        data={topClassified}
-        numColumns={2}
-        classifiedFlatListStyle={styles.flatListStyle}
-        classifiedCardStyle={styles.classifiedCardStyle}
-        classifiedImageStyle={styles.classifiedImageStyle}
-        classifiedTitlePrice={styles.classifiedTitlePrice}
-        classifiedTitleText={styles.classifiedTitleText}
-        classifiedPriceText={styles.classifiedPriceText}
-        classifiedAddressStyle={styles.classifiedAddressStyle}
-        classifiedAmenities={styles.classifiedAmenities}
-        classifiedAmenitiesText={styles.classifiedAmenitiesText}
-        amenitiesIconSize={10}
-      />
+      <InventoriesComp
+          data={topInventories}
+          inventoryCard={styles.inventoryCard}
+          flatListStyle={styles.flatListStyle}
+          profileImgStyle={styles.profileImgStyle}
+          profileImgContainer={styles.profileImgContainer}
+        />
     </View>
   );
 }
@@ -104,62 +97,28 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.primary,
   },
-  flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30)},
-  classifiedCardStyle: {
-    width: wp(43),
+  flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30),},
+  inventoryCard: {
+    width: wp(90),
     backgroundColor: colors.white,
-    borderRadius: 10,
-    marginHorizontal: wp(2),
-    alignItems: 'center',
-    paddingBottom: hp(1),
-    marginBottom: hp(1.8),
+    borderRadius: 14,
+    marginTop: hp(2),
     borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)'
+    borderColor:'rgba(0,0,0,0.08)',
+    paddingBottom:hp(2)
   },
-
-  classifiedImageStyle: {
-    width: wp(39),
-    height: hp(12),
-    borderRadius: 10,
-    marginTop: hp(1),
+  profileImgStyle: {
+    width: wp(12),
+    height: hp(6),
+    borderRadius: wp(8),
   },
-  classifiedTitlePrice: {
-    flexDirection: 'row',
-    width: wp(36),
-    justifyContent: 'space-between',
-    marginTop: hp(0.5),
+  profileImgContainer: {
+    width: wp(14),
+    height: hp(7),
+    borderRadius: wp(7),
+    backgroundColor: colors.white,
+    elevation: 1,
     alignItems: 'center',
-  },
-  classifiedTitleText: {
-    fontFamily: fonts.bold,
-    fontSize: hp(1.4),
-    color: colors.secondary,
-    maxWidth: wp(25),
-  },
-  classifiedPriceText: {
-    fontFamily: fonts.bold,
-    fontSize: hp(1.4),
-    color: colors.primary,
-    textAlign: 'right',
-  },
-  classifiedAddressStyle: {
-    fontFamily: fonts.regular,
-    fontSize: hp(1),
-    color: colors.grey,
-    width: wp(35),
-  },
-  classifiedAmenities: {
-    paddingHorizontal: wp(2),
-    paddingVertical: hp(0.2),
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-    borderRadius: 4,
-    marginTop: hp(1),
-  },
-  classifiedAmenitiesText: {
-    fontFamily: fonts.semiBold,
-    fontSize: hp(1.2),
-    color: 'white',
-    marginLeft: wp(0.5),
+    justifyContent: 'center',
   },
 });

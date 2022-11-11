@@ -7,11 +7,12 @@ export default function CustomFlatList(props) {
       <FlatList
         contentContainerStyle={props.flatListStyle}
         horizontal={props.horizontal}
+        numColumns={props.numColumns}
         showsHorizontalScrollIndicator={false}
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
-          <Pressable key={index}>
+          <Pressable key={index} onPress={props.onPress}>
             <View style={props.featureCard}>
               <Image
                 source={item.image}
