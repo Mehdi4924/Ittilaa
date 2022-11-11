@@ -12,12 +12,13 @@ export default function InventoriesComp(props) {
         contentContainerStyle={props.flatListStyle}
         horizontal={props.horizontal}
         showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
           <View
             key={index}
-            style={{...props.inventoryCard, marginRight: wp(8)}}>
+            style={props.inventoryCard}>
             <View style={styles.profileContainer}>
               <View style={props.profileImgContainer}>
                 <Image

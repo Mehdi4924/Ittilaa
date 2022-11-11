@@ -13,16 +13,16 @@ import {allImages} from '../../Constants/Images';
 import TitaniumFlatlist from '../../Components/TitaniumFlatlist';
 import {
   Featured,
+  NewsData,
   titanium,
   topClassified,
   topInventories,
 } from '../../Constants/dummyData';
 import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
-import TopClassified from '../../Components/TopClassified';
-import FeaturedProjectList from '../../Components/FeaturedProjectList';
-
-export default function HomeScreen() {
+import CustomFlatList from '../../Components/CustomFlatList'
+import TopClassifiedComp from '../../Components/TopClassifiedComp';
+export default function HomeScreen(props) {
   return (
     <View style={styles.mainContainer}>
       <ScrollView>
@@ -38,10 +38,13 @@ export default function HomeScreen() {
           textInputStyle={styles.textInputStyle}
           placeholder="Search"
           placeholderTextColor={colors.grey}
+          iconContainer={styles.iconContainer}
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Titanium Agency</Text>
-          <Text style={styles.viewAllText}>View all</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
         </View>
         <TitaniumFlatlist
           horizontal={true}
@@ -53,7 +56,9 @@ export default function HomeScreen() {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Inventories</Text>
-          <Text style={styles.viewAllText}>View all</Text>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'TopInventories'})}>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
         </View>
         <InventoriesComp
           data={topInventories}
@@ -65,12 +70,12 @@ export default function HomeScreen() {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Classified</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'TopClassified'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
-        <TopClassified
-          data={topClassified}
+        <TopClassifiedComp
+          data={topClassified.slice(0,4)}
           horizontal={true}
           classifiedFlatListStyle={styles.flatListStyle}
           classifiedCardStyle={styles.classifiedCardStyle}
@@ -85,12 +90,12 @@ export default function HomeScreen() {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Featured Projects</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'FeaturedProjects'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
-        <FeaturedProjectList
-          data={Featured}
+        <CustomFlatList
+          data={Featured.slice(0,5)}
           horizontal={true}
           featureCard={styles.featureCard}
           featureImageStyle={styles.featureImageStyle}
@@ -98,11 +103,20 @@ export default function HomeScreen() {
           flatListStyle={styles.flatListStyle}
         />
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Featured Projects</Text>
-          <TouchableOpacity>
+          <Text style={styles.titleText}>News</Text>
+          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'News'})}>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
+        <CustomFlatList
+          data={NewsData}
+          horizontal={true}
+          featureCard={styles.newsCard}
+          featureImageStyle={styles.newsImageStyle}
+          featureNameText={styles.newsNameText}
+          flatListStyle={styles.flatListStyle}
+        />
+
         <View style={{height: hp(4)}}></View>
       </ScrollView>
     </View>
@@ -131,6 +145,12 @@ const styles = StyleSheet.create({
   textInputStyle: {
     width: wp(75),
   },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: wp(5),
+  },
   cardStyle: {
     height: hp(12),
     width: wp(24),
@@ -144,7 +164,7 @@ const styles = StyleSheet.create({
     // marginHorizontal:wp(5),
     marginTop: hp(2),
   },
-  flatListStyle: {marginHorizontal: wp(5), paddingRight:wp(6)},
+  flatListStyle: {marginHorizontal: wp(5), paddingRight: wp(6)},
   listTitleStyle: {
     maxWidth: wp(20),
     fontFamily: fonts.regular,
@@ -174,9 +194,12 @@ const styles = StyleSheet.create({
     width: wp(75),
     height: hp(30),
     backgroundColor: colors.white,
-    elevation: 2,
+    // elevation: 1,
     borderRadius: 14,
     marginTop: hp(2),
+    marginRight:wp(8),
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.08)'
   },
   profileImgStyle: {
     width: wp(12),
@@ -195,13 +218,14 @@ const styles = StyleSheet.create({
   classifiedCardStyle: {
     width: wp(40),
     backgroundColor: colors.white,
-    elevation: 1,
     borderRadius: 10,
     marginRight: wp(3),
     alignItems: 'center',
     paddingBottom: hp(1),
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.09)'
   },
-  
+
   classifiedImageStyle: {
     width: wp(36),
     height: hp(10),
@@ -254,7 +278,8 @@ const styles = StyleSheet.create({
     marginRight: wp(3),
     alignItems: 'center',
     borderRadius: hp(1),
-  
+    borderWidth:.5,
+    borderColor:'rgba(0,0,0,0.09)'
   },
   featureImageStyle: {
     width: wp(26),
@@ -263,6 +288,31 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: hp(1),
   },
   featureNameText: {
+    fontFamily: fonts.medium,
+    fontSize: hp(1.2),
+    color: colors.black,
+    alignSelf: 'flex-start',
+    marginHorizontal: wp(1),
+    marginTop: hp(0.5),
+  },
+  newsCard: {
+    width: wp(26),
+    height: hp(15),
+    backgroundColor: colors.white,
+    marginRight: wp(3),
+    alignItems: 'center',
+    borderRadius: hp(1),
+    borderWidth: 1,
+    borderColor: colors.primary,
+    paddingVertical: hp(0.5),
+  },
+  newsImageStyle: {
+    width: wp(23),
+    height: hp(8),
+    borderRadius: hp(1),
+  },
+  newsNameText: {
+    width: wp(23),
     fontFamily: fonts.medium,
     fontSize: hp(1.2),
     color: colors.black,

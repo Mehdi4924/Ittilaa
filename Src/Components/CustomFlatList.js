@@ -1,17 +1,18 @@
 import {StyleSheet, Text, View, FlatList, Image, Pressable} from 'react-native';
 import React from 'react';
 
-export default function FeaturedProjectList(props) {
+export default function CustomFlatList(props) {
   return (
     <View>
       <FlatList
         contentContainerStyle={props.flatListStyle}
         horizontal={props.horizontal}
+        numColumns={props.numColumns}
         showsHorizontalScrollIndicator={false}
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
-          <Pressable key={index}>
+          <Pressable key={index} onPress={props.onPress}>
             <View style={props.featureCard}>
               <Image
                 source={item.image}

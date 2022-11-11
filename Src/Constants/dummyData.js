@@ -146,6 +146,65 @@ export const topClassified = [
     washroom: 2,
     plot: '5 Marla',
   },
+  {
+    id: '6',
+    name: 'House for Sale',
+    address: 'Tulip Ext. Block, Bahria Town Lahore',
+    image: require('../Assets/Images/home1.jpg'),
+    price: '55 Lakh',
+    bedRoom: 3,
+    washroom: 2,
+    plot: '5 Marla',
+  },
+  {
+    id: '7',
+    name: 'House for Sale',
+    address: 'Tulip Ext. Block, Bahria Town Lahore',
+    image: require('../Assets/Images/home1.jpg'),
+    price: '55 Lakh',
+    bedRoom: 3,
+    washoom: 2,
+    plot: '5 Marla',
+  },
+  {
+    id: '8',
+    name: 'House for Sale',
+    address: 'Tulip Ext. Block, Bahria Town Lahore',
+    image: require('../Assets/Images/home1.jpg'),
+    price: '55 Lakh',
+    bedRoom: 3,
+    washroom: 2,
+    plot: '5 Marla',
+  },
+  {
+    id: '9',
+    name: 'House for Sale',
+    address: 'Tulip Ext. Block, Bahria Town Lahore',
+    image: require('../Assets/Images/home1.jpg'),
+    price: '55 Lakh',
+    bedRoom: 3,
+    washroom: 2,
+    plot: '5 Marla',
+  },
+  {
+    id: '10',
+    name: 'House for Sale',
+    address: 'Tulip Ext. Block, Bahria Town Lahore',
+    image: require('../Assets/Images/home1.jpg'),
+    price: '55 Lakh',
+    bedRoom: 3,
+    washroom: 2,
+    plot: '5 Marla',
+  },
+  {
+    id: '11',
+    name: 'House for Sale',
+    address: 'Tulip Ext. Block, Bahria Town Lahore',
+    image: require('../Assets/Images/home1.jpg'),
+    bedRoom: 3,
+    washroom: 2,
+    plot: '5 Marla',
+  },
 ];
 export const Featured = [
   {
@@ -177,5 +236,67 @@ export const Featured = [
     id: '5',
     name: 'Elite Homes Toheed Developersy',
     image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '6',
+    name: 'Victoria City',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '7',
+    name: 'Elite Homes Toheed Developersy',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '8',
+    name: 'Victoria City',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '9',
+    name: 'Elite Homes Toheed Developersy',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '10',
+    name: 'Victoria City',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+  {
+    id: '11',
+    name: 'Elite Homes Toheed Developersy',
+    image: require('../Assets/Images/feature1.jpg'),
+  },
+];
+export const NewsData = [
+  {
+    id: '0',
+    name: 'Sumsung  Housing Schem',
+    image: require('../Assets/Images/news1.jpg'),
+  },
+  {
+    id: '1',
+    name: 'Independence Day of Pakistan',
+    image: require('../Assets/Images/news2.jpg'),
+  },
+  {
+    id: '2',
+    name: 'Sumsung  Housing Schem',
+    image: require('../Assets/Images/news1.jpg'),
+  },
+  {
+    id: '3',
+    name: 'Independence Day of Pakistan',
+    image: require('../Assets/Images/news2.jpg'),
+  },
+  {
+    id: '4',
+    name: 'Sumsung  Housing Schem',
+    image: require('../Assets/Images/news1.jpg'),
+  },
+  {
+    id: '5',
+    name: 'Independence Day of Pakistan',
+    image: require('../Assets/Images/news2.jpg'),
   },
 ];
