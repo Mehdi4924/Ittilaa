@@ -13,6 +13,7 @@ import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import Carousel from 'react-native-snap-carousel';
+import CustomButton from '../../Components/CustomButton';
 
 export default function ClassifiedDetails(props) {
   const carouselRef = useRef();
@@ -27,7 +28,7 @@ export default function ClassifiedDetails(props) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.container}>
+        <View style={[styles.container, {marginBottom: wp(5)}]}>
           <Carousel
             ref={c => {
               carouselRef.current = c;
@@ -100,33 +101,91 @@ export default function ClassifiedDetails(props) {
           <Text style={styles.locationText}>
             Sector C, Tulip Block, Bahria Town, Lahore
           </Text>
-          <View
-            style={{
-              backgroundColor: colors.black,
-              width: wp(80),
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: wp(3),
-              paddingVertical: hp(1),
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
+          <View style={styles.amenitiesMainView}>
+            <View style={styles.amenitiesSubView}>
               <Icon
-                name={'location'}
-                type={'ionicon'}
+                name={'scan1'}
+                type={'antdesign'}
                 color={colors.primary}
                 size={hp(3)}
               />
               <Text style={styles.amenitiesText}>3 Marla</Text>
             </View>
             <View style={styles.seperator}></View>
+            <View style={styles.amenitiesSubView}>
+              <Icon
+                name={'bed'}
+                type={'ionicon'}
+                color={colors.primary}
+                size={hp(3)}
+              />
+              <Text style={styles.amenitiesText}>3 Bedroom</Text>
+            </View>
+            <View style={styles.seperator}></View>
+            <View style={styles.amenitiesSubView}>
+              <Icon
+                name={'bath'}
+                type={'font-awesome-5'}
+                color={colors.primary}
+                size={hp(2.5)}
+              />
+              <Text style={styles.amenitiesText}>3 Marla</Text>
+            </View>
+          </View>
+          <Text style={styles.descText}>Description</Text>
+          <Text style={styles.descDetailsText}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
+            porttitor dolor ex, ac tempor magna tempus quis. Maecenas pharetra
+            eros eu urna tincidunt, id porttitor diam dignissim. Aenean in porta
+            odio, nec pellentesque massa.
+          </Text>
+          <Text style={styles.descText}>Location</Text>
+          <TouchableOpacity>
+            <Image
+              source={allImages.map}
+              style={{height: hp(25), width: wp(85)}}
+            />
+            <View style={styles.mapFabView}>
+              <Icon
+                name={'directions-fork'}
+                type={'material-community'}
+                color={colors.primary}
+                size={hp(4)}
+                style={styles.mapFab}
+              />
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.descText}>Agency Details</Text>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', width: wp(85)}}>
+            <Image
+              source={allImages.tamjeed}
+              style={styles.agencyProfileImage}
+            />
+            <View style={{marginLeft: wp(5)}}>
+              <Text style={styles.agencyNameText}>IronStone Equities</Text>
+              <Text style={styles.postByText}>By Danial Babar</Text>
+              <CustomButton
+                btnText="See Details"
+                indicator={false}
+                onPress={() =>
+                  props.navigation.navigate('AppFlow', {
+                    screen: 'InventoryDetails',
+                  })
+                }
+                btnContainer={styles.btnContainer}
+                btnTextStyles={styles.btnTextStyles}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
+      <TouchableOpacity style={[styles.fabView, {bottom: wp(16)}]}>
+        <Image source={allImages.whatsapp} style={styles.fabImage} />
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.fabView, {bottom: wp(5)}]}>
+        <Image source={allImages.call} style={styles.fabImage} />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -195,9 +254,85 @@ const styles = StyleSheet.create({
     marginVertical: hp(1),
     fontSize: hp(1.8),
   },
+  amenitiesMainView: {
+    backgroundColor: colors.black,
+    width: wp(80),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(1),
+    borderRadius: 5,
+  },
+  amenitiesSubView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   seperator: {
     width: 2,
     height: hp(3),
     backgroundColor: colors.white,
+    marginHorizontal: 5,
   },
+  descText: {
+    color: colors.primary,
+    fontFamily: fonts.bold,
+    width: wp(85),
+    fontSize: hp(2),
+    marginVertical: hp(2),
+  },
+  descDetailsText: {
+    color: colors.black,
+    fontFamily: fonts.regular,
+    width: wp(85),
+    fontSize: hp(1.8),
+  },
+  agencyProfileImage: {
+    width: hp(10),
+    height: hp(10),
+    backgroundColor: colors.white,
+    borderRadius: hp(7),
+  },
+  agencyNameText: {
+    color: colors.black,
+    fontFamily: fonts.regular,
+    marginVertical: hp(0.5),
+  },
+  postByText: {
+    color: colors.grey,
+    fontFamily: fonts.regular,
+    fontSize: hp(1.5),
+  },
+  btnContainer: {
+    width: wp(22),
+    height: hp(3.5),
+    backgroundColor: colors.primary,
+    borderRadius: hp(6),
+    marginVertical: hp(0.5),
+  },
+  btnTextStyles: {
+    fontFamily: fonts.regular,
+    color: colors.white,
+    fontSize: hp(1.5),
+  },
+  fabImage: {
+    width: hp(5),
+    height: hp(5),
+    backgroundColor: colors.white,
+    borderRadius: hp(7),
+  },
+  fabView: {
+    position: 'absolute',
+    right: wp(5),
+    elevation: 10,
+  },
+  mapFab: {
+    backgroundColor: colors.black,
+    width: hp(5),
+    height: hp(5),
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mapFabView: {position: 'absolute', bottom: hp(1), right: wp(1)},
 });

@@ -1,4 +1,11 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {colors} from '../../Constants/Colors';
 import {Icon} from '@rneui/themed';
@@ -6,7 +13,7 @@ import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 
-export default function InventoryDetails() {
+export default function InventoryDetails(props) {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -54,7 +61,7 @@ export default function InventoryDetails() {
               </Text>
             </View>
           </View>
-          <View style={styles.bottomIconView}>
+          <TouchableOpacity style={styles.bottomIconView}>
             <Icon
               name={'mobile-alt'}
               type={'font-awesome-5'}
@@ -66,8 +73,8 @@ export default function InventoryDetails() {
               <Text style={styles.normalText}>Call the agent</Text>
               <Text style={styles.phoneNumberText}>033333333333</Text>
             </View>
-          </View>
-          <View style={styles.bottomIconView}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bottomIconView}>
             <Icon
               name={'whatsapp'}
               type={'font-awesome-5'}
@@ -76,8 +83,10 @@ export default function InventoryDetails() {
               style={{marginRight: wp(3)}}
             />
             <Text style={styles.normalText}>Whatsapp the agent</Text>
-          </View>
-          <View style={styles.bottomIconView}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bottomIconView}
+            onPress={() => props.navigation.navigate('AgencyProfile')}>
             <Icon
               name={'md-person-circle-outline'}
               type={'ionicon'}
@@ -86,8 +95,8 @@ export default function InventoryDetails() {
               style={{marginRight: wp(3)}}
             />
             <Text style={styles.normalText}>Agency Profile</Text>
-          </View>
-          <View style={styles.bottomIconView}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bottomIconView}>
             <Icon
               name={'heart-outline' || 'heart-sharp'}
               type={'ionicon'}
@@ -96,7 +105,7 @@ export default function InventoryDetails() {
               style={{marginRight: wp(3)}}
             />
             <Text style={styles.normalText}>Add to favourite</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
   listContainer: {
     width: wp(95),
-    backgroundColor: colors.white,
+    backgroundColor: colors.tertiary,
     marginVertical: hp(1),
   },
   listImage: {
