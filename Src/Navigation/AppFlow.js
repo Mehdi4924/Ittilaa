@@ -3,11 +3,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import InventoryDetails from '../Screens/AppFlow/InventoryDetails';
 import ClassifiedDetails from '../Screens/AppFlow/ClassifiedDetails';
 import TopClassified from '../Screens/AppFlow/TopClassified';
-import FeaturedProjects from '../Screens/AppFlow/FeaturedProjects'
+import FeaturedProjects from '../Screens/AppFlow/FeaturedProjects';
 import News from '../Screens/AppFlow/News';
 import TopInventories from '../Screens/AppFlow/TopInventories';
 import NewsDetails from '../Screens/AppFlow/NewsDetails';
 import AgencyProfile from '../Screens/AppFlow/AgencyProfile';
+import AllAgencies from '../Screens/AppFlow/AllAgencies';
 
 export default function AppFlow() {
   const MainFlow = createNativeStackNavigator();
@@ -21,6 +22,7 @@ export default function AppFlow() {
       <MainFlow.Screen name="TopInventories" component={TopInventories} />
       <MainFlow.Screen name="NewsDetails" component={NewsDetails} />
       <MainFlow.Screen name="AgencyProfile" component={AgencyProfile} />
+      <MainFlow.Screen name="AllAgencies" component={AllAgencies} />
     </MainFlow.Navigator>
   );
 }

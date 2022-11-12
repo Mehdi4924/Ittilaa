@@ -16,7 +16,7 @@ import {fonts} from '../../Constants/Fonts';
 export default function InventoryDetails(props) {
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
             <Icon

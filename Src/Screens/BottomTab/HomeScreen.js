@@ -20,12 +20,12 @@ import {
 } from '../../Constants/dummyData';
 import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
-import CustomFlatList from '../../Components/CustomFlatList'
+import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
 export default function HomeScreen(props) {
   return (
     <View style={styles.mainContainer}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <CustomHeader
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
@@ -42,7 +42,10 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Titanium Agency</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {screen: 'AllAgencies'})
+            }>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
@@ -56,7 +59,10 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Inventories</Text>
-          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'TopInventories'})}>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {screen: 'TopInventories'})
+            }>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
@@ -70,12 +76,15 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Classified</Text>
-          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'TopClassified'})}>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {screen: 'TopClassified'})
+            }>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
         <TopClassifiedComp
-          data={topClassified.slice(0,4)}
+          data={topClassified.slice(0, 4)}
           horizontal={true}
           classifiedFlatListStyle={styles.flatListStyle}
           classifiedCardStyle={styles.classifiedCardStyle}
@@ -90,12 +99,15 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Featured Projects</Text>
-          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'FeaturedProjects'})}>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {screen: 'FeaturedProjects'})
+            }>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
         <CustomFlatList
-          data={Featured.slice(0,5)}
+          data={Featured.slice(0, 5)}
           horizontal={true}
           featureCard={styles.featureCard}
           featureImageStyle={styles.featureImageStyle}
@@ -104,7 +116,10 @@ export default function HomeScreen(props) {
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>News</Text>
-          <TouchableOpacity onPress={()=>props.navigation.navigate('AppFlow',{screen:'News'})}>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {screen: 'News'})
+            }>
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
@@ -144,6 +159,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     width: wp(75),
+    fontFamily: fonts.regular,
   },
   iconContainer: {
     flexDirection: 'row',
@@ -197,9 +213,9 @@ const styles = StyleSheet.create({
     // elevation: 1,
     borderRadius: 14,
     marginTop: hp(2),
-    marginRight:wp(8),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)'
+    marginRight: wp(8),
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.08)',
   },
   profileImgStyle: {
     width: wp(12),
@@ -222,8 +238,8 @@ const styles = StyleSheet.create({
     marginRight: wp(3),
     alignItems: 'center',
     paddingBottom: hp(1),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.09)'
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.09)',
   },
 
   classifiedImageStyle: {
@@ -278,8 +294,8 @@ const styles = StyleSheet.create({
     marginRight: wp(3),
     alignItems: 'center',
     borderRadius: hp(1),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.09)'
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.09)',
   },
   featureImageStyle: {
     width: wp(26),
