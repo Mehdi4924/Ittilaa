@@ -12,16 +12,16 @@ export default function CustomFlatList(props) {
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
-          <Pressable key={index} onPress={props.onPress}>
+          <Pressable key={index} onPress={item => props.onPress(item)}>
             <View style={props.featureCard}>
               <Image
                 source={item.image}
                 style={props.featureImageStyle}
                 resizeMode="contain"
               />
-              <Text style={props.featureNameText} 
-              numberOfLines={2}
-              >{item.name}</Text>
+              <Text style={props.featureNameText} numberOfLines={2}>
+                {item.name}
+              </Text>
             </View>
           </Pressable>
         )}

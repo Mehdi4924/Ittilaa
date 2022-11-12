@@ -96,6 +96,7 @@ export default function HomeScreen(props) {
           classifiedAmenities={styles.classifiedAmenities}
           classifiedAmenitiesText={styles.classifiedAmenitiesText}
           amenitiesIconSize={10}
+          // onPress={it => props.navigation.navigate('FeaturedDetails')}
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Featured Projects</Text>
@@ -113,6 +114,9 @@ export default function HomeScreen(props) {
           featureImageStyle={styles.featureImageStyle}
           featureNameText={styles.featureNameText}
           flatListStyle={styles.flatListStyle}
+          onPress={() =>
+            props.navigation.navigate('AppFlow', {screen: 'FeaturedDetails'})
+          }
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>News</Text>

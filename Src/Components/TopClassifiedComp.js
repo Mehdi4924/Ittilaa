@@ -17,7 +17,10 @@ export default function TopClassifiedComp(props) {
         numColumns={props.numColumns}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
-          <Pressable key={index} style={props.classifiedCardStyle}>
+          <Pressable
+            key={index}
+            style={props.classifiedCardStyle}
+            onPress={item => props.onPress(item)}>
             <Image
               source={item.image}
               style={props.classifiedImageStyle}
@@ -37,7 +40,9 @@ export default function TopClassifiedComp(props) {
                   size={props.amenitiesIconSize}
                   color={colors.white}
                 />
-                <Text style={props.classifiedAmenitiesText}>{item.bedRoom}</Text>
+                <Text style={props.classifiedAmenitiesText}>
+                  {item.bedRoom}
+                </Text>
               </View>
               <View style={props.classifiedAmenities}>
                 <Icon
@@ -46,11 +51,14 @@ export default function TopClassifiedComp(props) {
                   size={props.amenitiesIconSize}
                   color={colors.white}
                 />
-                <Text style={props.classifiedAmenitiesText}>{item.bedRoom}</Text>
+                <Text style={props.classifiedAmenitiesText}>
+                  {item.bedRoom}
+                </Text>
               </View>
               <View style={props.classifiedAmenities}>
-               
-                <Text style={props.classifiedAmenitiesText}>{item.bedRoom}Marla</Text>
+                <Text style={props.classifiedAmenitiesText}>
+                  {item.bedRoom}Marla
+                </Text>
               </View>
             </View>
           </Pressable>
@@ -61,11 +69,10 @@ export default function TopClassifiedComp(props) {
 }
 
 const styles = StyleSheet.create({
-  classifiedAmenitiesContainer:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
-    width:wp(35),
-    
-  }
+  classifiedAmenitiesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: wp(35),
+  },
 });

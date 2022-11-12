@@ -9,6 +9,8 @@ import TopInventories from '../Screens/AppFlow/TopInventories';
 import NewsDetails from '../Screens/AppFlow/NewsDetails';
 import AgencyProfile from '../Screens/AppFlow/AgencyProfile';
 import AllAgencies from '../Screens/AppFlow/AllAgencies';
+import FeaturedDetails from '../Screens/AppFlow/FeaturedDetails';
+import PackageDetails from '../Screens/AppFlow/PackageDetails';
 
 export default function AppFlow() {
   const MainFlow = createNativeStackNavigator();
@@ -23,6 +25,8 @@ export default function AppFlow() {
       <MainFlow.Screen name="NewsDetails" component={NewsDetails} />
       <MainFlow.Screen name="AgencyProfile" component={AgencyProfile} />
       <MainFlow.Screen name="AllAgencies" component={AllAgencies} />
+      <MainFlow.Screen name="FeaturedDetails" component={FeaturedDetails} />
+      <MainFlow.Screen name="PackageDetails" component={PackageDetails} />
     </MainFlow.Navigator>
   );
 }

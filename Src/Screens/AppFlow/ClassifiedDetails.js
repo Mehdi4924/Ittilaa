@@ -129,7 +129,7 @@ export default function ClassifiedDetails(props) {
                 color={colors.primary}
                 size={hp(2.5)}
               />
-              <Text style={styles.amenitiesText}>3 Marla</Text>
+              <Text style={styles.amenitiesText}>3</Text>
             </View>
           </View>
           <Text style={styles.descText}>Description</Text>
