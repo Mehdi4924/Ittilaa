@@ -5,6 +5,9 @@ import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import CustomButton from '../../Components/CustomButton';
+import CustomHeader from '../../Components/CustomHeader';
+import InventoriesComp from '../../Components/InventoriesComp';
+import {topInventories} from '../../Constants/dummyData';
 
 export default function Inventories(props) {
   const listData = [
@@ -27,10 +30,43 @@ export default function Inventories(props) {
       description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
     },
   ];
+  const headerComponent = () => {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.headingText}>Hot Properties</Text>
+        <InventoriesComp
+          data={topInventories}
+          inventoryCard={styles.inventoryCard}
+          horizontal={true}
+          flatListStyle={styles.flatListStyle}
+          profileImgStyle={styles.profileImgStyle}
+          profileImgContainer={styles.profileImgContainer}
+        />
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
+      <CustomHeader
+        headerStyle={styles.headerStyle}
+        iconContainer={styles.iconContainer}
+        leftIconName="arrow-back"
+        leftIconType="material"
+        leftIconColor={colors.white}
+        leftIconSize={30}
+        onLeftIconPress={() => props.navigation.goBack()}
+        inputViewStyle={styles.inputViewStyle}
+        textInputStyle={styles.textInputStyle}
+        placeholder="Search"
+        placeholderTextColor={colors.grey}
+        screenTitle="Inventories"
+        screenTitleStyle={styles.screenTitleStyle}
+      />
       <FlatList
         data={listData}
+        ListHeaderComponent={headerComponent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingLeft: wp(5)}}
         renderItem={({item, index}) => {
           return (
             <View style={styles.listContainer}>
@@ -79,7 +115,43 @@ export default function Inventories(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.white, alignItems: 'center'},
+  container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
+  headingText: {
+    fontFamily: fonts.bold,
+    color: colors.primary,
+    width: wp(90),
+    marginVertical: hp(1),
+  },
+  headerStyle: {
+    width: wp(100),
+    height: hp(20),
+    backgroundColor: colors.primary,
+  },
+  inputViewStyle: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    marginHorizontal: wp(5),
+    borderRadius: 5,
+    alignItems: 'center',
+    paddingHorizontal: wp(2),
+    marginTop: hp(2),
+  },
+  textInputStyle: {
+    width: wp(75),
+    fontFamily: fonts.regular,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: wp(5),
+    marginTop: hp(4),
+  },
+  screenTitleStyle: {
+    fontFamily: fonts.semiBold,
+    fontSize: hp(2.4),
+    color: colors.white,
+  },
   btnContainer: {
     width: wp(22),
     height: hp(3.5),
@@ -149,5 +221,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  //hot properties
+  flatListStyle: {
+    marginBottom: hp(2),
+  },
+  inventoryCard: {
+    width: wp(75),
+    height: hp(30),
+    backgroundColor: colors.white,
+    elevation: 5,
+    borderRadius: 14,
+    marginRight: wp(5),
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.08)',
+  },
+  profileImgStyle: {
+    width: wp(12),
+    height: hp(6),
+    borderRadius: wp(8),
+  },
+  profileImgContainer: {
+    width: wp(14),
+    height: hp(7),
+    borderRadius: wp(7),
+    backgroundColor: colors.white,
+    elevation: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

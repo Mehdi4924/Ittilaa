@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     width: wp(75),
+    fontFamily: fonts.regular,
   },
   iconContainer: {
     flexDirection: 'row',

@@ -7,11 +7,26 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 import CustomLoader from '../../Components/CustomLoader';
+import CustomHeader from '../../Components/CustomHeader';
 
 export default function Classified(props) {
   return (
     <View style={styles.container}>
-      <Text>Classified</Text>
+      <CustomHeader
+        headerStyle={styles.headerStyle}
+        iconContainer={styles.iconContainer}
+        leftIconName="arrow-back"
+        leftIconType="material"
+        leftIconColor={colors.white}
+        leftIconSize={30}
+        onLeftIconPress={() => props.navigation.goBack()}
+        inputViewStyle={styles.inputViewStyle}
+        textInputStyle={styles.textInputStyle}
+        placeholder="Search"
+        placeholderTextColor={colors.grey}
+        screenTitle="Classified"
+        screenTitleStyle={styles.screenTitleStyle}
+      />
       <CustomLoader isLoading={false} />
       <FlatList
         data={[1, 23, 4, 5, 5, 5, 6]}
@@ -91,6 +106,36 @@ export default function Classified(props) {
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
+  headerStyle: {
+    width: wp(100),
+    height: hp(20),
+    backgroundColor: colors.primary,
+  },
+  inputViewStyle: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    marginHorizontal: wp(5),
+    borderRadius: 5,
+    alignItems: 'center',
+    paddingHorizontal: wp(2),
+    marginTop: hp(2),
+  },
+  textInputStyle: {
+    width: wp(75),
+    fontFamily: fonts.regular,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: wp(5),
+    marginTop: hp(4),
+  },
+  screenTitleStyle: {
+    fontFamily: fonts.semiBold,
+    fontSize: hp(2.4),
+    color: colors.white,
+  },
   listContainer: {
     width: wp(95),
     backgroundColor: colors.tertiary,

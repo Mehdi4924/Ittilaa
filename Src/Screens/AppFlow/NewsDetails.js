@@ -15,9 +15,11 @@ import {fonts} from '../../Constants/Fonts';
 export default function NewsDetails(props) {
   return (
     <View style={styles.mainContainer}>
-      <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{flex: 1, alignItems: 'center'}}>
         <View style={styles.headerView}>
-          <TouchableOpacity onPress={()=>props.navigation.goBack()}>
+          <TouchableOpacity onPress={() => props.navigation.goBack()}>
             <View style={styles.iconBackground}>
               <Icon
                 type="material"

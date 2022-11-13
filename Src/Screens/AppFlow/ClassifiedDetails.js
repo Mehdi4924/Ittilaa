@@ -27,7 +27,7 @@ export default function ClassifiedDetails(props) {
   };
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.container, {marginBottom: wp(5)}]}>
           <Carousel
             ref={c => {
@@ -129,7 +129,7 @@ export default function ClassifiedDetails(props) {
                 color={colors.primary}
                 size={hp(2.5)}
               />
-              <Text style={styles.amenitiesText}>3 Marla</Text>
+              <Text style={styles.amenitiesText}>3</Text>
             </View>
           </View>
           <Text style={styles.descText}>Description</Text>

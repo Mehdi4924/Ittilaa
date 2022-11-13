@@ -16,9 +16,7 @@ export default function InventoriesComp(props) {
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={({item, index}) => (
-          <View
-            key={index}
-            style={props.inventoryCard}>
+          <View key={index} style={props.inventoryCard}>
             <View style={styles.profileContainer}>
               <View style={props.profileImgContainer}>
                 <Image
@@ -45,7 +43,9 @@ export default function InventoriesComp(props) {
                   color={colors.white}
                 />
               </View>
-              <Text style={{...styles.text2, marginLeft: wp(2)}}>
+              <Text
+                style={{...styles.text2, marginLeft: wp(2), maxWidth: wp(45)}}
+                numberOfLines={1}>
                 {item.address}
               </Text>
             </View>
