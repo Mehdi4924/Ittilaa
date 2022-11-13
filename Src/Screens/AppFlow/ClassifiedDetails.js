@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   chevron: {
     backgroundColor: colors.black,
     padding: 5,
-    borderRadius: 15,
+    borderRadius: 20,
   },
   header: {
     flexDirection: 'row',
