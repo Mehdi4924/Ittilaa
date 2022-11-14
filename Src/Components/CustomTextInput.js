@@ -4,6 +4,7 @@ import {hp, wp} from '../Constants/Responsive';
 import {fonts} from '../Constants/Fonts';
 import {colors} from '../Constants/Colors';
 import {Icon} from '@rneui/themed';
+import DropDownPicker from 'react-native-dropdown-picker';
 export default function CustomTextInput(props) {
   return (
     <View style={[styles.textInputContainer, props.textInputContainer]}>
@@ -16,13 +17,29 @@ export default function CustomTextInput(props) {
           size={props.iconSize ? props.iconSize : hp(5)}
           style={props.iconStyles}
         />
-        <TextInput
-          placeholder={props.placeholder}
-          value={props.value}
-          placeholderTextColor={colors.grey}
-          style={[styles.textInputStyles, props.textInputStyles]}
-          onChangeText={props.onChangeText}
-        />
+        {props.dorpdown ? (
+          <DropDownPicker
+            open={props.open}
+            value={props.dropValue}
+            items={props.dropItems}
+            setOpen={props.setDropOpen}
+            setValue={props.setDropValue}
+            setItems={props.setDropItems}
+            style={styles.dropDownStyles}
+          />
+        ) : (
+          <TextInput
+            placeholder={props.placeholder}
+            value={props.value}
+            placeholderTextColor={colors.grey}
+            style={[styles.textInputStyles, props.textInputStyles]}
+            onChangeText={props.onChangeText}
+            textStyle={styles.textStyle}
+            labelStyle={{
+              fontWeight: 'bold',
+            }}
+          />
+        )}
       </View>
     </View>
   );
@@ -43,7 +60,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -hp(2.4),
     left: wp(5),
-    backgroundColor: colors.white,
+    backgroundColor: colors.tertiary,
     padding: 5,
   },
   textInputView: {
@@ -54,5 +71,13 @@ const styles = StyleSheet.create({
   textInputStyles: {
     width: wp(70),
     fontFamily: fonts.regular,
+  },
+  dropDownStyles: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    width: wp(75),
+  },
+  textStyle: {
+    color: colors.grey,
   },
 });
