@@ -300,3 +300,17 @@ export const NewsData = [
     image: require('../Assets/Images/news2.jpg'),
   },
 ];
+export const cityItem = [
+  {label: 'Lahore', value: 'lahore'},
+  {label: 'Karachi', value: 'karachi'},
+  {label: 'Islamabad', value: 'islamabad'},
+  {label: 'Sargodha', value: 'Sargodha'},
+]
+export const societyItem = [
+  {label: 'Bahria', value: 'bahria'},
+  {label: 'Township', value: 'township'},
+]
+export const typeItem = [
+  {label: 'Class', value: 'class'},
+  {label: 'Invent', value: 'invent'},
+]

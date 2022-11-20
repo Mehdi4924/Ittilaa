@@ -9,7 +9,7 @@ export default function CustomTextInput(props) {
   return (
     <View style={[styles.textInputContainer, props.textInputContainer]}>
       <Text style={styles.inputHeading}>{props.topText || 'N/A'}</Text>
-      <View style={styles.textInputView}>
+      <View style={props.textInputView?props.textInputView:styles.textInputView}>
         <Icon
           name={props.iconName}
           type={props.iconType}
@@ -26,10 +26,17 @@ export default function CustomTextInput(props) {
             setValue={props.setDropValue}
             setItems={props.setDropItems}
             style={styles.dropDownStyles}
+            placeholder={props.dorpdownPlaceholder}
+            containerStyle={{width:wp(76),}}
+            onPress={props.onPress}
+            zIndex={5000}
+            
+
           />
         ) : (
           <TextInput
             placeholder={props.placeholder}
+            multiline={props.multiline}
             value={props.value}
             placeholderTextColor={colors.grey}
             style={[styles.textInputStyles, props.textInputStyles]}
@@ -38,6 +45,7 @@ export default function CustomTextInput(props) {
             labelStyle={{
               fontWeight: 'bold',
             }}
+            
           />
         )}
       </View>
