@@ -44,6 +44,7 @@ export default function AddInventoriesClassified(props) {
           onLeftIconPress={() => props.navigation.goBack()}
           screenTitle="Add Inventories/Classified"
           screenTitleStyle={styles.screenTitleStyle}
+          search={true}
         />
         <View style={styles.invClassBtnContainer}>
           <CustomButton
@@ -179,23 +180,23 @@ export default function AddInventoriesClassified(props) {
                 <Text style={styles.priceTypeTextStyle}>Cr</Text>
               </TouchableOpacity>
             </View>
-            <View style={{marginTop:hp(3)}}>
-              <Text >Select Type</Text>
-              <View style={{flexDirection:'row', marginTop:hp(1),}}>
-              <TouchableOpacity
-                style={
-                  adType ? styles.priceTypeActice : styles.priceTypeInactice
-                }
-                onPress={() => setAdType(true)}>
-                <Text style={styles.priceTypeTextStyle}>PUP</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={
-                  adType ? styles.priceTypeInactice : styles.priceTypeActice
-                }
-                onPress={() => setAdType(false)}>
-                <Text style={styles.priceTypeTextStyle}>M</Text>
-              </TouchableOpacity>
+            <View style={{marginTop: hp(3)}}>
+              <Text>Select Type</Text>
+              <View style={{flexDirection: 'row', marginTop: hp(1)}}>
+                <TouchableOpacity
+                  style={
+                    adType ? styles.priceTypeActice : styles.priceTypeInactice
+                  }
+                  onPress={() => setAdType(true)}>
+                  <Text style={styles.priceTypeTextStyle}>PUP</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={
+                    adType ? styles.priceTypeInactice : styles.priceTypeActice
+                  }
+                  onPress={() => setAdType(false)}>
+                  <Text style={styles.priceTypeTextStyle}>M</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -313,12 +314,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginTop: hp(2),
   },
-  priceTypeContainer:{
-    flexDirection:'row',
-    alignItems:'center',
-    width:wp(90),
-    justifyContent:'space-between',
-    marginTop:hp(3)
+  priceTypeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: wp(90),
+    justifyContent: 'space-between',
+    marginTop: hp(3),
   },
   priceTypeActice: {
     width: wp(10),

@@ -40,16 +40,17 @@ export default function CustomHeader(props) {
           />
         </TouchableOpacity>
       </View>
-      {props.inputViewStyle?CustomHeader(<View style={props.inputViewStyle}>
-        <Icon name="search" type="material" color={colors.grey} size={30} />
-        <TextInput
-          style={props.textInputStyle}
-          numberOfLine={1}
-          placeholder={props.placeholder}
-          placeholderTextColor={props.placeholderTextColor}
-        />
-      </View>):null}
-      
+      {!props.search ? (
+        <View style={props.inputViewStyle}>
+          <Icon name="search" type="material" color={colors.grey} size={30} />
+          <TextInput
+            style={props.textInputStyle}
+            numberOfLine={1}
+            placeholder={props.placeholder}
+            placeholderTextColor={props.placeholderTextColor}
+          />
+        </View>
+      ) : null}
     </View>
   );
 }

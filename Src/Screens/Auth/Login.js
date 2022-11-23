@@ -64,7 +64,7 @@ export default function Login(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.white, alignItems: 'center'},
+  container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
   continueText: {fontFamily: fonts.regular, fontSize: hp(2), marginTop: hp(1)},
   welcomeText: {fontFamily: fonts.bold, fontSize: hp(2.5), marginTop: hp(20)},
   btnContainer: {

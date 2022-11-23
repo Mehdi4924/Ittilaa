@@ -412,7 +412,7 @@ export default function RegisterAgency(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.white, alignItems: 'center'},
+  container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
   btnContainer: {
     width: wp(30),
   },
