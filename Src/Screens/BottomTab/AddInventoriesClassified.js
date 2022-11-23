@@ -14,6 +14,7 @@ import CustomButton from '../../Components/CustomButton';
 import CustomTextInput from '../../Components/CustomTextInput';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {cityItem, societyItem, typeItem} from '../../Constants/dummyData';
+import CustomDropdown from '../../Components/CustomDropdown';
 
 export default function AddInventoriesClassified(props) {
   const [open, setOpen] = useState(false);
@@ -70,6 +71,7 @@ export default function AddInventoriesClassified(props) {
         </View>
         {inventory ? (
           <View>
+            <CustomDropdown />
             <CustomTextInput
               textInputContainer={{marginTop: hp(3)}}
               topText="City"
