@@ -17,8 +17,12 @@ import CustomButton from '../../Components/CustomButton';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import {URL} from '../../Constants/URL';
+import {societyItem} from '../../Constants/dummyData';
+import CustomDropdown from '../../Components/CustomDropdown';
+
 export default function RegisterAgency(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
+  const [socItems, setSocItems] = useState(societyItem);
   const [dataToSend, setDataToSend] = useState({});
   const [indicator, setIndicator] = useState(false);
   const [imageUri, setImageUri] = useState('');
@@ -221,19 +225,20 @@ export default function RegisterAgency(props) {
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
               />
-              <CustomTextInput
+              <CustomDropdown
+                data={socItems}
+                topLabelText={'Society'}
+                labelFieldName={'label'}
+                valueFieldName={'value'}
+                placeholder={'Select Society'}
+                value={dataToSend.society}
                 iconName={'users'}
                 iconType="font-awesome"
-                topText="Select Society"
-                placeholder="Enter Select Society"
-                value={dataToSend.society || ''}
-                onChangeText={t =>
+                onChange={item => {
                   setDataToSend(prev => {
-                    return {...prev, society: t};
-                  })
-                }
-                textInputContainer={{marginVertical: hp(2)}}
-                iconSize={hp(3.5)}
+                    return {...prev, society: item.value};
+                  });
+                }}
               />
               <CustomTextInput
                 iconName={'location-pin'}

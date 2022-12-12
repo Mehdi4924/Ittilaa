@@ -95,33 +95,38 @@ export default function AddInventoriesClassified(props) {
         </View>
         {inventory ? (
           <View>
-            <CustomDropdown 
-              label='City'
-              data={cityItem}
-              leftIconName='place'
-              leftIconType='material'
-              leftIconSize={hp(3.5)}
-              placeholder='Select City'
-              search={true}
+            <CustomDropdown
+              data={cityItems}
+              topLabelText={'City'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="place"
+              placeholder={'Select City'}
+              value={value}
+              onChange={item => setValue(item.value)}
             />
-            <CustomDropdown 
-              label='Society'
-              data={societyItem}
-              leftIconName='groups'
-              leftIconType='material'
-              leftIconSize={hp(3.5)}
-              placeholder='Select Society'
-              search={true}
+            <CustomDropdown
+              data={socItems}
+              topLabelText={'Society'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              placeholder={'Select Society'}
+              iconName={'users'}
+              iconType="font-awesome"
+              value={socValue}
+              onChange={item => setSocValue(item.value)}
             />
-          
-            <CustomDropdown 
-              label='Type'
-              data={typeItem}
-              leftIconName='merge-type'
-              leftIconType='material'
-              leftIconSize={hp(3.5)}
-              placeholder='Select Type'
-              search={false}
+            <CustomDropdown
+              data={typeItems}
+              topLabelText={'Type'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="merge-type"
+              placeholder={'Select Type'}
+              value={typeValue}
+              onChange={item => setTypeValue(item.value)}
             />
             <CustomDropdown 
               label='Purpose'

@@ -15,48 +15,46 @@ const data = [
 ];
 
 const CustomDropdown = props => {
-  const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-
   const renderLabel = () => {
     return (
       <Text style={[styles.label, isFocus && {color: colors.primary}]}>
-        {props.label}
+        {props.topLabelText}
       </Text>
     );
     return null;
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.container]}>
       {renderLabel()}
       <Dropdown
-        style={[props.dropdown?props.dropdown:styles.dropdown, isFocus && {borderColor: colors.primary}]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
+        style={[styles.dropdown, isFocus && {borderColor: colors.primary}]}
+        placeholderStyle={[styles.placeholderStyle, props.placeholderStyle]}
+        selectedTextStyle={[styles.selectedTextStyle, props.selectedTextStyle]}
+        inputSearchStyle={[styles.inputSearchStyle, props.inputSearchStyle]}
+        iconStyle={[styles.iconStyle, props.iconStyle]}
         data={props.data}
-        search={!!props.search?true:false}
+        search
         fontFamily={fonts.regular}
         maxHeight={300}
-        labelField="label"
-        valueField="value"
+        labelField={props.labelFieldName}
+        valueField={props.valueFieldName}
         placeholder={!isFocus ? props.placeholder : '...'}
         searchPlaceholder="Search..."
-        value={value}
+        value={props.value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={props.onChange?props.onChange:item => {
-          setValue(item.value);
+        onChange={item => {
+          props.onChange(item);
           setIsFocus(false);
         }}
         renderLeftIcon={() => (
           <Icon
-            name={props.leftIconName}
-            type={props.leftIconType}
-            color={props.leftIconColor ? props.leftIconColor : colors.primary}
-            size={props.leftIconSize}
+            name={props.iconName}
+            type={props.iconType}
+            color={colors.primary}
+            size={hp(3)}
             style={{marginHorizontal: 5}}
           />
         )}
@@ -70,7 +68,7 @@ export default CustomDropdown;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.tertiary,
-    marginTop: hp(4),
+    marginVertical: hp(1.5),
   },
   dropdown: {
     height: hp(7),
@@ -90,7 +88,7 @@ const styles = StyleSheet.create({
     top: -hp(1.5),
     zIndex: 999,
     paddingHorizontal: 8,
-    fontFamily: fonts.regular,
+    fontFamily: fonts.bold,
     fontSize: hp(2),
   },
   placeholderStyle: {
