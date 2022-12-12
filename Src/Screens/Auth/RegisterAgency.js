@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TouchableOpacityBase,
+  Image,
 } from 'react-native';
 import {colors} from '../../Constants/Colors';
 import {Icon} from '@rneui/themed';
@@ -13,38 +14,91 @@ import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import {URL} from '../../Constants/URL';
 export default function RegisterAgency(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
   const [dataToSend, setDataToSend] = useState({});
   const [indicator, setIndicator] = useState(false);
+  const [imageUri, setImageUri] = useState('');
+  const [fileName, setFileName] = useState('');
+  const [logoUri, setLogoUri] = useState('');
+  const [logoFileName, setLogoFileName] = useState('');
+
+  const openPhotoGallery = () => {
+    let options = {
+      storageOption: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response =', response);
+      if (response.didCancel) {
+        console.log('User Cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error', response.error);
+      } else if (response.btnClick) {
+        console.log('User Click button', response.btnClick);
+      } else {
+        const source = {uri: 'data:image/jpeg;base64' + response.assets};
+        console.log('This is URI', response.assets[0].uri);
+        setFileName(response.assets[0].uri);
+        setImageUri(response.assets[0]);
+      }
+    });
+  };
+
+  const openLogoGallery = () => {
+    let options = {
+      storageOption: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response =', response);
+      if (response.didCancel) {
+        console.log('User Cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error', response.error);
+      } else if (response.btnClick) {
+        console.log('User Click button', response.btnClick);
+      } else {
+        const source = {uri: 'data:image/jpeg;base64' + response.assets};
+        console.log('This is URI', response.assets[0].uri);
+        setLogoFileName(response.assets[0].uri);
+        setLogoUri(response.assets[0]);
+      }
+    });
+  };
 
   const Register = () => {
     setIndicator(true);
-    var data = new FormData();
-    
-    const FormData = new FormData()
-    FormData.append('agency_name', dataToSend.agencyName)
-    FormData.append('name', dataToSend.userName)
-    FormData.append('designation', dataToSend.designation)
-    FormData.append('phone', dataToSend.phone)
-    FormData.append('society', dataToSend.society)
-    FormData.append('address', dataToSend.address)
-    FormData.append('ceo_name', dataToSend.ceoName)
-    FormData.append('ceo_mobile1', dataToSend.ceoNum1)
-    FormData.append('ceo_mobile2', dataToSend.ceoNum2)
-    FormData.append('landline', dataToSend.landline)
-    FormData.append('whatapp_no', dataToSend.whatsapp)
-    FormData.append('email', dataToSend.email)
-    FormData.append('fax', dataToSend.fax)
-    FormData.append('facebook', dataToSend.facebookLink)
-    FormData.append('youtube', dataToSend.youTubeLink)
-    FormData.append('twitter', dataToSend.twitterLink)
-    FormData.append('instagram', dataToSend.instagramLink)
-    FormData.append('message', dataToSend.message)
-    FormData.append('website', dataToSend.website)
-    FormData.append('about', dataToSend.about)
+    var date = new FormData();
+    date.append('agency_name', dataToSend.agencyName);
+    date.append('name', dataToSend.userName);
+    date.append('designation', dataToSend.designation);
+    date.append('phone', dataToSend.phone);
+    date.append('society', dataToSend.society);
+    date.append('address', dataToSend.address);
+    date.append('ceo_name', dataToSend.ceoName);
+    date.append('ceo_mobile1', dataToSend.ceoNum1);
+    date.append('ceo_mobile2', dataToSend.ceoNum2);
+    date.append('landline', dataToSend.landline);
+    date.append('whatapp_no', dataToSend.whatsapp);
+    date.append('email', dataToSend.email);
+    date.append('fax', dataToSend.fax);
+    date.append('facebook', dataToSend.facebookLink);
+    date.append('youtube', dataToSend.youTubeLink);
+    date.append('twitter', dataToSend.twitterLink);
+    date.append('instagram', dataToSend.instagramLink);
+    date.append('message', dataToSend.message);
+    date.append('website', dataToSend.website);
+    date.append('about', dataToSend.about);
+    date.append('photo[]', {uri:imageUri.uri, name:imageUri.fileName, type:imageUri.type});
+    date.append('agency_photo[]', {uri:imageUri.uri, name:imageUri.fileName, type:imageUri.type});
     axios
       .post(URL.baseURL + 'auth/register', data, {
         Headers: {'Content-Type': 'multipart/form-data'},
@@ -407,25 +461,53 @@ export default function RegisterAgency(props) {
             </>
           ) : (
             <View style={styles.imagesMainView}>
-              <TouchableOpacity style={styles.imageContainerView}>
-                <Icon
-                  name={'camera'}
-                  type="font-awesome"
-                  color={colors.primary}
-                  size={hp(5)}
-                  style={props.iconStyles}
-                />
-                <Text style={styles.imageText}>Photo</Text>
+              <TouchableOpacity
+                style={styles.imageContainerView}
+                onPress={() => {
+                  openPhotoGallery();
+                }}>
+                {fileName ? (
+                  <Image
+                    source={{uri: fileName}}
+                    style={styles.imageStyle}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <>
+                    <Icon
+                      name={'camera'}
+                      type="font-awesome"
+                      color={colors.primary}
+                      size={hp(5)}
+                      style={props.iconStyles}
+                    />
+                    <Text style={styles.imageText}>Photo</Text>
+                  </>
+                )}
               </TouchableOpacity>
-              <TouchableOpacity style={styles.imageContainerView}>
-                <Icon
-                  name={'file-image-o'}
-                  type="font-awesome"
-                  color={colors.primary}
-                  size={hp(5)}
-                  style={props.iconStyles}
-                />
-                <Text style={styles.imageText}>Agency Logo</Text>
+              <TouchableOpacity
+                style={styles.imageContainerView}
+                onPress={() => {
+                  openLogoGallery();
+                }}>
+                {logoFileName ? (
+                  <Image
+                    source={{uri: logoFileName}}
+                    style={styles.imageStyle}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <>
+                    <Icon
+                      name={'file-image-o'}
+                      type="font-awesome"
+                      color={colors.primary}
+                      size={hp(5)}
+                      style={props.iconStyles}
+                    />
+                    <Text style={styles.imageText}>Agency Logo</Text>
+                  </>
+                )}
               </TouchableOpacity>
             </View>
           )}
@@ -507,11 +589,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: hp(3),
   },
-  imageText: {marginVertical: hp(1), fontFamily: fonts.regular},
+  imageStyle: {
+    borderWidth: 1,
+    borderRadius: 5,
+    width: wp(30),
+    height: wp(30),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: hp(3),
+  },
+  imageText: {fontFamily: fonts.regular, fontSize: hp(2), color: colors.grey},
   btnContainer2: {
     width: wp(30),
     backgroundColor: colors.tertiary,
   },
+  imageFileName: {
+    fontFamily: fonts.regular,
+    fontSize: hp(1.5),
+    color: colors.grey,
+  },
+
   submitBtn: {
     width: wp(90),
     height: hp(7),
