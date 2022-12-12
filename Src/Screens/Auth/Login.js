@@ -12,6 +12,7 @@ import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
+import axios from 'axios';
 
 export default function Login(props) {
   const [phoneNumber, setPhoneNumber] = React.useState('');

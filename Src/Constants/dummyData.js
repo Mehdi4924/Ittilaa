@@ -311,6 +311,35 @@ export const societyItem = [
   {label: 'Township', value: 'township'},
 ]
 export const typeItem = [
-  {label: 'Class', value: 'class'},
-  {label: 'Invent', value: 'invent'},
+  {label: 'Residential', value: 'residential'},
+  {label: 'Commercial', value: 'commercial'},
 ]
+export const purpose = [
+  {label: 'Sale', value: 'sale'},
+  {label: 'Rent', value: 'rent'},
+  {label: 'Required', value: 'required'},
+]
+export const invenCategories = [
+  {label: 'Plot', value: 'plot'},
+  {label: 'House', value: 'house'},
+  {label: 'Flat', value: 'flat'},
+  {label: 'Villa', value: 'villa'},
+  {label: 'Apartment', value: 'apartment'},
+  {label: 'Portion', value: 'portion'},
+  {label: 'Office', value: 'office'},
+  {label: 'Shop', value: 'shop'},
+  {label: 'File', value: 'file'},
+  {label: 'Floor', value: 'floor'},
+  {label: 'Showroom', value: 'showroom'},
+  {label: 'Land', value: 'land'},
+
+]
+export const sizes = [
+  {label: 'Marla', value: 'marla'},
+  {label: 'Kanal', value: 'kanal'},
+  {label: 'Sq.ft', value: 'sq.ft'},
+  {label: 'Sq.yards', value: 'sq.yards'},
+  {label: 'Acre', value: 'acre'},
+  
+]
+

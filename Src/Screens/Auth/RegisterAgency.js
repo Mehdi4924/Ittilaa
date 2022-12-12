@@ -13,10 +13,53 @@ import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
-
+import axios from 'axios';
+import {URL} from '../../Constants/URL';
 export default function RegisterAgency(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
   const [dataToSend, setDataToSend] = useState({});
+  const [indicator, setIndicator] = useState(false);
+
+  const Register = () => {
+    setIndicator(true);
+    var data = new FormData();
+    
+    const FormData = new FormData()
+    FormData.append('agency_name', dataToSend.agencyName)
+    FormData.append('name', dataToSend.userName)
+    FormData.append('designation', dataToSend.designation)
+    FormData.append('phone', dataToSend.phone)
+    FormData.append('society', dataToSend.society)
+    FormData.append('address', dataToSend.address)
+    FormData.append('ceo_name', dataToSend.ceoName)
+    FormData.append('ceo_mobile1', dataToSend.ceoNum1)
+    FormData.append('ceo_mobile2', dataToSend.ceoNum2)
+    FormData.append('landline', dataToSend.landline)
+    FormData.append('whatapp_no', dataToSend.whatsapp)
+    FormData.append('email', dataToSend.email)
+    FormData.append('fax', dataToSend.fax)
+    FormData.append('facebook', dataToSend.facebookLink)
+    FormData.append('youtube', dataToSend.youTubeLink)
+    FormData.append('twitter', dataToSend.twitterLink)
+    FormData.append('instagram', dataToSend.instagramLink)
+    FormData.append('message', dataToSend.message)
+    FormData.append('website', dataToSend.website)
+    FormData.append('about', dataToSend.about)
+    axios
+      .post(URL.baseURL + 'auth/register', data, {
+        Headers: {'Content-Type': 'multipart/form-data'},
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error.response, null, 2);
+      })
+      .finally(function () {
+        setIndicator(false);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -319,10 +362,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome-5"
                 topText="Message"
                 placeholder="Enter Message"
-                value={dataToSend.instagramLink || ''}
+                value={dataToSend.message || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, instagramLink: t};
+                    return {...prev, message: t};
                   })
                 }
                 textInputContainer={{
@@ -338,10 +381,10 @@ export default function RegisterAgency(props) {
                 iconType="material-community"
                 topText="Website"
                 placeholder="Enter Website"
-                value={dataToSend.instagramLink || ''}
+                value={dataToSend.website || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, instagramLink: t};
+                    return {...prev, website: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -352,10 +395,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="About"
                 placeholder="Enter About"
-                value={dataToSend.instagramLink || ''}
+                value={dataToSend.about || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, instagramLink: t};
+                    return {...prev, about: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -406,6 +449,12 @@ export default function RegisterAgency(props) {
             btnTextStyles={{color: colors.black}}
           />
         </View>
+        <CustomButton
+          btnText="Submit"
+          indicator={indicator}
+          onPress={Register}
+          btnContainer={styles.submitBtn}
+        />
       </ScrollView>
     </View>
   );
@@ -462,5 +511,14 @@ const styles = StyleSheet.create({
   btnContainer2: {
     width: wp(30),
     backgroundColor: colors.tertiary,
+  },
+  submitBtn: {
+    width: wp(90),
+    height: hp(7),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+    marginTop: hp(10),
   },
 });
