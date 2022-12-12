@@ -1,11 +1,34 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {hp, wp} from '../Constants/Responsive';
 import {colors} from '../Constants/Colors';
 import {fonts} from '../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 
 export default function TopClassifiedComp(props) {
+  const [sliderIndex, setSliderIndex] = useState(0);
+  const [maxSlider, setMaxSlider] = useState(props.data.length - 1);
+  const flatListRef = useRef();
+  useEffect(() => {
+    listAnimator();
+  }, []);
+
+  let nextIndex = 0;
+  async function listAnimator() {
+    setInterval(function () {
+      if (nextIndex < maxSlider) {
+        nextIndex = nextIndex + 1;
+        scrollToIndex(nextIndex, true);
+      } else {
+        nextIndex = 0;
+        scrollToIndex(0, true);
+      }
+      setSliderIndex(nextIndex);
+    }, 2000);
+  }
+  async function scrollToIndex(index, animated) {
+    flatListRef.current && flatListRef.current.scrollToIndex({index, animated});
+  }
   return (
     <View>
       <FlatList
@@ -16,6 +39,13 @@ export default function TopClassifiedComp(props) {
         data={props.data}
         numColumns={props.numColumns}
         keyExtractor={item => item.id}
+        ref={r => (flatListRef.current = r)}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            scrollToIndex(nextIndex, true);
+          });
+        }}
         renderItem={({item, index}) => (
           <Pressable
             key={index}

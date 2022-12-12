@@ -14,47 +14,45 @@ const data = [
   {label: 'Islamabad', value: '4'},
 ];
 
-const CustomDropdown = () => {
-  const [value, setValue] = useState(null);
+const CustomDropdown = props => {
   const [isFocus, setIsFocus] = useState(false);
-
   const renderLabel = () => {
     return (
       <Text style={[styles.label, isFocus && {color: colors.primary}]}>
-        City{' '}
+        {props.topLabelText}
       </Text>
     );
     return null;
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.container]}>
       {renderLabel()}
       <Dropdown
         style={[styles.dropdown, isFocus && {borderColor: colors.primary}]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
+        placeholderStyle={[styles.placeholderStyle, props.placeholderStyle]}
+        selectedTextStyle={[styles.selectedTextStyle, props.selectedTextStyle]}
+        inputSearchStyle={[styles.inputSearchStyle, props.inputSearchStyle]}
+        iconStyle={[styles.iconStyle, props.iconStyle]}
+        data={props.data}
         search
         fontFamily={fonts.regular}
         maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select City' : '...'}
+        labelField={props.labelFieldName}
+        valueField={props.valueFieldName}
+        placeholder={!isFocus ? props.placeholder : '...'}
         searchPlaceholder="Search..."
-        value={value}
+        value={props.value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
-          setValue(item.value);
+          props.onChange(item);
           setIsFocus(false);
         }}
         renderLeftIcon={() => (
           <Icon
-            name={'location'}
-            type={'ionicon'}
+            name={props.iconName}
+            type={props.iconType}
             color={colors.primary}
             size={hp(3)}
             style={{marginHorizontal: 5}}
@@ -70,6 +68,7 @@ export default CustomDropdown;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.tertiary,
+    marginVertical: hp(1.5),
   },
   dropdown: {
     height: hp(7),
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     top: -hp(1.5),
     zIndex: 999,
     paddingHorizontal: 8,
-    fontFamily: fonts.regular,
+    fontFamily: fonts.bold,
     fontSize: hp(2),
   },
   placeholderStyle: {

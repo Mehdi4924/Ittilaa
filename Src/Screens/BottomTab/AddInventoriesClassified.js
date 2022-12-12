@@ -71,51 +71,38 @@ export default function AddInventoriesClassified(props) {
         </View>
         {inventory ? (
           <View>
-            <CustomDropdown />
-            <CustomTextInput
-              textInputContainer={{marginTop: hp(3)}}
-              topText="City"
+            <CustomDropdown
+              data={cityItems}
+              topLabelText={'City'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
               iconType="material"
               iconName="place"
-              iconSize={26}
-              dorpdown={true}
-              dorpdownPlaceholder="Select City"
-              open={open}
-              dropValue={value}
-              dropItems={cityItems}
-              setDropOpen={setOpen}
-              setDropValue={setValue}
-              setDropItems={setCityItems}
+              placeholder={'Select City'}
+              value={value}
+              onChange={item => setValue(item.value)}
             />
-            <CustomTextInput
-              textInputContainer={{marginTop: hp(3)}}
-              topText="Society"
-              iconType="material"
-              iconName="groups"
-              iconSize={30}
-              dorpdown={true}
-              dorpdownPlaceholder="Select Society"
-              open={socOpen}
-              dropValue={socValue}
-              dropItems={socItems}
-              setDropOpen={setSocOpen}
-              setDropValue={setSocValue}
-              setDropItems={setSocItems}
+            <CustomDropdown
+              data={socItems}
+              topLabelText={'Society'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              placeholder={'Select Society'}
+              iconName={'users'}
+              iconType="font-awesome"
+              value={socValue}
+              onChange={item => setSocValue(item.value)}
             />
-            <CustomTextInput
-              textInputContainer={{marginTop: hp(3)}}
-              topText="Type"
+            <CustomDropdown
+              data={typeItems}
+              topLabelText={'Type'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
               iconType="material"
               iconName="merge-type"
-              iconSize={30}
-              dorpdown={true}
-              dorpdownPlaceholder="Select Type"
-              open={typeOpen}
-              dropValue={typeValue}
-              dropItems={typeItems}
-              setDropOpen={setTypeOpen}
-              setDropValue={setTypeValue}
-              setDropItems={setTypeItems}
+              placeholder={'Select Type'}
+              value={typeValue}
+              onChange={item => setTypeValue(item.value)}
             />
             <CustomTextInput
               textInputContainer={{marginTop: hp(3)}}

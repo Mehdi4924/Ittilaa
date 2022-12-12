@@ -13,9 +13,12 @@ import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
+import {societyItem} from '../../Constants/dummyData';
+import CustomDropdown from '../../Components/CustomDropdown';
 
 export default function RegisterAgency(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
+  const [socItems, setSocItems] = useState(societyItem);
   const [dataToSend, setDataToSend] = useState({});
   return (
     <View style={styles.container}>
@@ -124,19 +127,20 @@ export default function RegisterAgency(props) {
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
               />
-              <CustomTextInput
+              <CustomDropdown
+                data={socItems}
+                topLabelText={'Society'}
+                labelFieldName={'label'}
+                valueFieldName={'value'}
+                placeholder={'Select Society'}
+                value={dataToSend.society}
                 iconName={'users'}
                 iconType="font-awesome"
-                topText="Select Society"
-                placeholder="Enter Select Society"
-                value={dataToSend.society || ''}
-                onChangeText={t =>
+                onChange={item => {
                   setDataToSend(prev => {
-                    return {...prev, society: t};
-                  })
-                }
-                textInputContainer={{marginVertical: hp(2)}}
-                iconSize={hp(3.5)}
+                    return {...prev, society: item.value};
+                  });
+                }}
               />
               <CustomTextInput
                 iconName={'location-pin'}
