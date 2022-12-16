@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {ImageBackground} from 'react-native';
@@ -8,17 +8,32 @@ import {fonts} from '../../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 import CustomLoader from '../../Components/CustomLoader';
 import CustomHeader from '../../Components/CustomHeader';
+import axios from 'axios';
+
 
 export default function Classified(props) {
+
+  useEffect(()=>{
+    getData()
+  })
+
+  const getData = () => {
+    axios({
+      method: 'get',
+      url: URL.baseURL + 'classified',
+    })
+      .then(function (response) {
+       console.log('Response data',response);
+      })
+      .catch(function (error) {
+        console.log('classified Error', error);
+      });
+  };
   return (
     <View style={styles.container}>
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
-        leftIconName="arrow-back"
-        leftIconType="material"
-        leftIconColor={colors.white}
-        leftIconSize={30}
         onLeftIconPress={() => props.navigation.goBack()}
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
