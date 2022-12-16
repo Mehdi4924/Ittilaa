@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableOpacityBase,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import {colors} from '../../Constants/Colors';
 import {Icon} from '@rneui/themed';
@@ -79,43 +80,81 @@ export default function RegisterAgency(props) {
   };
 
   const Register = () => {
-    setIndicator(true);
-    var date = new FormData();
-    date.append('agency_name', dataToSend.agencyName);
-    date.append('name', dataToSend.userName);
-    date.append('designation', dataToSend.designation);
-    date.append('phone', dataToSend.phone);
-    date.append('society', dataToSend.society);
-    date.append('address', dataToSend.address);
-    date.append('ceo_name', dataToSend.ceoName);
-    date.append('ceo_mobile1', dataToSend.ceoNum1);
-    date.append('ceo_mobile2', dataToSend.ceoNum2);
-    date.append('landline', dataToSend.landline);
-    date.append('whatapp_no', dataToSend.whatsapp);
-    date.append('email', dataToSend.email);
-    date.append('fax', dataToSend.fax);
-    date.append('facebook', dataToSend.facebookLink);
-    date.append('youtube', dataToSend.youTubeLink);
-    date.append('twitter', dataToSend.twitterLink);
-    date.append('instagram', dataToSend.instagramLink);
-    date.append('message', dataToSend.message);
-    date.append('website', dataToSend.website);
-    date.append('about', dataToSend.about);
-    date.append('photo[]', {uri:imageUri.uri, name:imageUri.fileName, type:imageUri.type});
-    date.append('agency_photo[]', {uri:imageUri.uri, name:imageUri.fileName, type:imageUri.type});
-    axios
-      .post(URL.baseURL + 'auth/register', data, {
-        Headers: {'Content-Type': 'multipart/form-data'},
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error.response, null, 2);
-      })
-      .finally(function () {
-        setIndicator(false);
+    // if (dataToSend.agencyName == null) {
+    //   ToastAndroid.show('Please Enter agency name', ToastAndroid.SHORT);
+    // } else if (dataToSend.userName == null) {
+    //   ToastAndroid.show('Please Enter your name', ToastAndroid.SHORT);
+    // } else if (dataToSend.phone == null) {
+    //   ToastAndroid.show('Please Enter phone number', ToastAndroid.SHORT);
+    // } else if (dataToSend.society == null) {
+    //   ToastAndroid.show('Please select society', ToastAndroid.SHORT);
+    // } else if (dataToSend.password == null) {
+    //   ToastAndroid.show('Please Enter [assword]', ToastAndroid.SHORT);
+    // } else if (dataToSend.confPassword == null) {
+    //   ToastAndroid.show('Please confirm password', ToastAndroid.SHORT);
+    // } else if (dataToSend.email == null) {
+    //   ToastAndroid.show('Please Enter Email', ToastAndroid.SHORT);
+    // } else if (fileName == null) {
+    //   ToastAndroid.show('Please select photo', ToastAndroid.SHORT);
+    // } else if (logoFileName == null) {
+    //   ToastAndroid.show('Please select Logo', ToastAndroid.SHORT);
+    // } 
+    // else 
+    // {
+      setIndicator(true);
+      var data = new FormData();
+      data.append('agency_name', dataToSend.agencyName);
+      data.append('name', dataToSend.userName);
+      data.append('designation', dataToSend.designation);
+      data.append('phone', dataToSend.phone);
+      data.append('society', dataToSend.society);
+      data.append('address', dataToSend.address);
+      data.append('ceo_name', dataToSend.ceoName);
+      data.append('ceo_mobile1', dataToSend.ceoNum1);
+      data.append('ceo_mobile2', dataToSend.ceoNum2);
+      data.append('landline', dataToSend.landline);
+      data.append('whatapp_no', dataToSend.whatsapp);
+      data.append('email', dataToSend.email);
+      data.append('fax', dataToSend.fax);
+      data.append('facebook', dataToSend.facebookLink);
+      data.append('youtube', dataToSend.youTubeLink);
+      data.append('twitter', dataToSend.twitterLink);
+      data.append('instagram', dataToSend.instagramLink);
+      data.append('message', dataToSend.message);
+      data.append('website', dataToSend.website);
+      data.append('about', dataToSend.about);
+      data.append('password', dataToSend.password);
+      data.append('photo[]', {
+        uri: imageUri.uri,
+        name: imageUri.fileName,
+        type: imageUri.type,
       });
+      data.append('agency_photo[]', {
+        uri: imageUri.uri,
+        name: imageUri.fileName,
+        type: imageUri.type,
+      });
+      // axios
+      //   .post(URL.baseURL + 'auth/register', data, {
+      //     Headers: {'Content-Type': 'multipart/form-data'},
+      //   })
+        axios({
+          method: "post",
+          url: URL.baseURL+'auth/register',
+          data: data,
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(function (response) {
+          props.navigation.navigate('Login');
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error, null, 2);
+        })
+        .finally(function () {
+          setIndicator(false);
+        });
+    
   };
 
   return (
@@ -224,6 +263,7 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
+                keyboardType="phone-pad"
               />
               <CustomDropdown
                 data={socItems}
@@ -236,7 +276,7 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 onChange={item => {
                   setDataToSend(prev => {
-                    return {...prev, society: item.value};
+                    return {...prev, society: item.label};
                   });
                 }}
               />
@@ -253,6 +293,36 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
+              />
+              <CustomTextInput
+                iconName={'lock'}
+                iconType="entypo"
+                topText="Password"
+                placeholder="Enter Password"
+                value={dataToSend.password || ''}
+                onChangeText={t =>
+                  setDataToSend(prev => {
+                    return {...prev, password: t};
+                  })
+                }
+                textInputContainer={{marginVertical: hp(2)}}
+                iconSize={hp(4)}
+                secureTextEntry={true}
+              />
+              <CustomTextInput
+                iconName={'lock'}
+                iconType="entypo"
+                topText="Confirm Password"
+                placeholder="Enter Confirm Password"
+                value={dataToSend.confPassword || ''}
+                onChangeText={t =>
+                  setDataToSend(prev => {
+                    return {...prev, confPassword: t};
+                  })
+                }
+                textInputContainer={{marginVertical: hp(2)}}
+                iconSize={hp(4)}
+                secureTextEntry={true}
               />
             </>
           ) : selectedIndex == 1 ? (
@@ -284,6 +354,7 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
+                keyboardType="phone-pad"
               />
               <CustomTextInput
                 iconName={'user-plus'}
@@ -298,6 +369,7 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(3.5)}
+                keyboardType="phone-pad"
               />
               <CustomTextInput
                 iconName={'phone'}
@@ -312,6 +384,7 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
+                keyboardType="phone-pad"
               />
               <CustomTextInput
                 iconName={'whatsapp'}
@@ -326,6 +399,7 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
+                keyboardType="phone-pad"
               />
               <CustomTextInput
                 iconName={'mail-bulk'}
@@ -340,6 +414,7 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(3.5)}
+                keyboardType="email-address"
               />
               <CustomTextInput
                 iconName={'fax'}
@@ -536,12 +611,14 @@ export default function RegisterAgency(props) {
             btnTextStyles={{color: colors.black}}
           />
         </View>
+        {selectedIndex==3?(
         <CustomButton
           btnText="Submit"
           indicator={indicator}
           onPress={Register}
           btnContainer={styles.submitBtn}
         />
+        ):null}
       </ScrollView>
     </View>
   );

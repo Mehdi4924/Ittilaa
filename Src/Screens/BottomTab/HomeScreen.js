@@ -73,6 +73,7 @@ export default function HomeScreen(props) {
           flatListStyle={styles.flatListStyle}
           profileImgStyle={styles.profileImgStyle}
           profileImgContainer={styles.profileImgContainer}
+          animation={true}
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Top Classified</Text>
@@ -96,6 +97,7 @@ export default function HomeScreen(props) {
           classifiedAmenities={styles.classifiedAmenities}
           classifiedAmenitiesText={styles.classifiedAmenitiesText}
           amenitiesIconSize={10}
+          animation={true}
           // onPress={it => props.navigation.navigate('FeaturedDetails')}
         />
         <View style={styles.titleContainer}>

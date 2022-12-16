@@ -35,6 +35,7 @@ export default function CustomTextInput(props) {
           />
         ) : (
           <TextInput
+          secureTextEntry={props.secureTextEntry?true:false}
             placeholder={props.placeholder}
             multiline={props.multiline}
             value={props.value}
@@ -42,6 +43,7 @@ export default function CustomTextInput(props) {
             style={[styles.textInputStyles, props.textInputStyles]}
             onChangeText={props.onChangeText}
             textStyle={styles.textStyle}
+            keyboardType={props.keyboardType?props.keyboardType:'default'}
             labelStyle={{
               fontWeight: 'bold',
             }}
