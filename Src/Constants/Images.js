@@ -8,4 +8,5 @@ export const allImages = {
   map: require('../Assets/Images/map.png'),
   whatsapp: require('../Assets/Images/whatsapp.png'),
   call: require('../Assets/Images/call.png'),
+  agencydummy: require('../Assets/Images/agency-dummy.png'),
 };

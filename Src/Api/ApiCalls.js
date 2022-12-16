@@ -36,6 +36,13 @@ export const Auth = {
   login: data => requests.post('auth/login', data),
   forgot_Password: data => requests.post('forget-password', data),
 };
+export const AppFlow = {
+  dashboard: () => requests.get('dashboard'),
+  InventoryDetails: id => requests.get(`inventory/${id}`),
+  getAllClassifieds: () => requests.get('classified'),
+  getAllAgencies: () => requests.get('agency'),
+  getAgencyDetail: id => requests.get(`agency/${id}`),
+};
 
 export const GetCities = {
   cities: data =>

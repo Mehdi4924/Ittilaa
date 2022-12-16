@@ -5,13 +5,14 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomHeader from '../../Components/CustomHeader';
 import {fonts} from '../../Constants/Fonts';
-import { topInventories} from '../../Constants/dummyData';
+import {topInventories} from '../../Constants/dummyData';
 import InventoriesComp from '../../Components/InventoriesComp';
+import {AppFlow} from '../../Api/ApiCalls';
 
 export default function TopInventories(props) {
   return (
@@ -23,7 +24,7 @@ export default function TopInventories(props) {
         leftIconType="material"
         leftIconColor={colors.white}
         leftIconSize={30}
-        onLeftIconPress={()=>props.navigation.goBack()}
+        onLeftIconPress={() => props.navigation.goBack()}
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
@@ -35,12 +36,12 @@ export default function TopInventories(props) {
         <Text style={styles.titleText}>Top Inventories</Text>
       </View>
       <InventoriesComp
-          data={topInventories}
-          inventoryCard={styles.inventoryCard}
-          flatListStyle={styles.flatListStyle}
-          profileImgStyle={styles.profileImgStyle}
-          profileImgContainer={styles.profileImgContainer}
-        />
+        data={topInventories}
+        inventoryCard={styles.inventoryCard}
+        flatListStyle={styles.flatListStyle}
+        profileImgStyle={styles.profileImgStyle}
+        profileImgContainer={styles.profileImgContainer}
+      />
     </View>
   );
 }
@@ -98,15 +99,15 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.primary,
   },
-  flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30),},
+  flatListStyle: {paddingTop: hp(1), paddingBottom: hp(30)},
   inventoryCard: {
     width: wp(90),
     backgroundColor: colors.white,
     borderRadius: 14,
     marginTop: hp(2),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)',
-    paddingBottom:hp(2)
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.08)',
+    paddingBottom: hp(2),
   },
   profileImgStyle: {
     width: wp(12),

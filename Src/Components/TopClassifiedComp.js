@@ -42,9 +42,10 @@ export default function TopClassifiedComp(props) {
           keyExtractor={item => item.id}
           ref={r => (flatListRef.current = r)}
           onScrollToIndexFailed={info => {
+            nextIndex = 0;
             const wait = new Promise(resolve => setTimeout(resolve, 500));
             wait.then(() => {
-              scrollToIndex(nextIndex, true);
+              scrollToIndex(0, true);
             });
           }}
           renderItem={({item, index}) => (
@@ -53,16 +54,27 @@ export default function TopClassifiedComp(props) {
               style={props.classifiedCardStyle}
               onPress={item => props.onPress(item)}>
               <Image
-                source={item.image}
+                source={
+                  item.file
+                    ? {uri: item.file}
+                    : require('../Assets/Images/classified.jpeg')
+                }
                 style={props.classifiedImageStyle}
                 resizeMode="contain"
               />
               <View style={props.classifiedTitlePrice}>
-                <Text style={props.classifiedTitleText}>{item.name}</Text>
-                <Text style={props.classifiedPriceText}>{item.price}</Text>
+                <Text style={props.classifiedTitleText}>
+                  {item.type == 'pa' ? 'House ' : 'Plot '}
+                  For Sale
+                </Text>
+                <Text style={props.classifiedPriceText}>
+                  {item?.price || 'Loading'} Lacs
+                </Text>
               </View>
               <View></View>
-              <Text style={props.classifiedAddressStyle}>{item.address}</Text>
+              <Text style={props.classifiedAddressStyle}>
+                {item.block || 'Loading'}
+              </Text>
               <View style={styles.classifiedAmenitiesContainer}>
                 <View style={props.classifiedAmenities}>
                   <Icon
@@ -72,7 +84,7 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item.bedRoom}
+                    {item?.bedRoom || '2'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
@@ -83,12 +95,12 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item.bedRoom}
+                    {item?.bedRoom || '3'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
                   <Text style={props.classifiedAmenitiesText}>
-                    {item.bedRoom}Marla
+                    {item?.bedRoom || '4'} Marla
                   </Text>
                 </View>
               </View>
@@ -104,7 +116,6 @@ export default function TopClassifiedComp(props) {
           data={props.data}
           numColumns={props.numColumns}
           keyExtractor={item => item.id}
-          
           renderItem={({item, index}) => (
             <Pressable
               key={index}

@@ -4,11 +4,11 @@ import {hp, wp} from '../Constants/Responsive';
 
 export default function TitaniumFlatlist(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
-  const [maxSlider, setMaxSlider] = useState(props.data.length - 1);
+  const [maxSlider, setMaxSlider] = useState(props?.data?.length - 1);
   const flatListRef = useRef();
   useEffect(() => {
-    listAnimator();
-  }, []);
+    props?.data?.length ? listAnimator() : null;
+  }, [props?.length]);
 
   let nextIndex = 0;
   async function listAnimator() {
@@ -24,7 +24,10 @@ export default function TitaniumFlatlist(props) {
     }, 2000);
   }
   async function scrollToIndex(index, animated) {
-    flatListRef.current && flatListRef.current.scrollToIndex({index, animated});
+    props.data.length
+      ? flatListRef.current &&
+        flatListRef.current.scrollToIndex({index, animated})
+      : null;
   }
   return (
     <View style={props.listContainerstyle}>
@@ -36,22 +39,32 @@ export default function TitaniumFlatlist(props) {
         data={props.data}
         keyExtractor={item => item.id}
         ref={r => (flatListRef.current = r)}
+        ListEmptyComponent={
+          <View>
+            <Text>Hi there</Text>
+          </View>
+        }
         onScrollToIndexFailed={info => {
+          nextIndex = 0;
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
-            scrollToIndex(nextIndex, true);
+            props?.data?.length ? scrollToIndex(0, true) : null;
           });
         }}
         renderItem={({item, index}) => (
           <View key={index} style={{alignItems: 'center', marginRight: wp(2)}}>
             <View style={props.cardStyle}>
               <Image
-                source={item.image}
+                source={
+                  item?.file
+                    ? {uri: item.file}
+                    : require('../Assets/Images/agency-icon.png')
+                }
                 style={{width: wp(20), height: hp(10)}}
                 resizeMode="contain"
               />
             </View>
-            <Text style={props.listTitleStyle}>{item.name}</Text>
+            <Text style={props.listTitleStyle}>{item?.name || 'Loading'}</Text>
           </View>
         )}
       />
