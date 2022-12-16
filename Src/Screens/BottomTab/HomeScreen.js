@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import CustomHeader from '../../Components/CustomHeader';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
@@ -22,7 +22,28 @@ import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
 import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
+import {URL} from '../../Constants/URL';
+import axios from 'axios';
+
 export default function HomeScreen(props) {
+
+  useEffect(()=>{
+    getData()
+  })
+
+  const getData = () => {
+    axios({
+      method: 'get',
+      url: URL.baseURL + 'dashboard',
+    })
+      .then(function (response) {
+       console.log('Response data',response);
+      })
+      .catch(function (error) {
+        console.log('Dashboard Error', error.response);
+      });
+  };
+
   return (
     <View style={styles.mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>

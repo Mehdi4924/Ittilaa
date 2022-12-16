@@ -13,11 +13,19 @@ import {fonts} from '../../Constants/Fonts';
 import CustomButton from '../../Components/CustomButton';
 import CustomTextInput from '../../Components/CustomTextInput';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {adCategories, cityItem, invenCategories, plotType, purpose, sizes, societyItem, typeItem} from '../../Constants/dummyData';
+import {
+  adCategories,
+  cityItem,
+  invenCategories,
+  plotType,
+  purpose,
+  sizes,
+  societyItem,
+  typeItem,
+} from '../../Constants/dummyData';
 import CustomDropdown from '../../Components/CustomDropdown';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import { Icon } from '@rneui/themed';
-
+import {Icon} from '@rneui/themed';
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
@@ -26,6 +34,8 @@ export default function AddInventoriesClassified(props) {
   const [adType, setAdType] = useState(true);
   const [imageUri, setImageUri] = useState('');
   const [fileName, setFileName] = useState('');
+  const [socValue, setSocValue] = useState('');
+  const [city, setCity] = useState('');
   const [PUP, setPUP] = useState(false);
   const [CP, setCP] = useState(false);
   const [MB, setMB] = useState(false);
@@ -96,18 +106,18 @@ export default function AddInventoriesClassified(props) {
         {inventory ? (
           <View>
             <CustomDropdown
-              data={cityItems}
+              data={cityItem}
               topLabelText={'City'}
               labelFieldName={'label'}
               valueFieldName={'value'}
               iconType="material"
               iconName="place"
               placeholder={'Select City'}
-              value={value}
-              onChange={item => setValue(item.value)}
+              value={city}
+              onChange={item => setCity(item.value)}
             />
             <CustomDropdown
-              data={socItems}
+              data={societyItem}
               topLabelText={'Society'}
               labelFieldName={'label'}
               valueFieldName={'value'}
@@ -118,7 +128,7 @@ export default function AddInventoriesClassified(props) {
               onChange={item => setSocValue(item.value)}
             />
             <CustomDropdown
-              data={typeItems}
+              data={typeItem}
               topLabelText={'Type'}
               labelFieldName={'label'}
               valueFieldName={'value'}
@@ -128,26 +138,31 @@ export default function AddInventoriesClassified(props) {
               value={typeValue}
               onChange={item => setTypeValue(item.value)}
             />
-            <CustomDropdown 
-              label='Purpose'
+            <CustomDropdown
+              label="Purpose"
               data={purpose}
-              leftIconName='location-city'
-              leftIconType='material'
+              leftIconName="location-city"
+              leftIconType="material"
               leftIconSize={hp(3.2)}
-              placeholder='Select Purpose'
+              placeholder="Select Purpose"
               search={false}
             />
-            <CustomDropdown 
-              label='Categories'
+            <CustomDropdown
+              label="Categories"
               data={invenCategories}
-              leftIconName='category'
-              leftIconType='material'
+              leftIconName="category"
+              leftIconType="material"
               leftIconSize={hp(3.2)}
-              placeholder='Select Category'
+              placeholder="Select Category"
               search={true}
             />
-            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
-           <CustomTextInput
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <CustomTextInput
                 topText="Plot/Propert No."
                 iconType="material"
                 iconName="fullscreen-exit"
@@ -157,18 +172,18 @@ export default function AddInventoriesClassified(props) {
                 textInputStyles={styles.plNoTxtInpStyles}
                 textInputView={styles.plNoTxtInpView}
               />
-               <CustomDropdown 
-              label='Size'
-              data={sizes}
-              leftIconName='fit-screen'
-              leftIconType='material'
-              leftIconSize={hp(3.2)}
-              placeholder='Size'
-              search={false}
-              dropdown={styles.sizesDropdown}
-            />
-              </View>
-              <CustomTextInput
+              <CustomDropdown
+                label="Size"
+                data={sizes}
+                leftIconName="fit-screen"
+                leftIconType="material"
+                leftIconSize={hp(3.2)}
+                placeholder="Size"
+                search={false}
+                dropdown={styles.sizesDropdown}
+              />
+            </View>
+            <CustomTextInput
               textInputContainer={{marginTop: hp(4)}}
               topText="Block"
               iconType="material"
@@ -176,7 +191,7 @@ export default function AddInventoriesClassified(props) {
               iconSize={26}
               placeholder="Enter Block"
             />
-              <View style={styles.priceTypeContainer}>
+            <View style={styles.priceTypeContainer}>
               <CustomTextInput
                 topText="Price"
                 iconType="material"
@@ -214,21 +229,24 @@ export default function AddInventoriesClassified(props) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    ...MB ? styles.priceTypeActice : styles.priceTypeInactice, marginLeft:wp(2)
+                    ...(MB ? styles.priceTypeActice : styles.priceTypeInactice),
+                    marginLeft: wp(2),
                   }}
                   onPress={() => setMB(!MB)}>
                   <Text style={styles.priceTypeTextStyle}>M</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    ...CP ? styles.priceTypeActice : styles.priceTypeInactice, marginLeft:wp(2)
+                    ...(CP ? styles.priceTypeActice : styles.priceTypeInactice),
+                    marginLeft: wp(2),
                   }}
                   onPress={() => setCP(!CP)}>
                   <Text style={styles.priceTypeTextStyle}>CP</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    ...FP ? styles.priceTypeActice : styles.priceTypeInactice, marginLeft:wp(2)
+                    ...(FP ? styles.priceTypeActice : styles.priceTypeInactice),
+                    marginLeft: wp(2),
                   }}
                   onPress={() => setFP(!FP)}>
                   <Text style={styles.priceTypeTextStyle}>FP</Text>
@@ -238,28 +256,28 @@ export default function AddInventoriesClassified(props) {
           </View>
         ) : (
           <View>
-          <View style={styles.photoContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              openGallery();
-            }}>
-            <Icon
-              type="material"
-              name="collections"
-              size={50}
-              color={colors.grey}
-            />
-          </TouchableOpacity>
-          <Text style={styles.insertPhotoText}>Insert Cover Photo</Text>
-          <Text
-            style={styles.fileNameStyle}
-            numberOfLines={1}
-            adjustsFontSizeToFit>
-            {fileName.length < 15
-              ? `${fileName}`
-              : `${fileName.substring(0, 14)}...`}
-          </Text>
-        </View>
+            <View style={styles.photoContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  openGallery();
+                }}>
+                <Icon
+                  type="material"
+                  name="collections"
+                  size={50}
+                  color={colors.grey}
+                />
+              </TouchableOpacity>
+              <Text style={styles.insertPhotoText}>Insert Cover Photo</Text>
+              <Text
+                style={styles.fileNameStyle}
+                numberOfLines={1}
+                adjustsFontSizeToFit>
+                {fileName.length < 15
+                  ? `${fileName}`
+                  : `${fileName.substring(0, 14)}...`}
+              </Text>
+            </View>
             <CustomTextInput
               textInputContainer={{marginTop: hp(4)}}
               topText="Title."
@@ -267,7 +285,7 @@ export default function AddInventoriesClassified(props) {
               iconName="title"
               iconSize={26}
               placeholder="Enter plot title"
-            /> 
+            />
             <CustomTextInput
               textInputContainer={{marginTop: hp(4)}}
               topText="Plot No."
@@ -276,10 +294,9 @@ export default function AddInventoriesClassified(props) {
               iconSize={26}
               placeholder="Enter Plot Number"
             />
-            
-            
+
             <View style={styles.amenitiesMainContainer}>
-            <CustomTextInput
+              <CustomTextInput
                 topText="Beds"
                 iconType="font-awesome"
                 iconName="bed"
@@ -289,7 +306,7 @@ export default function AddInventoriesClassified(props) {
                 textInputStyles={styles.amenitiesInputStyles}
                 textInputView={styles.amenitiesInputView}
               />
-            <CustomTextInput
+              <CustomTextInput
                 topText="Bath"
                 iconType="font-awesome"
                 iconName="bath"
@@ -299,7 +316,7 @@ export default function AddInventoriesClassified(props) {
                 textInputStyles={styles.amenitiesInputStyles}
                 textInputView={styles.amenitiesInputView}
               />
-            <CustomTextInput
+              <CustomTextInput
                 topText="Floor"
                 iconType="material-community"
                 iconName="floor-plan"
@@ -309,14 +326,14 @@ export default function AddInventoriesClassified(props) {
                 textInputStyles={styles.amenitiesInputStyles}
                 textInputView={styles.amenitiesInputView}
               />
-              </View>
-               <CustomDropdown 
-              label='Type'
+            </View>
+            <CustomDropdown
+              label="Type"
               data={plotType}
-              leftIconName='merge-type'
-              leftIconType='material'
+              leftIconName="merge-type"
+              leftIconType="material"
               leftIconSize={hp(3.5)}
-              placeholder='Select Type'
+              placeholder="Select Type"
               search={false}
             />
             <CustomTextInput
@@ -331,7 +348,6 @@ export default function AddInventoriesClassified(props) {
               multiline={true}
               textInputView={styles.textInputView}
             />
-            
           </View>
         )}
 
@@ -435,10 +451,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(5),
     borderRadius: 5,
     borderWidth: 1,
-    flexDirection:'row',
-    alignItems:'center',
-    
-    
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   priceTextInputStyles: {
     width: wp(52),
@@ -481,7 +495,7 @@ const styles = StyleSheet.create({
     height: hp(20),
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor:colors.primary,
+    borderColor: colors.primary,
     borderRadius: hp(1),
     alignItems: 'center',
     justifyContent: 'center',
@@ -497,23 +511,23 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.grey,
   },
-  amenitiesMainContainer:{
-    width:wp(90),
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
-    marginTop:hp(2)
+  amenitiesMainContainer: {
+    width: wp(90),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: hp(2),
   },
   amenitiesContainer: {
     width: wp(28),
     height: hp(6),
-    flexDirection:'row',
-  justifyContent: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     paddingHorizontal: wp(2),
     borderRadius: 5,
     borderWidth: 1,
     marginTop: hp(3),
-    alignItems:'center'
+    alignItems: 'center',
     // backgroundColor:'red'
   },
   amenitiesInputStyles: {
@@ -534,21 +548,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(5),
     borderRadius: 8,
     borderWidth: 1,
-    marginTop:hp(4.5),
-    flexDirection:'row',
-    alignItems:'center'
-    
+    marginTop: hp(4.5),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   plNoTxtInpStyles: {
     width: wp(35),
     fontFamily: fonts.regular,
-  
   },
   plNoTxtInpView: {
     flexDirection: 'row',
     alignItems: 'center',
-    
-
   },
   sizesDropdown: {
     height: hp(7),

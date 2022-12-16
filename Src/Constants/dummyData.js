@@ -299,7 +299,7 @@ export const NewsData = [
     name: 'Independence Day of Pakistan',
     image: require('../Assets/Images/news2.jpg'),
   },
-];
+]
 export const cityItem = [
   {label: 'Lahore', value: 'lahore'},
   {label: 'Karachi', value: 'karachi'},

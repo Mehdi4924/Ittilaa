@@ -9,8 +9,8 @@ export default function AuthStack() {
   const AuthStack = createNativeStackNavigator();
   return (
     <AuthStack.Navigator screenOptions={{headerShown: false}}>
-      <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="Splash" component={Splash} />
+      <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="RegisterAgency" component={RegisterAgency} />
     </AuthStack.Navigator>
   );

@@ -1,5 +1,5 @@
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
@@ -8,6 +8,8 @@ import CustomButton from '../../Components/CustomButton';
 import CustomHeader from '../../Components/CustomHeader';
 import InventoriesComp from '../../Components/InventoriesComp';
 import {topInventories} from '../../Constants/dummyData';
+import axios from 'axios';
+
 
 export default function Inventories(props) {
   const listData = [
@@ -30,6 +32,22 @@ export default function Inventories(props) {
       description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
     },
   ];
+  useEffect(()=>{
+    Inventories()
+  })
+
+  const Inventories = () => {
+    axios({
+      method: 'get',
+      url: URL.baseURL + 'inventory/1',
+    })
+      .then(function (response) {
+       console.log('Response data',response);
+      })
+      .catch(function (error) {
+        console.log('Inventories Error', error.response);
+      });
+  };
   const headerComponent = () => {
     return (
       <View style={styles.container}>

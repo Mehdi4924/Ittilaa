@@ -17,13 +17,14 @@ import { useState } from 'react';
 import { URL } from '../../Constants/URL';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Login(props) {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('646464');
+  const [password, setPassword] = useState('1234');
+  const [indicatorInd, setIndicatorInd] = useState(false);
   const [indicator, setIndicator] = useState(false);
 
 
   const Login = () => {
-    setIndicator(true);
+    setIndicatorInd(true);
     var data = new FormData();
     data.append('phone', phoneNumber);
     data.append('password',password);
@@ -35,7 +36,7 @@ export default function Login(props) {
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
-         AsyncStorage.setItem('user')
+        //  JSON.parse(AsyncStorage.setItem('user'))
         props.navigation.navigate('BottomNavigator')
         console.log(response);
       })
@@ -43,7 +44,7 @@ export default function Login(props) {
         console.log(error.response, null, 2);
       })
       .finally(function () {
-        setIndicator(false);
+        setIndicatorInd(false);
       });
     }
 
@@ -81,7 +82,7 @@ export default function Login(props) {
         <View style={{alignItems: 'center'}}>
           <CustomButton
             btnText="Login"
-            indicator={false}
+            indicator={indicatorInd}
             onPress={Login}
             btnContainer={{marginTop: hp(20)}}
           />
