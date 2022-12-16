@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {hp, wp} from '../Constants/Responsive';
 import {fonts} from '../Constants/Fonts';
@@ -9,7 +15,10 @@ export default function CustomTextInput(props) {
   return (
     <View style={[styles.textInputContainer, props.textInputContainer]}>
       <Text style={styles.inputHeading}>{props.topText || 'N/A'}</Text>
-      <View style={props.textInputView?props.textInputView:styles.textInputView}>
+      <View
+        style={
+          props.textInputView ? props.textInputView : styles.textInputView
+        }>
         <Icon
           name={props.iconName}
           type={props.iconType}
@@ -17,39 +26,31 @@ export default function CustomTextInput(props) {
           size={props.iconSize ? props.iconSize : hp(5)}
           style={props.iconStyles}
         />
-        {props.dorpdown ? (
-          <DropDownPicker
-            open={props.open}
-            value={props.dropValue}
-            items={props.dropItems}
-            setOpen={props.setDropOpen}
-            setValue={props.setDropValue}
-            setItems={props.setDropItems}
-            style={styles.dropDownStyles}
-            placeholder={props.dorpdownPlaceholder}
-            containerStyle={{width:wp(76),}}
-            onPress={props.onPress}
-            zIndex={5000}
-            
-
-          />
-        ) : (
-          <TextInput
-          secureTextEntry={props.secureTextEntry?true:false}
-            placeholder={props.placeholder}
-            multiline={props.multiline}
-            value={props.value}
-            placeholderTextColor={colors.grey}
-            style={[styles.textInputStyles, props.textInputStyles]}
-            onChangeText={props.onChangeText}
-            textStyle={styles.textStyle}
-            keyboardType={props.keyboardType?props.keyboardType:'default'}
-            labelStyle={{
-              fontWeight: 'bold',
-            }}
-            
-          />
-        )}
+        <TextInput
+          secureTextEntry={props.secureTextEntry ? true : false}
+          placeholder={props.placeholder}
+          multiline={props.multiline}
+          value={props.value}
+          placeholderTextColor={colors.grey}
+          style={[styles.textInputStyles, props.textInputStyles]}
+          onChangeText={props.onChangeText}
+          textStyle={styles.textStyle}
+          keyboardType={props.keyboardType ? props.keyboardType : 'default'}
+          labelStyle={{
+            fontWeight: 'bold',
+          }}
+        />
+        {props.rightIcon ? (
+          <TouchableOpacity onPress={props.rightIconPress}>
+            <Icon
+              name={props.rightIconName}
+              type={props.rightIconType}
+              color={colors.primary}
+              size={props.iconSize ? props.rightIconSize : hp(5)}
+              style={props.rightIconStyles}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );

@@ -1,18 +1,20 @@
 import axios from 'axios';
 import Config from './Config';
-// import Config from '../Constants/Config';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const API_ROOT = Config.baseURL;
 const googleKey = Config.googleMapKey;
 
 export const configureAxiosHeaders = async () => {
-  //   let tok = await AsyncStorage.getItem('Auth');
-  // console.log('this is token', 'Bearer '.concat(tok));
-  axios.defaults.headers['Authorization'] = 'Bearer ';
+  const userData = await AsyncStorage.getItem('AuthUser');
+  const parsedData = JSON.parse(userData);
+  console.log('Async User Data', parsedData);
+  axios.defaults.headers['Authorization'] = 'Bearer '.concat(
+    parsedData.accessToken,
+  );
   axios.defaults.headers['Expires'] = '0';
   axios.defaults.headers['Pragma'] = 'no-cache';
   axios.defaults.headers['Cache-Control'] = 'no-cache';
-  axios.defaults.headers['Content-Type'] = 'application/json';
+  axios.defaults.headers['Content-Type'] = 'multipart/form-data';
 };
 
 const requests = {
@@ -31,7 +33,7 @@ const requests = {
 };
 export const Auth = {
   registerAgency: data => requests.post('auth/register', data),
-  login: data => requests.post('user-login', data),
+  login: data => requests.post('auth/login', data),
   forgot_Password: data => requests.post('forget-password', data),
 };
 
