@@ -12,7 +12,6 @@ import axios from 'axios';
 
 
 export default function Classified(props) {
-
   useEffect(()=>{
     getData()
   })
@@ -26,7 +25,7 @@ export default function Classified(props) {
        console.log('Response data',response);
       })
       .catch(function (error) {
-        console.log('classified Error', error);
+        console.log('Dashboard Error', error.response);
       });
   };
   return (
