@@ -4,6 +4,8 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Image,
+  ImageBackground,
 } from 'react-native';
 import React, {useState} from 'react';
 import CustomHeader from '../../Components/CustomHeader';
@@ -35,7 +37,16 @@ export default function AddInventoriesClassified(props) {
   const [imageUri, setImageUri] = useState('');
   const [fileName, setFileName] = useState('');
   const [socValue, setSocValue] = useState('');
+  const [typeValue, setTypeValue] = useState('');
+  const [clsTypeValue, setClsTypeValue] = useState('');
+  const [propPurpose, setpropPurpose] = useState('');
+  const [clsProPurpose, setclsProPurpose] = useState('');
+  const [category, setCategory] = useState('');
+  const [clsCategory, setClsCategory] = useState('');
+  const [plotSize, setplotSize] = useState('');
   const [city, setCity] = useState('');
+  const [block, setBlock] = useState('');
+  const [price, setPrice] = useState('');
   const [PUP, setPUP] = useState(false);
   const [CP, setCP] = useState(false);
   const [MB, setMB] = useState(false);
@@ -139,22 +150,26 @@ export default function AddInventoriesClassified(props) {
               onChange={item => setTypeValue(item.value)}
             />
             <CustomDropdown
-              label="Purpose"
               data={purpose}
-              leftIconName="location-city"
-              leftIconType="material"
-              leftIconSize={hp(3.2)}
-              placeholder="Select Purpose"
-              search={false}
+              topLabelText={'Purpose'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="business"
+              placeholder={'Select Purpose'}
+              value={propPurpose}
+              onChange={item => setpropPurpose(item.value)}
             />
             <CustomDropdown
-              label="Categories"
               data={invenCategories}
-              leftIconName="category"
-              leftIconType="material"
-              leftIconSize={hp(3.2)}
-              placeholder="Select Category"
-              search={true}
+              topLabelText={'Category'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="category"
+              placeholder={'Select Category'}
+              value={category}
+              onChange={item => setCategory(item.value)}
             />
             <View
               style={{
@@ -173,23 +188,27 @@ export default function AddInventoriesClassified(props) {
                 textInputView={styles.plNoTxtInpView}
               />
               <CustomDropdown
-                label="Size"
-                data={sizes}
-                leftIconName="fit-screen"
-                leftIconType="material"
-                leftIconSize={hp(3.2)}
-                placeholder="Size"
-                search={false}
                 dropdown={styles.sizesDropdown}
+                data={sizes}
+                topLabelText={'Size'}
+                labelFieldName={'label'}
+                valueFieldName={'value'}
+                iconType="material"
+                iconName="fullscreen"
+                placeholder={'Size'}
+                value={plotSize}
+                onChange={item => setplotSize(item.value)}
               />
             </View>
             <CustomTextInput
-              textInputContainer={{marginTop: hp(4)}}
+              textInputContainer={{marginTop: hp(2), borderRadius: 8}}
               topText="Block"
               iconType="material"
               iconName="grid-view"
               iconSize={26}
               placeholder="Enter Block"
+              value={block}
+              onChangeText={e => setBlock(e)}
             />
             <View style={styles.priceTypeContainer}>
               <CustomTextInput
@@ -198,6 +217,8 @@ export default function AddInventoriesClassified(props) {
                 iconName="local-offer"
                 iconSize={26}
                 placeholder="Enter Price"
+                value={price}
+                onChangeText={e => setPrice(e)}
                 textInputContainer={styles.priceTextInputContainer}
                 textInputStyles={styles.priceTextInputStyles}
                 textInputView={styles.priceTextInputView}
@@ -257,42 +278,100 @@ export default function AddInventoriesClassified(props) {
         ) : (
           <View>
             <View style={styles.photoContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  openGallery();
-                }}>
-                <Icon
-                  type="material"
-                  name="collections"
-                  size={50}
-                  color={colors.grey}
-                />
-              </TouchableOpacity>
-              <Text style={styles.insertPhotoText}>Insert Cover Photo</Text>
-              <Text
-                style={styles.fileNameStyle}
-                numberOfLines={1}
-                adjustsFontSizeToFit>
-                {fileName.length < 15
-                  ? `${fileName}`
-                  : `${fileName.substring(0, 14)}...`}
-              </Text>
+              {fileName ? (
+                <ImageBackground
+                  source={{uri: fileName}}
+                  style={{width: wp(85), height: hp(18), borderRadius: 8}}
+                  imageStyle={{borderRadius: 8}}
+                  resizeMode="contain">
+                  <TouchableOpacity
+                    style={styles.delIconContainer}
+                    onPress={() => {
+                      setFileName('');
+                    }}>
+                    <Icon
+                      type="material"
+                      name="delete"
+                      size={25}
+                      color={colors.primary}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+              ) : (
+                <>
+                  <TouchableOpacity
+                    onPress={() => {
+                      openGallery();
+                    }}>
+                    <Icon
+                      type="material"
+                      name="collections"
+                      size={50}
+                      color={colors.grey}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.insertPhotoText}>Insert Cover Photo</Text>
+                </>
+              )}
             </View>
+            <CustomDropdown
+              // data={()=>{}}
+              topLabelText={'Location'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="place"
+              placeholder={'Select Location'}
+              container={{marginTop: hp(4)}}
+            />
+
             <CustomTextInput
-              textInputContainer={{marginTop: hp(4)}}
+              textInputContainer={{
+                marginTop: hp(2),
+                height: hp(7),
+                borderRadius: 8,
+              }}
               topText="Title."
               iconType="material"
               iconName="title"
               iconSize={26}
               placeholder="Enter plot title"
             />
-            <CustomTextInput
-              textInputContainer={{marginTop: hp(4)}}
-              topText="Plot No."
-              iconType="font-awesome-5"
-              iconName="expand"
-              iconSize={26}
-              placeholder="Enter Plot Number"
+            <CustomDropdown
+              container={{marginTop: hp(4)}}
+              data={typeItem}
+              topLabelText={'Type'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="merge-type"
+              placeholder={'Select Type'}
+              value={clsTypeValue}
+              onChange={item => setClsTypeValue(item.value)}
+            />
+            <CustomDropdown
+              container={{marginTop: hp(2.5)}}
+              data={purpose}
+              topLabelText={'Purpose'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="business"
+              placeholder={'Select Purpose'}
+              value={clsProPurpose}
+              onChange={item => setclsProPurpose(item.value)}
+            />
+            <CustomDropdown
+              container={{marginTop: hp(2.5)}}
+              data={invenCategories}
+              topLabelText={'Category'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="category"
+              placeholder={'Select Category'}
+              value={clsCategory}
+              onChange={item => setClsCategory(item.value)}
             />
 
             <View style={styles.amenitiesMainContainer}>
@@ -328,14 +407,19 @@ export default function AddInventoriesClassified(props) {
               />
             </View>
             <CustomDropdown
-              label="Type"
-              data={plotType}
-              leftIconName="merge-type"
-              leftIconType="material"
-              leftIconSize={hp(3.5)}
-              placeholder="Select Type"
-              search={false}
+              container={{marginTop: hp(4)}}
+              dropdown={{...styles.sizesDropdown, width: wp(90)}}
+              data={sizes}
+              topLabelText={'Area'}
+              labelFieldName={'label'}
+              valueFieldName={'value'}
+              iconType="material"
+              iconName="fullscreen"
+              placeholder={'Area'}
+              value={plotSize}
+              onChange={item => setplotSize(item.value)}
             />
+
             <CustomTextInput
               topText="Details"
               iconType="material"
@@ -449,7 +533,7 @@ const styles = StyleSheet.create({
     height: hp(8),
     justifyContent: 'flex-start',
     paddingHorizontal: wp(5),
-    borderRadius: 5,
+    borderRadius: 8,
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -467,7 +551,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: wp(90),
     justifyContent: 'space-between',
-    marginTop: hp(4),
+    marginTop: hp(3.5),
   },
   priceTypeActice: {
     width: wp(10),
@@ -526,20 +610,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(2),
     borderRadius: 5,
     borderWidth: 1,
-    marginTop: hp(3),
     alignItems: 'center',
-    // backgroundColor:'red'
   },
   amenitiesInputStyles: {
     width: wp(18),
     fontFamily: fonts.regular,
     textAlignVertical: 'top',
-    // marginTop: hp(-1),
   },
   amenitiesInputView: {
     flexDirection: 'row',
     alignItems: 'center',
-    // marginTop: hp(2),
   },
   plNoTxtInpContainer: {
     width: wp(50),
@@ -548,7 +628,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(5),
     borderRadius: 8,
     borderWidth: 1,
-    marginTop: hp(4.5),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -567,5 +646,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
+  },
+  delIconContainer: {
+    position: 'absolute',
+    right: wp(2),
+    bottom: hp(1),
+    backgroundColor: colors.white,
+    borderRadius: hp(2),
+    padding: 2,
   },
 });
