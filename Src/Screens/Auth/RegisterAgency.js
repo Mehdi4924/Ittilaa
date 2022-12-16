@@ -13,13 +13,13 @@ import {colors} from '../../Constants/Colors';
 import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
+import {societyItem} from '../../Constants/dummyData';
+import {Auth} from '../../Api/ApiCalls';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
+import CustomDropdown from '../../Components/CustomDropdown';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import axios from 'axios';
-import {URL} from '../../Constants/URL';
-import {societyItem} from '../../Constants/dummyData';
-import CustomDropdown from '../../Components/CustomDropdown';
 
 export default function RegisterAgency(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
@@ -30,6 +30,8 @@ export default function RegisterAgency(props) {
   const [fileName, setFileName] = useState('');
   const [logoUri, setLogoUri] = useState('');
   const [logoFileName, setLogoFileName] = useState('');
+  const [passwordSecure, setPasswordSecure] = useState(true);
+  const [confPasswordSecure, setConfPasswordSecure] = useState(true);
 
   const openPhotoGallery = () => {
     let options = {
@@ -80,27 +82,27 @@ export default function RegisterAgency(props) {
   };
 
   const Register = () => {
-    // if (dataToSend.agencyName == null) {
-    //   ToastAndroid.show('Please Enter agency name', ToastAndroid.SHORT);
-    // } else if (dataToSend.userName == null) {
-    //   ToastAndroid.show('Please Enter your name', ToastAndroid.SHORT);
-    // } else if (dataToSend.phone == null) {
-    //   ToastAndroid.show('Please Enter phone number', ToastAndroid.SHORT);
-    // } else if (dataToSend.society == null) {
-    //   ToastAndroid.show('Please select society', ToastAndroid.SHORT);
-    // } else if (dataToSend.password == null) {
-    //   ToastAndroid.show('Please Enter [assword]', ToastAndroid.SHORT);
-    // } else if (dataToSend.confPassword == null) {
-    //   ToastAndroid.show('Please confirm password', ToastAndroid.SHORT);
-    // } else if (dataToSend.email == null) {
-    //   ToastAndroid.show('Please Enter Email', ToastAndroid.SHORT);
-    // } else if (fileName == null) {
-    //   ToastAndroid.show('Please select photo', ToastAndroid.SHORT);
-    // } else if (logoFileName == null) {
-    //   ToastAndroid.show('Please select Logo', ToastAndroid.SHORT);
-    // } 
-    // else 
-    // {
+    if (dataToSend.agencyName == null) {
+      Toast.show('Please Enter agency name', Toast.SHORT);
+    } else if (dataToSend.userName == null) {
+      Toast.show('Please Enter your name', Toast.SHORT);
+    } else if (dataToSend.phone == null) {
+      Toast.show('Please Enter phone number', Toast.SHORT);
+    } else if (dataToSend.society == null) {
+      Toast.show('Please select society', Toast.SHORT);
+    } else if (dataToSend.password == null) {
+      Toast.show('Please Enter [assword]', Toast.SHORT);
+    } else if (dataToSend.confPassword == null) {
+      Toast.show('Please confirm password', Toast.SHORT);
+    } else if (dataToSend.password != dataToSend.confPassword) {
+      Toast.show('Passwords dont match', Toast.SHORT);
+    } else if (dataToSend.email == null) {
+      Toast.show('Please Enter Email', Toast.SHORT);
+    } else if (fileName == null) {
+      Toast.show('Please select photo', Toast.SHORT);
+    } else if (logoFileName == null) {
+      Toast.show('Please select Logo', Toast.SHORT);
+    } else {
       setIndicator(true);
       var data = new FormData();
       data.append('agency_name', dataToSend.agencyName);
@@ -134,19 +136,9 @@ export default function RegisterAgency(props) {
         name: imageUri.fileName,
         type: imageUri.type,
       });
-      // axios
-      //   .post(URL.baseURL + 'auth/register', data, {
-      //     Headers: {'Content-Type': 'multipart/form-data'},
-      //   })
-        axios({
-          method: "post",
-          url: URL.baseURL+'auth/register',
-          data: data,
-          headers: { "Content-Type": "multipart/form-data" },
-        })
+      Auth.registerAgency(data)
         .then(function (response) {
           props.navigation.navigate('Login');
-          console.log(response);
         })
         .catch(function (error) {
           console.log(error, null, 2);
@@ -154,7 +146,7 @@ export default function RegisterAgency(props) {
         .finally(function () {
           setIndicator(false);
         });
-    
+    }
   };
 
   return (
@@ -307,7 +299,11 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
-                secureTextEntry={true}
+                secureTextEntry={passwordSecure}
+                rightIcon
+                rightIconName={'eye'}
+                rightIconType="entypo"
+                rightIconPress={() => setPasswordSecure(!passwordSecure)}
               />
               <CustomTextInput
                 iconName={'lock'}
@@ -322,7 +318,13 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
-                secureTextEntry={true}
+                secureTextEntry={confPasswordSecure}
+                rightIcon
+                rightIconName={'eye'}
+                rightIconType="entypo"
+                rightIconPress={() =>
+                  setConfPasswordSecure(!confPasswordSecure)
+                }
               />
             </>
           ) : selectedIndex == 1 ? (
@@ -611,14 +613,14 @@ export default function RegisterAgency(props) {
             btnTextStyles={{color: colors.black}}
           />
         </View>
-        {selectedIndex==3?(
-        <CustomButton
-          btnText="Submit"
-          indicator={indicator}
-          onPress={Register}
-          btnContainer={styles.submitBtn}
-        />
-        ):null}
+        {selectedIndex == 3 ? (
+          <CustomButton
+            btnText="Submit"
+            indicator={indicator}
+            onPress={Register}
+            btnContainer={styles.submitBtn}
+          />
+        ) : null}
       </ScrollView>
     </View>
   );

@@ -12,40 +12,42 @@ import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
-import axios from 'axios';
-import { useState } from 'react';
-import { URL } from '../../Constants/URL';
+import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Auth} from '../../Api/ApiCalls';
+import Toast from 'react-native-simple-toast';
+import axios from 'axios';
 export default function Login(props) {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('646464');
+  const [password, setPassword] = useState('1234');
   const [indicator, setIndicator] = useState(false);
-
+  const [confPasswordSecure, setConfPasswordSecure] = useState(true);
 
   const Login = () => {
-    setIndicator(true);
-    var data = new FormData();
-    data.append('phone', phoneNumber);
-    data.append('password',password);
-
-    axios({
-      method: "post",
-      url: URL.baseURL+'auth/login',
-      data: data,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-      .then(function (response) {
-         AsyncStorage.setItem('user')
-        props.navigation.navigate('BottomNavigator')
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error.response, null, 2);
-      })
-      .finally(function () {
-        setIndicator(false);
-      });
+    if (phoneNumber == '' || password == '') {
+      Toast.show('Please add details', Toast.SHORT);
+    } else {
+      setIndicator(true);
+      var data = new FormData();
+      data.append('phone', phoneNumber);
+      data.append('password', password);
+      Auth.login(data)
+        .then(async function (response) {
+          console.log(response);
+          await AsyncStorage.setItem(
+            'AuthUser',
+            JSON.stringify(response.data.data),
+          );
+          props.navigation.navigate('BottomNavigator');
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .finally(function () {
+          setIndicator(false);
+        });
     }
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -61,7 +63,6 @@ export default function Login(props) {
           onChangeText={t => setPhoneNumber(t)}
           textInputContainer={{marginVertical: hp(2), marginTop: hp(4)}}
           keyboardType="phone-pad"
-
         />
         <CustomTextInput
           iconName={'lock'}
@@ -72,8 +73,11 @@ export default function Login(props) {
           onChangeText={t => setPassword(t)}
           textInputContainer={{marginVertical: hp(1)}}
           iconSize={hp(4)}
-          secureTextEntry={true}
-
+          secureTextEntry={confPasswordSecure}
+          rightIcon
+          rightIconName={'eye'}
+          rightIconType="entypo"
+          rightIconPress={() => setConfPasswordSecure(!confPasswordSecure)}
         />
         <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}}>
           <Text style={styles.forgotText}>Forgot Password?</Text>
@@ -81,14 +85,14 @@ export default function Login(props) {
         <View style={{alignItems: 'center'}}>
           <CustomButton
             btnText="Login"
-            indicator={false}
+            indicator={indicator}
             onPress={Login}
             btnContainer={{marginTop: hp(20)}}
           />
           <Text style={styles.orText}>- OR -</Text>
           <CustomButton
             btnText="Register Your Agency"
-            indicator={indicator}
+            indicator={false}
             onPress={() => props.navigation.navigate('RegisterAgency')}
             btnContainer={styles.btnContainer}
           />
