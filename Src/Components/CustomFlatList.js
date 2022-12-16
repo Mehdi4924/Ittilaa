@@ -36,21 +36,28 @@ export default function CustomFlatList(props) {
         keyExtractor={item => item.id}
         ref={r => (flatListRef.current = r)}
         onScrollToIndexFailed={info => {
+          nextIndex = 0;
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
-            scrollToIndex(nextIndex, true);
+            scrollToIndex(0, true);
           });
         }}
         renderItem={({item, index}) => (
           <Pressable key={index} onPress={item => props.onPress(item)}>
             <View style={props.featureCard}>
               <Image
-                source={item.image}
+                source={
+                  item?.file
+                    ? {uri: item.file}
+                    : require('../Assets/Images/feature1.jpg')
+                }
                 style={props.featureImageStyle}
                 resizeMode="contain"
               />
-              <Text style={props.featureNameText} numberOfLines={2}>
-                {item.name}
+              <Text style={props.featureNameText} numberOfLines={3}>
+                {props?.news
+                  ? `${item.description}`
+                  : `${item?.agency_name} working with ${item.developer_name}`}
               </Text>
             </View>
           </Pressable>

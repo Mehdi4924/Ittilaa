@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ScrollView,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CustomHeader from '../../Components/CustomHeader';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
@@ -25,8 +26,28 @@ import InventoriesComp from '../../Components/InventoriesComp';
 import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
 import {Icon} from '@rneui/themed';
+import {AppFlow} from '../../Api/ApiCalls';
 
-export default function AllAgencies() {
+export default function AllAgencies(props) {
+  const [agencies, setAgencies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    getAllAgencies();
+  }, []);
+  async function getAllAgencies() {
+    setIsLoading(true);
+    AppFlow.getAllAgencies()
+      .then(res => {
+        console.log(JSON.stringify(res.data, null, 2));
+        setAgencies(res?.data?.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
   return (
     <View style={styles.mainContainer}>
       <CustomHeader
@@ -44,53 +65,65 @@ export default function AllAgencies() {
         screenTitle="All Agencies"
         screenTitleStyle={styles.screenTitleStyle}
       />
-      <FlatList
-        data={['a', 'a', 'a', 'a']}
-        contentContainerStyle={{
-          paddingHorizontal: wp(5),
-          marginVertical: hp(2),
-        }}
-        renderItem={({item, index}) => {
-          const a = index % 2;
-          console.log(a);
-          return (
-            <View
-              style={[
-                styles.listContainer,
-                {backgroundColor: a == 1 ? colors.white : colors.black},
-              ]}>
-              <Image
-                source={allImages.tamjeed}
-                style={
-                  a == 1
-                    ? styles.agencyProfileImage
-                    : styles.agencyProfileImage1
+      {isLoading ? (
+        <View style={styles.indicator}>
+          <ActivityIndicator size={'small'} color={colors.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={agencies}
+          contentContainerStyle={{
+            paddingHorizontal: wp(5),
+            marginVertical: hp(2),
+          }}
+          renderItem={({item, index}) => {
+            const a = index % 2;
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AgencyProfile', {agency: item})
                 }
-              />
-              <View style={styles.listTextView}>
-                <Text style={styles.vendorName}>Ahmad State</Text>
-                <Text
-                  style={[
-                    styles.developerName,
-                    {color: a == 1 ? colors.black : colors.white},
-                  ]}>
-                  Tamjeed Developers{' '}
-                </Text>
-                <View style={styles.locationView}>
-                  <Icon
-                    name={'location'}
-                    type={'ionicon'}
-                    color={colors.primary}
-                    size={hp(2)}
-                    style={{marginRight: wp(2)}}
-                  />
-                  <Text style={styles.locationText}>Ahmad State</Text>
+                style={[
+                  styles.listContainer,
+                  {backgroundColor: a == 1 ? colors.white : colors.black},
+                ]}>
+                <Image
+                  source={item?.file ? {uri: item.file} : allImages.agencydummy}
+                  style={
+                    a == 1
+                      ? styles.agencyProfileImage
+                      : styles.agencyProfileImage1
+                  }
+                />
+                <View style={styles.listTextView}>
+                  <Text style={styles.vendorName}>
+                    {item?.name || 'Loading'}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.developerName,
+                      {color: a == 1 ? colors.black : colors.white},
+                    ]}>
+                    Atif Developers{' '}
+                  </Text>
+                  <View style={styles.locationView}>
+                    <Icon
+                      name={'location'}
+                      type={'ionicon'}
+                      color={colors.primary}
+                      size={hp(2)}
+                      style={{marginRight: wp(2)}}
+                    />
+                    <Text style={styles.locationText}>
+                      {item?.address || 'Loading'}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </View>
-          );
-        }}
-      />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
     </View>
   );
 }
@@ -167,5 +200,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     color: colors.grey,
     fontSize: hp(1.8),
+  },
+  indicator: {
+    width: wp(100),
+    height: hp(90),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

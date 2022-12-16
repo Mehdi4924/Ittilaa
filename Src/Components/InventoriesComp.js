@@ -1,4 +1,11 @@
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {hp, wp} from '../Constants/Responsive';
 import {fonts} from '../Constants/Fonts';
@@ -44,32 +51,50 @@ export default function InventoriesComp(props) {
           keyExtractor={item => item.id}
           ref={r => (flatListRef.current = r)}
           onScrollToIndexFailed={info => {
+            nextIndex = 0;
             const wait = new Promise(resolve => setTimeout(resolve, 500));
             wait.then(() => {
-              scrollToIndex(nextIndex, true);
+              scrollToIndex(0, true);
             });
           }}
           renderItem={({item, index}) => (
-            <View key={index} style={props.inventoryCard}>
+            <TouchableOpacity
+              key={index}
+              style={props.inventoryCard}
+              onPress={() => props.onPress(item)}>
               <View style={styles.profileContainer}>
                 <View style={props.profileImgContainer}>
                   <Image
-                    source={item.image}
+                    source={
+                      item.file
+                        ? {uri: item.file}
+                        : require('../Assets/Images/agency-dummy.png')
+                    }
                     style={props.profileImgStyle}
                     resizeMode="contain"
                   />
                 </View>
                 <View style={{marginLeft: wp(4)}}>
-                  <Text style={styles.title}>{item.name}</Text>
-                  <Text style={styles.byUser}>By:{item.by}</Text>
+                  <Text style={styles.title}>
+                    {item?.name || 'Test Agency'}
+                  </Text>
+                  <Text style={styles.byUser}>
+                    By: {item?.by || 'Muhammad Atif'}
+                  </Text>
                 </View>
               </View>
               <View style={styles.detailsContainer}>
-                <Text style={styles.text2}>{item.details}</Text>
+                <Text style={styles.text2}>
+                  Plot Number {item?.plot_no} is available {'\n'} in{' '}
+                  {item?.block} {'\n'} at {item?.price}
+                  {item?.price_unit} Rupees
+                </Text>
               </View>
               <View style={styles.locationMain}>
                 <View style={styles.locationContainer}>
-                  <Text style={styles.locationText}>Plot for Sale</Text>
+                  <Text style={styles.locationText}>
+                    {item?.type} Plot for Sale
+                  </Text>
                   <Icon
                     type="material"
                     name="place"
@@ -80,10 +105,10 @@ export default function InventoriesComp(props) {
                 <Text
                   style={{...styles.text2, marginLeft: wp(2), maxWidth: wp(45)}}
                   numberOfLines={1}>
-                  {item.address}
+                  Plot No. {item?.plot_no} in {item?.block}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       ) : (

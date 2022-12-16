@@ -8,11 +8,11 @@ export default function Splash(props) {
     navigateToConfirmation();
   }, []);
   const navigateToConfirmation = async () => {
-    let userData = await AsyncStorage.getItem('user');
+    let userData = await AsyncStorage.getItem('AuthUser');
     let parseUser = JSON.parse(userData);
     console.log('Async storage', parseUser);
     setTimeout(() => {
-      if (parseUser == null) {
+      if (userData == null) {
         props.navigation.navigate('Login');
       } else {
         props.navigation.navigate('BottomNavigator');

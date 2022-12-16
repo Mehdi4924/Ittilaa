@@ -6,25 +6,49 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
+import {AppFlow} from '../../Api/ApiCalls';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function InventoryDetails(props) {
+  const {inventory} = props.route.params;
+  console.log('data', inventory);
+  const [inventoryData, setInventoryData] = useState();
+  useFocusEffect(
+    React.useCallback(() => {
+      Inventories();
+    }, []),
+  );
+
+  const Inventories = () => {
+    AppFlow.InventoryDetails(inventory.agency_id)
+      .then(function (response) {
+        console.log('Response data', response);
+        setInventoryData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log('Inventories Error', error.response);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Icon
-              name={'arrow-back-circle'}
-              type={'ionicon'}
-              color={colors.primary}
-              size={hp(5)}
-            />
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
+              <Icon
+                name={'arrow-back-circle'}
+                type={'ionicon'}
+                color={colors.primary}
+                size={hp(5)}
+              />
+            </TouchableOpacity>
             <Text style={styles.headingText}>Inventory Details</Text>
             <Icon
               name={'md-share-social'}
@@ -34,20 +58,38 @@ export default function InventoryDetails(props) {
               size={hp(2)}
             />
           </View>
-          <Image source={allImages.tamjeed} style={styles.agencyProfileImage} />
-          <Text style={styles.agencyNameText}>IronStone Equities</Text>
-          <Text style={styles.postByText}>By Danial Babar</Text>
+          <Image
+            source={
+              inventoryData?.file
+                ? {uri: inventoryData.file}
+                : allImages.agencydummy
+            }
+            style={styles.agencyProfileImage}
+          />
+          <Text style={styles.agencyNameText}>Test Agency</Text>
+          <Text style={styles.postByText}>By Muhammad Atif</Text>
           <View style={styles.detailsView}>
             <View style={styles.callAgentView}>
-              <Text style={styles.normalText}>Bahria Town</Text>
-              <Text style={styles.priceText}>RS. 15 Lacs</Text>
+              <Text style={styles.normalText}>
+                {inventoryData?.block || 'Loading'}
+              </Text>
+              <Text style={styles.priceText}>
+                RS. {inventoryData?.price || 'Loading'}{' '}
+                {inventoryData?.price_unit}
+              </Text>
             </View>
-            <Text style={styles.normalText}>Tulip Extension</Text>
-            <Text style={styles.normalText}>05 Marla Plot</Text>
+            <Text style={styles.normalText}>Bahria Town</Text>
             <Text style={styles.normalText}>
-              Plot 672, 8626, PU Paid, 96 Lacs Each
+              {inventoryData?.size || 'Loading'}{' '}
+              {inventoryData?.size_unit || ''}
             </Text>
-            <Text style={styles.textHighlited}>Commercial Plots For Sale </Text>
+            <Text style={styles.normalText}>
+              {inventoryData?.type} Plot {inventoryData?.plot_no}
+            </Text>
+            <Text style={styles.textHighlited}>
+              {' '}
+              {inventoryData?.type} Plots For Sale{' '}
+            </Text>
             <View style={styles.locationTextView}>
               <Icon
                 name={'location'}
