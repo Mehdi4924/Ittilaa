@@ -1,23 +1,33 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { hp, wp } from '../../Constants/Responsive'
+import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {hp, wp} from '../../Constants/Responsive';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Splash(props) {
-  setTimeout(() => {navigateToConfirmation(props)}, 3000);
+  useEffect(() => {
+    navigateToConfirmation();
+  }, []);
+  const navigateToConfirmation = async () => {
+    let userData = await AsyncStorage.getItem('user');
+    let parseUser = JSON.parse(userData);
+    console.log('Async storage', parseUser);
+    setTimeout(() => {
+      if (parseUser == null) {
+        props.navigation.navigate('Login');
+      } else {
+        props.navigation.navigate('BottomNavigator');
+      }
+    }, 3000);
+  };
   return (
-
-    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Image
-      source={require('../../Assets/Images/logo.png')}
-      style={{width:hp(40), height:hp(20)}}
-      resizeMode='contain'
+        source={require('../../Assets/Images/logo.png')}
+        style={{width: hp(40), height: hp(20)}}
+        resizeMode="contain"
       />
     </View>
-  )
- 
+  );
 }
-const navigateToConfirmation =(props) =>(
-  props.navigation.navigate('BottomNavigator')
-  )
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
