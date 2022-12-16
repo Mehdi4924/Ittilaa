@@ -7,7 +7,9 @@ import {Icon} from '@rneui/themed';
 
 export default function InventoriesComp(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
+
   const [maxSlider, setMaxSlider] = useState(props.data.length - 1);
+
   const flatListRef = useRef();
   useEffect(() => {
     listAnimator();
@@ -29,59 +31,107 @@ export default function InventoriesComp(props) {
   async function scrollToIndex(index, animated) {
     flatListRef.current && flatListRef.current.scrollToIndex({index, animated});
   }
+
   return (
     <View>
-      <FlatList
-        contentContainerStyle={props.flatListStyle}
-        horizontal={props.horizontal}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        data={props.data}
-        keyExtractor={item => item.id}
-        ref={r => (flatListRef.current = r)}
-        onScrollToIndexFailed={info => {
-          const wait = new Promise(resolve => setTimeout(resolve, 500));
-          wait.then(() => {
-            scrollToIndex(nextIndex, true);
-          });
-        }}
-        renderItem={({item, index}) => (
-          <View key={index} style={props.inventoryCard}>
-            <View style={styles.profileContainer}>
-              <View style={props.profileImgContainer}>
-                <Image
-                  source={item.image}
-                  style={props.profileImgStyle}
-                  resizeMode="contain"
-                />
+      {props.animation ? (
+        <FlatList
+          contentContainerStyle={props.flatListStyle}
+          horizontal={props.horizontal}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          data={props.data}
+          keyExtractor={item => item.id}
+          ref={r => (flatListRef.current = r)}
+          onScrollToIndexFailed={info => {
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              scrollToIndex(nextIndex, true);
+            });
+          }}
+          renderItem={({item, index}) => (
+            <View key={index} style={props.inventoryCard}>
+              <View style={styles.profileContainer}>
+                <View style={props.profileImgContainer}>
+                  <Image
+                    source={item.image}
+                    style={props.profileImgStyle}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View style={{marginLeft: wp(4)}}>
+                  <Text style={styles.title}>{item.name}</Text>
+                  <Text style={styles.byUser}>By:{item.by}</Text>
+                </View>
               </View>
-              <View style={{marginLeft: wp(4)}}>
-                <Text style={styles.title}>{item.name}</Text>
-                <Text style={styles.byUser}>By:{item.by}</Text>
+              <View style={styles.detailsContainer}>
+                <Text style={styles.text2}>{item.details}</Text>
+              </View>
+              <View style={styles.locationMain}>
+                <View style={styles.locationContainer}>
+                  <Text style={styles.locationText}>Plot for Sale</Text>
+                  <Icon
+                    type="material"
+                    name="place"
+                    size={10}
+                    color={colors.white}
+                  />
+                </View>
+                <Text
+                  style={{...styles.text2, marginLeft: wp(2), maxWidth: wp(45)}}
+                  numberOfLines={1}>
+                  {item.address}
+                </Text>
               </View>
             </View>
-            <View style={styles.detailsContainer}>
-              <Text style={styles.text2}>{item.details}</Text>
-            </View>
-            <View style={styles.locationMain}>
-              <View style={styles.locationContainer}>
-                <Text style={styles.locationText}>Plot for Sale</Text>
-                <Icon
-                  type="material"
-                  name="place"
-                  size={10}
-                  color={colors.white}
-                />
+          )}
+        />
+      ) : (
+        <FlatList
+          contentContainerStyle={props.flatListStyle}
+          horizontal={props.horizontal}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          data={props.data}
+          keyExtractor={item => item.id}
+          renderItem={({item, index}) => (
+            <View key={index} style={props.inventoryCard}>
+              <View style={styles.profileContainer}>
+                <View style={props.profileImgContainer}>
+                  <Image
+                    source={item.image}
+                    style={props.profileImgStyle}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View style={{marginLeft: wp(4)}}>
+                  <Text style={styles.title}>{item.name}</Text>
+                  <Text style={styles.byUser}>By:{item.by}</Text>
+                </View>
               </View>
-              <Text
-                style={{...styles.text2, marginLeft: wp(2), maxWidth: wp(45)}}
-                numberOfLines={1}>
-                {item.address}
-              </Text>
+              <View style={styles.detailsContainer}>
+                <Text style={styles.text2}>{item.details}</Text>
+              </View>
+              <View style={styles.locationMain}>
+                <View style={styles.locationContainer}>
+                  <Text style={styles.locationText}>Plot for Sale</Text>
+                  <Icon
+                    type="material"
+                    name="place"
+                    size={10}
+                    color={colors.white}
+                  />
+                </View>
+                <Text
+                  style={{...styles.text2, marginLeft: wp(2), maxWidth: wp(45)}}
+                  numberOfLines={1}>
+                  {item.address}
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      )}
     </View>
   );
 }

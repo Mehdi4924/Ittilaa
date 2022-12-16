@@ -13,10 +13,40 @@ import {colors} from '../../Constants/Colors';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
 import axios from 'axios';
-
+import { useState } from 'react';
+import { URL } from '../../Constants/URL';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Login(props) {
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [indicator, setIndicator] = useState(false);
+
+
+  const Login = () => {
+    setIndicator(true);
+    var data = new FormData();
+    data.append('phone', phoneNumber);
+    data.append('password',password);
+
+    axios({
+      method: "post",
+      url: URL.baseURL+'auth/login',
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+         AsyncStorage.setItem('user')
+        props.navigation.navigate('BottomNavigator')
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error.response, null, 2);
+      })
+      .finally(function () {
+        setIndicator(false);
+      });
+    }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -30,6 +60,8 @@ export default function Login(props) {
           value={phoneNumber}
           onChangeText={t => setPhoneNumber(t)}
           textInputContainer={{marginVertical: hp(2), marginTop: hp(4)}}
+          keyboardType="phone-pad"
+
         />
         <CustomTextInput
           iconName={'lock'}
@@ -40,6 +72,8 @@ export default function Login(props) {
           onChangeText={t => setPassword(t)}
           textInputContainer={{marginVertical: hp(1)}}
           iconSize={hp(4)}
+          secureTextEntry={true}
+
         />
         <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}}>
           <Text style={styles.forgotText}>Forgot Password?</Text>
@@ -48,13 +82,13 @@ export default function Login(props) {
           <CustomButton
             btnText="Login"
             indicator={false}
-            onPress={() => props.navigation.navigate('BottomNavigator')}
+            onPress={Login}
             btnContainer={{marginTop: hp(20)}}
           />
           <Text style={styles.orText}>- OR -</Text>
           <CustomButton
             btnText="Register Your Agency"
-            indicator={false}
+            indicator={indicator}
             onPress={() => props.navigation.navigate('RegisterAgency')}
             btnContainer={styles.btnContainer}
           />

@@ -41,7 +41,7 @@ export default function AllAgencies() {
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
         placeholderTextColor={colors.grey}
-        screenTitle="Inventories"
+        screenTitle="All Agencies"
         screenTitleStyle={styles.screenTitleStyle}
       />
       <FlatList
