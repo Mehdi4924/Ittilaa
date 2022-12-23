@@ -321,10 +321,10 @@ export const purpose = [
 ]
 export const invenCategories = [
   {label: 'Plot', value: 'plot'},
-  {label: 'House', value: 'house'},
+  {label: 'House', value: 'House'},
   {label: 'Flat', value: 'flat'},
   {label: 'Villa', value: 'villa'},
-  {label: 'Apartment', value: 'apartment'},
+  {label: 'Apartment', value: 'Apartment'},
   {label: 'Portion', value: 'portion'},
   {label: 'Office', value: 'office'},
   {label: 'Shop', value: 'shop'},
