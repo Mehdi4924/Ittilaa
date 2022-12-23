@@ -5,16 +5,16 @@ const API_ROOT = Config.baseURL;
 const googleKey = Config.googleMapKey;
 
 export const configureAxiosHeaders = async () => {
+  axios.defaults.headers['Expires'] = '0';
+  axios.defaults.headers['Pragma'] = 'no-cache';
+  axios.defaults.headers['Cache-Control'] = 'no-cache';
+  axios.defaults.headers['Content-Type'] = 'multipart/form-data';
   const userData = await AsyncStorage.getItem('AuthUser');
   const parsedData = JSON.parse(userData);
   console.log('Async User Data', parsedData);
   axios.defaults.headers['Authorization'] = 'Bearer '.concat(
     parsedData.accessToken,
   );
-  axios.defaults.headers['Expires'] = '0';
-  axios.defaults.headers['Pragma'] = 'no-cache';
-  axios.defaults.headers['Cache-Control'] = 'no-cache';
-  axios.defaults.headers['Content-Type'] = 'multipart/form-data';
 };
 
 const requests = {

@@ -43,7 +43,7 @@ export default function HomeScreen(props) {
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
-        console.log('Response data', response);
+        console.log('Response data', JSON.stringify(response.data, null, 2));
         setScreenData(response.data.data);
       })
       .catch(function (error) {
@@ -58,7 +58,7 @@ export default function HomeScreen(props) {
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
           leftImageStyle={{width: wp(50), height: hp(10)}}
-          rightIconName="queue"
+          rightIconName="account-circle"
           rightIconType="material"
           rightIconColor={colors.white}
           rightIconSize={30}
