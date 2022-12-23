@@ -4,17 +4,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const API_ROOT = Config.baseURL;
 const googleKey = Config.googleMapKey;
 
-export const configureAxiosHeaders = async () => {  axios.defaults.headers['Expires'] = '0';
-axios.defaults.headers['Pragma'] = 'no-cache';
-axios.defaults.headers['Cache-Control'] = 'no-cache';
-axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+export const configureAxiosHeaders = async () => {
+  axios.defaults.headers['Expires'] = '0';
+  axios.defaults.headers['Pragma'] = 'no-cache';
+  axios.defaults.headers['Cache-Control'] = 'no-cache';
+  axios.defaults.headers['Content-Type'] = 'multipart/form-data';
   const userData = await AsyncStorage.getItem('AuthUser');
   const parsedData = JSON.parse(userData);
   console.log('Async User Data', parsedData);
   axios.defaults.headers['Authorization'] = 'Bearer '.concat(
     parsedData.accessToken,
   );
-
 };
 
 const requests = {
@@ -40,6 +40,7 @@ export const AppFlow = {
   dashboard: () => requests.get('dashboard'),
   InventoryDetails: id => requests.get(`inventory/${id}`),
   getAllClassifieds: () => requests.get('classified'),
+  GetClassiffiedDetails: id => requests.get(`classified/${id}`),
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
   agencyProperties: id => requests.get(`inventory/${id}`),

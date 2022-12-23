@@ -27,6 +27,7 @@ import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
 import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
+import {URL} from '../../Constants/URL';
 
 export default function AllAgencies(props) {
   const [agencies, setAgencies] = useState([]);
@@ -88,7 +89,9 @@ export default function AllAgencies(props) {
                   {backgroundColor: a == 1 ? colors.white : colors.black},
                 ]}>
                 <Image
-                  source={item?.file ? {uri: item.file} : allImages.agencydummy}
+                  source={
+                    item?.file ? {uri: URL.imageURL + item.file.file} : allImages.agencydummy
+                  }
                   style={
                     a == 1
                       ? styles.agencyProfileImage
@@ -129,6 +132,10 @@ export default function AllAgencies(props) {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.tertiary,
+  },
   headerStyle: {
     width: wp(100),
     height: hp(20),

@@ -4,6 +4,7 @@ import {hp, wp} from '../Constants/Responsive';
 import {colors} from '../Constants/Colors';
 import {fonts} from '../Constants/Fonts';
 import {Icon} from '@rneui/themed';
+import {URL} from '../Constants/URL';
 
 export default function TopClassifiedComp(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -52,11 +53,11 @@ export default function TopClassifiedComp(props) {
             <Pressable
               key={index}
               style={props.classifiedCardStyle}
-              onPress={item => props.onPress(item)}>
+              onPress={() => props.onPress(item)}>
               <Image
                 source={
-                  item.file
-                    ? {uri: item.file}
+                  item?.file
+                    ? {uri: URL.imageURL + item.file.file}
                     : require('../Assets/Images/classified.jpeg')
                 }
                 style={props.classifiedImageStyle}
@@ -120,18 +121,28 @@ export default function TopClassifiedComp(props) {
             <Pressable
               key={index}
               style={props.classifiedCardStyle}
-              onPress={item => props.onPress(item)}>
+              onPress={() => props.onPress(item)}>
               <Image
-                source={item.image}
+                source={
+                  item?.file
+                    ? {uri: item.file}
+                    : require('../Assets/Images/classified.jpeg')
+                }
                 style={props.classifiedImageStyle}
                 resizeMode="contain"
               />
               <View style={props.classifiedTitlePrice}>
-                <Text style={props.classifiedTitleText}>{item.name}</Text>
-                <Text style={props.classifiedPriceText}>{item.price}</Text>
+                <Text style={props.classifiedTitleText}>
+                  {item.category || 'Plot '} For {item?.purpose || 'N/A'}
+                </Text>
+                <Text style={props.classifiedPriceText}>
+                  {item?.price || 'Loading'} Lacs
+                </Text>
               </View>
               <View></View>
-              <Text style={props.classifiedAddressStyle}>{item.address}</Text>
+              <Text style={props.classifiedAddressStyle}>
+                {item.block || 'Loading'}
+              </Text>
               <View style={styles.classifiedAmenitiesContainer}>
                 <View style={props.classifiedAmenities}>
                   <Icon
@@ -141,7 +152,7 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item.bedRoom}
+                    {item?.bedRoom || '2'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
@@ -152,12 +163,12 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item.bedRoom}
+                    {item?.bedRoom || '3'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
                   <Text style={props.classifiedAmenitiesText}>
-                    {item.bedRoom}Marla
+                    {item?.bedRoom || '4'} Marla
                   </Text>
                 </View>
               </View>

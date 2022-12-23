@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -14,11 +14,26 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import Carousel from 'react-native-snap-carousel';
 import CustomButton from '../../Components/CustomButton';
+import {AppFlow} from '../../Api/ApiCalls';
 
 export default function ClassifiedDetails(props) {
+  const {classified} = props.route.params;
   const carouselRef = useRef();
+  const [data, setData] = useState();
+  useEffect(() => {
+    GetClassiffiedDetails();
+  }, []);
+  async function GetClassiffiedDetails() {
+    await AppFlow.GetClassiffiedDetails(classified.id)
+      .then(function (response) {
+        console.log('Classified data', JSON.stringify(response.data, null, 2));
+        setData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log('Classified Error', error.response);
+      });
+  }
   const _renderItem = ({item, index}) => {
-    console.log(item);
     return (
       <View style={styles.slide}>
         <Image source={{uri: item}} style={{width: wp(100), height: hp(30)}} />

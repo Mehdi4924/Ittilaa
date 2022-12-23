@@ -15,6 +15,20 @@ import InventoriesComp from '../../Components/InventoriesComp';
 import {AppFlow} from '../../Api/ApiCalls';
 
 export default function TopInventories(props) {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    GetInventories();
+  }, []);
+  async function GetInventories() {
+    await AppFlow.getAllClassifieds()
+      .then(function (response) {
+        console.log('Response data', JSON.stringify(response.data, null, 2));
+        // setData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log('Dashboard Error', error.response);
+      });
+  }
   return (
     <View style={styles.mainContainer}>
       <CustomHeader

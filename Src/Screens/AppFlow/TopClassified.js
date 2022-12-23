@@ -5,15 +5,33 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomHeader from '../../Components/CustomHeader';
 import {fonts} from '../../Constants/Fonts';
 import {topClassified} from '../../Constants/dummyData';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
+import {AppFlow} from '../../Api/ApiCalls';
 
 export default function TopClassified(props) {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    GetInventories();
+  }, []);
+  async function GetInventories() {
+    await AppFlow.getAllClassifieds()
+      .then(function (response) {
+        console.log(
+          'Top Classified data',
+          JSON.stringify(response.data, null, 2),
+        );
+        setData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log('Top Classified Error', error.response);
+      });
+  }
   return (
     <View style={styles.mainContainer}>
       <CustomHeader
@@ -23,7 +41,7 @@ export default function TopClassified(props) {
         leftIconType="material"
         leftIconColor={colors.white}
         leftIconSize={30}
-        onLeftIconPress={()=>props.navigation.goBack()}
+        onLeftIconPress={() => props.navigation.goBack()}
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
@@ -35,7 +53,13 @@ export default function TopClassified(props) {
         <Text style={styles.titleText}>Top Classified</Text>
       </View>
       <TopClassifiedComp
-        data={topClassified}
+        data={data}
+        onPress={item =>
+          props.navigation.navigate('AppFlow', {
+            screen: 'ClassifiedDetails',
+            params: {classified: item},
+          })
+        }
         numColumns={2}
         classifiedFlatListStyle={styles.flatListStyle}
         classifiedCardStyle={styles.classifiedCardStyle}
@@ -47,6 +71,7 @@ export default function TopClassified(props) {
         classifiedAmenities={styles.classifiedAmenities}
         classifiedAmenitiesText={styles.classifiedAmenitiesText}
         amenitiesIconSize={10}
+        animation={false}
       />
     </View>
   );
@@ -114,8 +139,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: hp(1),
     marginBottom: hp(1.8),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)'
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.08)',
   },
 
   classifiedImageStyle: {

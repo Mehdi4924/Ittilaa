@@ -326,12 +326,15 @@ export default function AddInventoriesClassified(props) {
                 </TouchableOpacity>
               </View>
             </View>
-            
-            <View style={{marginTop:hp(2)}}>
-            <Text style={styles.bulkText}>Do you want to upload Inventories in Bulk?</Text>
-            <TouchableOpacity onPress={()=>setBulk(true)}>
-            <Text style={{...styles.bulkText, color:colors.primary}}>Click Here</Text>
-            </TouchableOpacity>
+            <View style={{marginTop: hp(2)}}>
+              <Text style={styles.bulkText}>
+                Do you want to upload Inventories in Bulk?
+              </Text>
+              <TouchableOpacity>
+                <Text style={{...styles.bulkText, color: colors.primary}}>
+                  Click Here
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
           }
@@ -362,7 +365,7 @@ export default function AddInventoriesClassified(props) {
                 <>
                   <TouchableOpacity
                     onPress={() => {
-                      openGallery();
+                      openGallery(); 
                     }}>
                     <Icon
                       type="material"
@@ -473,7 +476,7 @@ export default function AddInventoriesClassified(props) {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginTop: hp(1)
+                marginTop: hp(1),
               }}>
               <CustomDropdown
                 // container={{marginTop: hp(4)}}
@@ -488,7 +491,7 @@ export default function AddInventoriesClassified(props) {
                 value={plotSize}
                 onChange={item => setplotSize(item.value)}
               />
-               <CustomDropdown
+              <CustomDropdown
                 dropdown={styles.sizesDropdown}
                 data={sizes}
                 topLabelText={'Size'}
@@ -498,7 +501,6 @@ export default function AddInventoriesClassified(props) {
                 value={clsPlotSize}
                 onChange={item => setclsPlotSize(item.value)}
               />
-              
             </View>
             <CustomTextInput
               textInputContainer={styles.prcTxtInpContainer}
@@ -692,7 +694,6 @@ const styles = StyleSheet.create({
   },
   amenitiesContainer: {
     width: wp(28),
-    height: hp(6),
     flexDirection: 'row',
     justifyContent: 'flex-start',
     paddingHorizontal: wp(2),
@@ -704,6 +705,7 @@ const styles = StyleSheet.create({
     width: wp(18),
     fontFamily: fonts.regular,
     textAlignVertical: 'top',
+    paddingTop: hp(2.5),
   },
   amenitiesInputView: {
     flexDirection: 'row',
@@ -743,14 +745,14 @@ const styles = StyleSheet.create({
     borderRadius: hp(2),
     padding: 2,
   },
-  prcTxtInpContainer:{
+  prcTxtInpContainer: {
     marginTop: hp(2),
     height: hp(7),
     borderRadius: 8,
   },
-  bulkText:{
-    fontFamily:fonts.semiBold,
-    fontSize:hp(2),
-    color:colors.grey,
-  }
+  bulkText: {
+    fontFamily: fonts.semiBold,
+    fontSize: hp(2),
+    color: colors.grey,
+  },
 });
