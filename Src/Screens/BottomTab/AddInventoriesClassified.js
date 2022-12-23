@@ -37,6 +37,7 @@ export default function AddInventoriesClassified(props) {
   const [priceTh, setPriceTh] = useState(true);
   const [adType, setAdType] = useState(true);
   const [imageUri, setImageUri] = useState('');
+  const [bulkDetails, setBulkDetails] = useState('');
   const [fileName, setFileName] = useState('');
   const [socValue, setSocValue] = useState('');
   const [typeValue, setTypeValue] = useState('');
@@ -50,10 +51,12 @@ export default function AddInventoriesClassified(props) {
   const [city, setCity] = useState('');
   const [block, setBlock] = useState('');
   const [price, setPrice] = useState('');
+  const [bulk, setBulk] = useState(false);
   const [PUP, setPUP] = useState(false);
   const [CP, setCP] = useState(false);
   const [MB, setMB] = useState(false);
   const [FP, setFP] = useState(false);
+
 
   const openGallery = () => {
     let options = {
@@ -118,6 +121,31 @@ export default function AddInventoriesClassified(props) {
           />
         </View>
         {inventory ? (
+          <>
+          {bulk?(
+            <>
+            <CustomTextInput
+              topText="Bulk Details"
+              iconType="material"
+              iconName="info"
+              iconSize={26}
+              placeholder="Enter Details in bulk"
+              textInputContainer={styles.textInputContainer}
+              textInputStyles={styles.textInputStyles}
+              iconStyles={styles.iconStyles}
+              multiline={true}
+              textInputView={styles.textInputView}
+              value={bulkDetails}
+              onChangeText={(e)=>setBulkDetails(e)}
+            />
+             <View style={{marginTop:hp(2)}}>
+            <Text style={styles.bulkText}>Do you want to upload Single Inventories?</Text>
+            <TouchableOpacity onPress={()=>setBulk(false)}>
+            <Text style={{...styles.bulkText, color:colors.primary}}>Click Here</Text>
+            </TouchableOpacity>
+            </View>
+            </>
+          ):
           <View>
             <CustomDropdown
               data={cityItem}
@@ -298,13 +326,16 @@ export default function AddInventoriesClassified(props) {
                 </TouchableOpacity>
               </View>
             </View>
+            
             <View style={{marginTop:hp(2)}}>
             <Text style={styles.bulkText}>Do you want to upload Inventories in Bulk?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>setBulk(true)}>
             <Text style={{...styles.bulkText, color:colors.primary}}>Click Here</Text>
             </TouchableOpacity>
             </View>
           </View>
+          }
+          </>
         ) : (
           <View>
             <View style={styles.photoContainer}>
@@ -482,7 +513,7 @@ export default function AddInventoriesClassified(props) {
               iconType="material"
               iconName="info"
               iconSize={26}
-              placeholder="Enter Price PKR"
+              placeholder="Enter Details"
               textInputContainer={styles.textInputContainer}
               textInputStyles={styles.textInputStyles}
               iconStyles={styles.iconStyles}

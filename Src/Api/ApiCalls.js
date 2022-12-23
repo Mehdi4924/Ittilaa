@@ -42,6 +42,7 @@ export const AppFlow = {
   getAllClassifieds: () => requests.get('classified'),
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
+  agencyProperties: id => requests.get(`inventory/${id}`),
 };
 
 export const GetCities = {
