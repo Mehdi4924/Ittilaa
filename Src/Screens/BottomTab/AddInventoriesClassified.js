@@ -32,7 +32,9 @@ import {Icon} from '@rneui/themed';
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
   const [classify, setClassify] = useState(false);
-  const [priceType, setPriceType] = useState(true);
+  const [priceLac, setPriceLac] = useState(false);
+  const [priceCr, setPriceCr] = useState(false);
+  const [priceTh, setPriceTh] = useState(true);
   const [adType, setAdType] = useState(true);
   const [imageUri, setImageUri] = useState('');
   const [fileName, setFileName] = useState('');
@@ -43,7 +45,8 @@ export default function AddInventoriesClassified(props) {
   const [clsProPurpose, setclsProPurpose] = useState('');
   const [category, setCategory] = useState('');
   const [clsCategory, setClsCategory] = useState('');
-  const [plotSize, setplotSize] = useState('');
+  const [plotSize, setplotSize] = useState('Marla');
+  const [clsPlotSize, setclsPlotSize] = useState('Marla');
   const [city, setCity] = useState('');
   const [block, setBlock] = useState('');
   const [price, setPrice] = useState('');
@@ -178,11 +181,21 @@ export default function AddInventoriesClassified(props) {
                 justifyContent: 'space-between',
               }}>
               <CustomTextInput
-                topText="Plot/Propert No."
+                topText="Prop No."
                 iconType="material"
                 iconName="fullscreen-exit"
                 iconSize={26}
-                placeholder="Enter Plot No."
+                placeholder="Prop No."
+                textInputContainer={styles.plNoTxtInpContainer}
+                textInputStyles={styles.plNoTxtInpStyles}
+                textInputView={styles.plNoTxtInpView}
+              />
+              <CustomTextInput
+                topText="Plot size."
+                iconType="material"
+                iconName="fullscreen"
+                iconSize={26}
+                placeholder="Size."
                 textInputContainer={styles.plNoTxtInpContainer}
                 textInputStyles={styles.plNoTxtInpStyles}
                 textInputView={styles.plNoTxtInpView}
@@ -193,9 +206,7 @@ export default function AddInventoriesClassified(props) {
                 topLabelText={'Size'}
                 labelFieldName={'label'}
                 valueFieldName={'value'}
-                iconType="material"
-                iconName="fullscreen"
-                placeholder={'Size'}
+                placeholder={plotSize}
                 value={plotSize}
                 onChange={item => setplotSize(item.value)}
               />
@@ -225,16 +236,29 @@ export default function AddInventoriesClassified(props) {
               />
               <TouchableOpacity
                 style={
-                  priceType ? styles.priceTypeActice : styles.priceTypeInactice
+                  priceTh ? styles.priceTypeActice : styles.priceTypeInactice
                 }
-                onPress={() => setPriceType(true)}>
-                <Text style={styles.priceTypeTextStyle}>LAC</Text>
+                onPress={() => {
+                  setPriceTh(true), setPriceCr(false), setPriceLac(false);
+                }}>
+                <Text style={styles.priceTypeTextStyle}>Th</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  priceType ? styles.priceTypeInactice : styles.priceTypeActice
+                  priceLac ? styles.priceTypeActice : styles.priceTypeInactice
                 }
-                onPress={() => setPriceType(false)}>
+                onPress={() => {
+                  setPriceLac(true), setPriceCr(false), setPriceTh(false);
+                }}>
+                <Text style={styles.priceTypeTextStyle}>Lac</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  priceCr ? styles.priceTypeActice : styles.priceTypeInactice
+                }
+                onPress={() => {
+                  setPriceCr(true), setPriceLac(false), setPriceTh(false);
+                }}>
                 <Text style={styles.priceTypeTextStyle}>Cr</Text>
               </TouchableOpacity>
             </View>
@@ -273,6 +297,12 @@ export default function AddInventoriesClassified(props) {
                   <Text style={styles.priceTypeTextStyle}>FP</Text>
                 </TouchableOpacity>
               </View>
+            </View>
+            <View style={{marginTop:hp(2)}}>
+            <Text style={styles.bulkText}>Do you want to upload Inventories in Bulk?</Text>
+            <TouchableOpacity>
+            <Text style={{...styles.bulkText, color:colors.primary}}>Click Here</Text>
+            </TouchableOpacity>
             </View>
           </View>
         ) : (
@@ -373,53 +403,80 @@ export default function AddInventoriesClassified(props) {
               value={clsCategory}
               onChange={item => setClsCategory(item.value)}
             />
-
-            <View style={styles.amenitiesMainContainer}>
-              <CustomTextInput
-                topText="Beds"
-                iconType="font-awesome"
-                iconName="bed"
-                iconSize={20}
-                placeholder="Beds"
-                textInputContainer={styles.amenitiesContainer}
-                textInputStyles={styles.amenitiesInputStyles}
-                textInputView={styles.amenitiesInputView}
+            {clsCategory == 'House' || clsCategory == 'Apartment' ? (
+              <View style={styles.amenitiesMainContainer}>
+                <CustomTextInput
+                  topText="Beds"
+                  iconType="font-awesome"
+                  iconName="bed"
+                  iconSize={20}
+                  placeholder="Beds"
+                  textInputContainer={styles.amenitiesContainer}
+                  textInputStyles={styles.amenitiesInputStyles}
+                  textInputView={styles.amenitiesInputView}
+                />
+                <CustomTextInput
+                  topText="Bath"
+                  iconType="font-awesome"
+                  iconName="bath"
+                  iconSize={20}
+                  placeholder="Baths"
+                  textInputContainer={styles.amenitiesContainer}
+                  textInputStyles={styles.amenitiesInputStyles}
+                  textInputView={styles.amenitiesInputView}
+                />
+                <CustomTextInput
+                  topText="Floor"
+                  iconType="material-community"
+                  iconName="floor-plan"
+                  iconSize={20}
+                  placeholder="Floor"
+                  textInputContainer={styles.amenitiesContainer}
+                  textInputStyles={styles.amenitiesInputStyles}
+                  textInputView={styles.amenitiesInputView}
+                />
+              </View>
+            ) : null}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginTop: hp(1)
+              }}>
+              <CustomDropdown
+                // container={{marginTop: hp(4)}}
+                dropdown={{...styles.sizesDropdown, width: wp(60)}}
+                data={sizes}
+                topLabelText={'Area'}
+                labelFieldName={'label'}
+                valueFieldName={'value'}
+                iconType="material"
+                iconName="fullscreen"
+                placeholder={'Area'}
+                value={plotSize}
+                onChange={item => setplotSize(item.value)}
               />
-              <CustomTextInput
-                topText="Bath"
-                iconType="font-awesome"
-                iconName="bath"
-                iconSize={20}
-                placeholder="Baths"
-                textInputContainer={styles.amenitiesContainer}
-                textInputStyles={styles.amenitiesInputStyles}
-                textInputView={styles.amenitiesInputView}
+               <CustomDropdown
+                dropdown={styles.sizesDropdown}
+                data={sizes}
+                topLabelText={'Size'}
+                labelFieldName={'label'}
+                valueFieldName={'value'}
+                placeholder={clsPlotSize}
+                value={clsPlotSize}
+                onChange={item => setclsPlotSize(item.value)}
               />
-              <CustomTextInput
-                topText="Floor"
-                iconType="material-community"
-                iconName="floor-plan"
-                iconSize={20}
-                placeholder="Floor"
-                textInputContainer={styles.amenitiesContainer}
-                textInputStyles={styles.amenitiesInputStyles}
-                textInputView={styles.amenitiesInputView}
-              />
+              
             </View>
-            <CustomDropdown
-              container={{marginTop: hp(4)}}
-              dropdown={{...styles.sizesDropdown, width: wp(90)}}
-              data={sizes}
-              topLabelText={'Area'}
-              labelFieldName={'label'}
-              valueFieldName={'value'}
+            <CustomTextInput
+              textInputContainer={styles.prcTxtInpContainer}
+              topText="Price."
               iconType="material"
-              iconName="fullscreen"
-              placeholder={'Area'}
-              value={plotSize}
-              onChange={item => setplotSize(item.value)}
+              iconName="local-offer"
+              iconSize={26}
+              placeholder="Enter Price"
             />
-
             <CustomTextInput
               topText="Details"
               iconType="material"
@@ -529,7 +586,7 @@ const styles = StyleSheet.create({
     marginTop: hp(6),
   },
   priceTextInputContainer: {
-    width: wp(68),
+    width: wp(50),
     height: hp(8),
     justifyContent: 'flex-start',
     paddingHorizontal: wp(5),
@@ -539,7 +596,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   priceTextInputStyles: {
-    width: wp(52),
+    width: wp(34),
     fontFamily: fonts.regular,
   },
   priceTextInputView: {
@@ -622,17 +679,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plNoTxtInpContainer: {
-    width: wp(50),
+    width: wp(30),
     height: hp(7),
     justifyContent: 'flex-start',
-    paddingHorizontal: wp(5),
+    paddingHorizontal: wp(2),
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
   plNoTxtInpStyles: {
-    width: wp(35),
+    width: wp(20),
     fontFamily: fonts.regular,
   },
   plNoTxtInpView: {
@@ -641,7 +698,7 @@ const styles = StyleSheet.create({
   },
   sizesDropdown: {
     height: hp(7),
-    width: wp(35),
+    width: wp(25),
     borderColor: colors.black,
     borderWidth: 1,
     borderRadius: 8,
@@ -655,4 +712,14 @@ const styles = StyleSheet.create({
     borderRadius: hp(2),
     padding: 2,
   },
+  prcTxtInpContainer:{
+    marginTop: hp(2),
+    height: hp(7),
+    borderRadius: 8,
+  },
+  bulkText:{
+    fontFamily:fonts.semiBold,
+    fontSize:hp(2),
+    color:colors.grey,
+  }
 });

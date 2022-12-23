@@ -115,9 +115,7 @@ export default function Inventories(props) {
                     btnText="See Details"
                     indicator={false}
                     onPress={() =>
-                      props.navigation.navigate('AppFlow', {
-                        screen: 'InventoryDetails',
-                      })
+                      props.navigation.navigate('AppFlow',{screen:'InventoryDetails'})
                     }
                     btnContainer={styles.btnContainer}
                     btnTextStyles={styles.btnTextStyles}

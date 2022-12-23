@@ -28,6 +28,7 @@ import axios from 'axios';
 import {useFocusEffect} from '@react-navigation/native';
 import {AppFlow} from '../../Api/ApiCalls';
 import TopClassified from '../AppFlow/TopClassified';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
@@ -58,10 +59,14 @@ export default function HomeScreen(props) {
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
           leftImageStyle={{width: wp(50), height: hp(10)}}
-          rightIconName="queue"
+          rightIconName="logout"
           rightIconType="material"
           rightIconColor={colors.white}
           rightIconSize={30}
+          onRighttIconPress={()=>{
+            AsyncStorage.clear()
+            props.navigation.navigate('AuthStack',{screen:'Login'})
+          }}
           inputViewStyle={styles.inputViewStyle}
           textInputStyle={styles.textInputStyle}
           placeholder="Search"

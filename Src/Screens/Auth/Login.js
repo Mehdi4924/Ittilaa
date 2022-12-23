@@ -18,8 +18,8 @@ import {Auth} from '../../Api/ApiCalls';
 import Toast from 'react-native-simple-toast';
 import axios from 'axios';
 export default function Login(props) {
-  const [phoneNumber, setPhoneNumber] = useState('646464');
-  const [password, setPassword] = useState('1234');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
   const [indicator, setIndicator] = useState(false);
   const [confPasswordSecure, setConfPasswordSecure] = useState(true);
 
