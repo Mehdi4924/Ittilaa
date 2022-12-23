@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, FlatList, Image, Pressable} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {URL} from '../Constants/URL';
 
 export default function CustomFlatList(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -48,7 +49,7 @@ export default function CustomFlatList(props) {
               <Image
                 source={
                   item?.file
-                    ? {uri: item.file}
+                    ? {uri: URL.imageURL + item.file.file}
                     : require('../Assets/Images/feature1.jpg')
                 }
                 style={props.featureImageStyle}

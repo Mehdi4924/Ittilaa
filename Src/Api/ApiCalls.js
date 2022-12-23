@@ -40,6 +40,7 @@ export const AppFlow = {
   dashboard: () => requests.get('dashboard'),
   InventoryDetails: id => requests.get(`inventory/${id}`),
   getAllClassifieds: () => requests.get('classified'),
+  GetClassiffiedDetails: id => requests.get(`classified/${id}`),
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
 };

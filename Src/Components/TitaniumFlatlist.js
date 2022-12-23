@@ -1,6 +1,14 @@
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {hp, wp} from '../Constants/Responsive';
+import {URL} from '../Constants/URL';
 
 export default function TitaniumFlatlist(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -41,7 +49,7 @@ export default function TitaniumFlatlist(props) {
         ref={r => (flatListRef.current = r)}
         ListEmptyComponent={
           <View>
-            <Text>Hi there</Text>
+            <Text>No Data Found</Text>
           </View>
         }
         onScrollToIndexFailed={info => {
@@ -52,20 +60,23 @@ export default function TitaniumFlatlist(props) {
           });
         }}
         renderItem={({item, index}) => (
-          <View key={index} style={{alignItems: 'center', marginRight: wp(2)}}>
+          <TouchableOpacity
+            onPress={() => props.onPress(item)}
+            key={index}
+            style={{alignItems: 'center', marginRight: wp(2)}}>
             <View style={props.cardStyle}>
               <Image
                 source={
                   item?.file
-                    ? {uri: item.file}
+                    ? {uri: URL.imageURL + item.file.file}
                     : require('../Assets/Images/agency-icon.png')
                 }
-                style={{width: wp(20), height: hp(10)}}
+                style={{width: wp(20), height: wp(20), borderRadius: hp(10)}}
                 resizeMode="contain"
               />
             </View>
             <Text style={props.listTitleStyle}>{item?.name || 'Loading'}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>

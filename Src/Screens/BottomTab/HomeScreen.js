@@ -63,9 +63,9 @@ export default function HomeScreen(props) {
           rightIconType="material"
           rightIconColor={colors.white}
           rightIconSize={30}
-          onRighttIconPress={()=>{
-            AsyncStorage.clear()
-            props.navigation.navigate('AuthStack',{screen:'Login'})
+          onRighttIconPress={() => {
+            AsyncStorage.clear();
+            props.navigation.navigate('AuthStack', {screen: 'Login'});
           }}
           inputViewStyle={styles.inputViewStyle}
           textInputStyle={styles.textInputStyle}
@@ -91,6 +91,12 @@ export default function HomeScreen(props) {
               listContainerstyle={styles.listContainerstyle}
               flatListStyle={styles.flatListStyle}
               listTitleStyle={styles.listTitleStyle}
+              onPress={item =>
+                props.navigation.navigate('AppFlow', {
+                  screen: 'AgencyProfile',
+                  params: {agency: item},
+                })
+              }
             />
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Top Inventories</Text>
@@ -143,6 +149,12 @@ export default function HomeScreen(props) {
               classifiedAmenitiesText={styles.classifiedAmenitiesText}
               amenitiesIconSize={10}
               animation={true}
+              onPress={item =>
+                props.navigation.navigate('AppFlow', {
+                  screen: 'ClassifiedDetails',
+                  params: {classified: item},
+                })
+              }
               // onPress={item => props.navigation.navigate('FeaturedDetails')}
             />
             <View style={styles.titleContainer}>
@@ -229,10 +241,9 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(5),
   },
   cardStyle: {
-    height: hp(12),
-    width: wp(24),
+    height: wp(25),
+    width: wp(25),
     backgroundColor: colors.white,
-
     borderRadius: hp(10),
     alignItems: 'center',
     justifyContent: 'center',

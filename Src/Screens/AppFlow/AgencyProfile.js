@@ -15,9 +15,11 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
+import { URL } from '../../Constants/URL';
 
 export default function AgencyProfile(props) {
   const {agency} = props.route.params;
+  console.log(JSON.stringify(props, null, 2));
   const [agencyData, setAgencyData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function AgencyProfile(props) {
                 <Image
                   source={
                     agencyData?.file
-                      ? {uri: agencyData?.file}
+                      ? {uri: URL.imageURL + agencyData?.file.file}
                       : allImages.agencydummy
                   }
                   style={styles.agencyProfileImage}
