@@ -11,6 +11,8 @@ import {topInventories} from '../../Constants/dummyData';
 import axios from 'axios';
 import { AppFlow } from '../../Api/ApiCalls';
 import { useFocusEffect } from '@react-navigation/native';
+import { URL } from '../../Constants/URL';
+
 
 
 export default function AgencyProperties(props) {
@@ -36,6 +38,7 @@ export default function AgencyProperties(props) {
     },
   ];
   const [screenData, setScreenData] = useState();
+  const [inventData, setInventData] = useState();
   useFocusEffect(
     React.useCallback(() => {
       getData();
@@ -47,6 +50,7 @@ export default function AgencyProperties(props) {
       .then(function (response) {
         console.log('Response data', response);
         setScreenData(response.data.data);
+        setInventData(response.data.data.inventory)
       })
       .catch(function (error) {
         console.log('Agency Profile Error', error.response);
@@ -67,7 +71,8 @@ export default function AgencyProperties(props) {
   //     </View>
   //   );
   // };
-  console.log('Egency properties', screenData);
+  console.log('Egency properties', inventData);
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -87,7 +92,8 @@ export default function AgencyProperties(props) {
       />
       <Text style={styles.titleText}>Agency Properties</Text>
       <FlatList
-        data={screenData}
+      contentContainerStyle={{paddingBottom:hp(10)}}
+        data={inventData}
         // ListHeaderComponent={headerComponent}
         showsVerticalScrollIndicator={false}
         // contentContainerStyle={{paddingLeft: wp(5)}}
@@ -96,7 +102,11 @@ export default function AgencyProperties(props) {
             <View style={styles.listContainer} key={index}>
               <View style={styles.listLeftView}>
                 <Image
-                  source={{uri:agency.file.file}}
+                  source={
+                    item.agency?.file?.file
+                      ? {uri: URL.imageURL + item.agency?.file?.file}
+                      : allImages.agencydummy
+                  }
                   style={styles.listImage}
                   resizeMode="contain"
                 />
@@ -105,23 +115,23 @@ export default function AgencyProperties(props) {
                 </Text>
               </View>
               <View style={styles.listRightView}>
-                <Text style={styles.listHeading}>{item.company || 'N/A'}</Text>
+                <Text style={styles.listHeading}>{item.agency.name || 'N/A'}</Text>
                 <Text style={styles.listPersonName}>
-                  {item.person || 'N/A'}
+                  {item.agency.ceo_name || 'N/A'}
                 </Text>
                 <Text style={[styles.listText, {marginTop: hp(1)}]}>
-                  {item.town || 'N/A'}
+                  {item.city.name || 'N/A'}
                 </Text>
-                <Text style={styles.listText}>{item.society || 'N/A'}</Text>
-                <Text style={styles.listText}>{item.marlas || 'N/A'}</Text>
-                <Text style={styles.listText}>{item.description || 'N/A'}</Text>
+                <Text style={styles.listText}>{item.society.name || 'N/A'}</Text>
+                <Text style={styles.listText}>{item.size} {item.size_unit}</Text>
+                {/* <Text style={styles.listText}>{item.description || 'N/A'}</Text> */}
                 <View style={styles.listBtnView}>
                   <Text style={styles.listPersonName}>1 day ago</Text>
                   <CustomButton
                     btnText="See Details"
                     indicator={false}
                     onPress={() =>
-                      props.navigation.navigate('AppFlow',{screen:'InventoryDetails'})
+                      props.navigation.navigate('InventoryDetails',{inventory:item})
                     }
                     btnContainer={styles.btnContainer}
                     btnTextStyles={styles.btnTextStyles}
@@ -132,6 +142,7 @@ export default function AgencyProperties(props) {
           );
         }}
       />
+      
     </View>
   );
 }

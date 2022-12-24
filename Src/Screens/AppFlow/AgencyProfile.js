@@ -45,12 +45,14 @@ export default function AgencyProfile(props) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
+          <TouchableOpacity onPress={()=>props.navigation.goBack()}>
             <Icon
               name={'arrow-back-circle'}
               type={'ionicon'}
               color={colors.primary}
               size={hp(5)}
             />
+            </TouchableOpacity>
             <Text style={styles.headingText}>Agency Details</Text>
             <View></View>
           </View>

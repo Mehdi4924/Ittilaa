@@ -43,7 +43,8 @@ export const AppFlow = {
   GetClassiffiedDetails: id => requests.get(`classified/${id}`),
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
-  agencyProperties: id => requests.get(`inventory/${id}`),
+  agencyProperties: id => requests.get(`agency/inventory/${id}`),
+  createEnventory: data => requests.get('inventory/store', data),
 };
 
 export const GetCities = {
