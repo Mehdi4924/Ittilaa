@@ -30,6 +30,8 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
+import {AppFlow} from '../../Api/ApiCalls';
+import Toast from 'react-native-simple-toast'
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
@@ -40,6 +42,7 @@ export default function AddInventoriesClassified(props) {
   const [priceTh, setPriceTh] = useState(true);
   const [adType, setAdType] = useState(true);
   const [imageUri, setImageUri] = useState('');
+  const [bulkDetails, setBulkDetails] = useState('');
   const [fileName, setFileName] = useState('');
   const [socValue, setSocValue] = useState('');
   const [typeValue, setTypeValue] = useState('');
@@ -48,11 +51,12 @@ export default function AddInventoriesClassified(props) {
   const [clsProPurpose, setclsProPurpose] = useState('');
   const [category, setCategory] = useState('');
   const [clsCategory, setClsCategory] = useState('');
-  const [plotSize, setplotSize] = useState('');
+  const [sizeUnit, setSizeUnit] = useState('');
   const [clsPlotSize, setclsPlotSize] = useState('');
   const [city, setCity] = useState('');
   const [block, setBlock] = useState('');
   const [price, setPrice] = useState('');
+  const [bulk, setBulk] = useState(false);
   const [PUP, setPUP] = useState(false);
   const [CP, setCP] = useState(false);
   const [MB, setMB] = useState(false);
@@ -63,6 +67,8 @@ export default function AddInventoriesClassified(props) {
   const [clsPrice, setClsPrice] = useState('');
   const [clsDetails, setClsDetails] = useState('');
   const [clsAreaType, setClsAreaType] = useState();
+  const [indicator, setIndicator] = useState(false);
+  const [inventDataToAdd, setInventDataToAdd] = useState({});
 
   const openGallery = () => {
     let options = {
@@ -140,6 +146,53 @@ export default function AddInventoriesClassified(props) {
         });
     }
   }
+  const submitInventory = () => {
+    if (typeValue == null) {
+      Toast.show('Please select type', Toast.SHORT);
+    } else if (purpose == null) {
+      Toast.show('Please select purpose', Toast.SHORT);
+    } else if (inventDataToAdd.plotSize == null) {
+      Toast.show('Please Enter plot size', Toast.SHORT);
+    } else if (sizeUnit == null) {
+      Toast.show('Please select size Unit', Toast.SHORT);
+    } else if (inventDataToAdd.block == null) {
+      Toast.show('Please enter block', Toast.SHORT);
+    } else if (inventDataToAdd.propNo == null) {
+      Toast.show('Please enter property No.', Toast.SHORT);
+    } else if (inventDataToAdd.inventPrice == null) {
+      Toast.show('Please enter price', Toast.SHORT);
+    } else if (category == null) {
+      Toast.show('Please select category', Toast.SHORT);
+    } else {
+      setIndicator(true);
+      var data = new FormData();
+      data.append('city_id', 1);
+      data.append('society_id', 1);
+      data.append('type', typeValue);
+      data.append('purpose', propPurpose);
+      data.append('size', inventDataToAdd.plotSize);
+      data.append('size_unit', sizeUnit);
+      data.append('block', inventDataToAdd.block);
+      data.append('plot_no', inventDataToAdd.propNo);
+      data.append('price', inventDataToAdd.inventPrice);
+      data.append('category', category);
+      data.append('price_unit', priceTh ? 'Th' : priceLac ? 'Lac' : 'Cr');
+      data.append('featuret', 'cp');
+
+      AppFlow.createEnventory(data)
+        .then(function (response) {
+          // props.navigation.navigate('Login');
+          // Toast.show('')
+          console.log('responseeee', response);
+        })
+        .catch(function (error) {
+          console.log(error, null, 2);
+        })
+        .finally(function () {
+          setIndicator(false);
+        });
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <ScrollView
@@ -180,197 +233,260 @@ export default function AddInventoriesClassified(props) {
           />
         </View>
         {inventory ? (
-          <View>
-            <CustomDropdown
-              data={cityItem}
-              topLabelText={'City'}
-              labelFieldName={'label'}
-              valueFieldName={'value'}
-              iconType="material"
-              iconName="place"
-              placeholder={'Select City'}
-              value={city}
-              onChange={item => setCity(item.value)}
-            />
-            <CustomDropdown
-              data={societyItem}
-              topLabelText={'Society'}
-              labelFieldName={'label'}
-              valueFieldName={'value'}
-              placeholder={'Select Society'}
-              iconName={'users'}
-              iconType="font-awesome"
-              value={socValue}
-              onChange={item => setSocValue(item.value)}
-            />
-            <CustomDropdown
-              data={typeItem}
-              topLabelText={'Type'}
-              labelFieldName={'label'}
-              valueFieldName={'value'}
-              iconType="material"
-              iconName="merge-type"
-              placeholder={'Select Type'}
-              value={typeValue}
-              onChange={item => setTypeValue(item.value)}
-            />
-            <CustomDropdown
-              data={purpose}
-              topLabelText={'Purpose'}
-              labelFieldName={'label'}
-              valueFieldName={'value'}
-              iconType="material"
-              iconName="business"
-              placeholder={'Select Purpose'}
-              value={propPurpose}
-              onChange={item => setpropPurpose(item.value)}
-            />
-            <CustomDropdown
-              data={invenCategories}
-              topLabelText={'Category'}
-              labelFieldName={'label'}
-              valueFieldName={'value'}
-              iconType="material"
-              iconName="category"
-              placeholder={'Select Category'}
-              value={category}
-              onChange={item => setCategory(item.value)}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <CustomTextInput
-                topText="Prop No."
-                iconType="material"
-                iconName="fullscreen-exit"
-                iconSize={26}
-                placeholder="Prop No."
-                textInputContainer={styles.plNoTxtInpContainer}
-                textInputStyles={styles.plNoTxtInpStyles}
-                textInputView={styles.plNoTxtInpView}
-              />
-              <CustomTextInput
-                topText="Plot size."
-                iconType="material"
-                iconName="fullscreen"
-                iconSize={26}
-                placeholder="Size."
-                textInputContainer={styles.plNoTxtInpContainer}
-                textInputStyles={styles.plNoTxtInpStyles}
-                textInputView={styles.plNoTxtInpView}
-              />
-              <CustomDropdown
-                dropdown={styles.sizesDropdown}
-                data={sizes}
-                topLabelText={'Size'}
-                labelFieldName={'label'}
-                valueFieldName={'value'}
-                placeholder={plotSize}
-                value={plotSize}
-                onChange={item => setplotSize(item.value)}
-              />
-            </View>
-            <CustomTextInput
-              textInputContainer={{marginTop: hp(2), borderRadius: 8}}
-              topText="Block"
-              iconType="material"
-              iconName="grid-view"
-              iconSize={26}
-              placeholder="Enter Block"
-              value={block}
-              onChangeText={e => setBlock(e)}
-            />
-            <View style={styles.priceTypeContainer}>
-              <CustomTextInput
-                topText="Price"
-                iconType="material"
-                iconName="local-offer"
-                iconSize={26}
-                placeholder="Enter Price"
-                value={price}
-                onChangeText={e => setPrice(e)}
-                textInputContainer={styles.priceTextInputContainer}
-                textInputStyles={styles.priceTextInputStyles}
-                textInputView={styles.priceTextInputView}
-              />
-              <TouchableOpacity
-                style={
-                  priceTh ? styles.priceTypeActice : styles.priceTypeInactice
-                }
-                onPress={() => {
-                  setPriceTh(true), setPriceCr(false), setPriceLac(false);
-                }}>
-                <Text style={styles.priceTypeTextStyle}>Th</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={
-                  priceLac ? styles.priceTypeActice : styles.priceTypeInactice
-                }
-                onPress={() => {
-                  setPriceLac(true), setPriceCr(false), setPriceTh(false);
-                }}>
-                <Text style={styles.priceTypeTextStyle}>Lac</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={
-                  priceCr ? styles.priceTypeActice : styles.priceTypeInactice
-                }
-                onPress={() => {
-                  setPriceCr(true), setPriceLac(false), setPriceTh(false);
-                }}>
-                <Text style={styles.priceTypeTextStyle}>Cr</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{marginTop: hp(4)}}>
-              <Text>Feature/Paid</Text>
-              <View style={{flexDirection: 'row', marginTop: hp(1)}}>
-                <TouchableOpacity
-                  style={
-                    PUP ? styles.priceTypeActice : styles.priceTypeInactice
-                  }
-                  onPress={() => setPUP(!PUP)}>
-                  <Text style={styles.priceTypeTextStyle}>PUP</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+          <>
+            {bulk ? (
+              <>
+                <CustomTextInput
+                  topText="Bulk Details"
+                  iconType="material"
+                  iconName="info"
+                  iconSize={26}
+                  placeholder="Enter Details in bulk"
+                  textInputContainer={styles.textInputContainer}
+                  textInputStyles={styles.textInputStyles}
+                  iconStyles={styles.iconStyles}
+                  multiline={true}
+                  textInputView={styles.textInputView}
+                  value={bulkDetails}
+                  onChangeText={e => setBulkDetails(e)}
+                />
+                <View style={{marginTop: hp(2)}}>
+                  <Text style={styles.bulkText}>
+                    Do you want to upload Single Inventories?
+                  </Text>
+                  <TouchableOpacity onPress={() => setBulk(false)}>
+                    <Text style={{...styles.bulkText, color: colors.primary}}>
+                      Click Here
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <View>
+                <CustomDropdown
+                  data={cityItem}
+                  topLabelText={'City'}
+                  labelFieldName={'label'}
+                  valueFieldName={'value'}
+                  iconType="material"
+                  iconName="place"
+                  placeholder={'Select City'}
+                  value={city}
+                  onChange={item => setCity(item.value)}
+                />
+                <CustomDropdown
+                  data={societyItem}
+                  topLabelText={'Society'}
+                  labelFieldName={'label'}
+                  valueFieldName={'value'}
+                  placeholder={'Select Society'}
+                  iconName={'users'}
+                  iconType="font-awesome"
+                  value={socValue}
+                  onChange={item => setSocValue(item.value)}
+                />
+                <CustomDropdown
+                  data={typeItem}
+                  topLabelText={'Type'}
+                  labelFieldName={'label'}
+                  valueFieldName={'value'}
+                  iconType="material"
+                  iconName="merge-type"
+                  placeholder={'Select Type'}
+                  value={typeValue}
+                  onChange={item => setTypeValue(item.value)}
+                />
+                <CustomDropdown
+                  data={purpose}
+                  topLabelText={'Purpose'}
+                  labelFieldName={'label'}
+                  valueFieldName={'value'}
+                  iconType="material"
+                  iconName="business"
+                  placeholder={'Select Purpose'}
+                  value={propPurpose}
+                  onChange={item => setpropPurpose(item.value)}
+                />
+                <CustomDropdown
+                  data={invenCategories}
+                  topLabelText={'Category'}
+                  labelFieldName={'label'}
+                  valueFieldName={'value'}
+                  iconType="material"
+                  iconName="category"
+                  placeholder={'Select Category'}
+                  value={category}
+                  onChange={item => setCategory(item.value)}
+                />
+                <View
                   style={{
-                    ...(MB ? styles.priceTypeActice : styles.priceTypeInactice),
-                    marginLeft: wp(2),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}>
+                  <CustomTextInput
+                    topText="Prop No."
+                    iconType="material"
+                    iconName="fullscreen-exit"
+                    iconSize={26}
+                    placeholder="Prop No."
+                    textInputContainer={styles.plNoTxtInpContainer}
+                    textInputStyles={styles.plNoTxtInpStyles}
+                    textInputView={styles.plNoTxtInpView}
+                    valu={inventDataToAdd.propNo || ''}
+                    onChangeText={e => {
+                      setInventDataToAdd(prev => {
+                        return {...prev, propNo: e};
+                      });
+                    }}
+                  />
+                  <CustomTextInput
+                    topText="Plot size."
+                    iconType="material"
+                    iconName="fullscreen"
+                    iconSize={26}
+                    placeholder="Size."
+                    textInputContainer={styles.plNoTxtInpContainer}
+                    textInputStyles={styles.plNoTxtInpStyles}
+                    textInputView={styles.plNoTxtInpView}
+                    valu={inventDataToAdd.plotSize || ''}
+                    onChangeText={e => {
+                      setInventDataToAdd(prev => {
+                        return {...prev, plotSize: e};
+                      });
+                    }}
+                  />
+                  <CustomDropdown
+                    dropdown={styles.sizesDropdown}
+                    data={sizes}
+                    topLabelText={'Size'}
+                    labelFieldName={'label'}
+                    valueFieldName={'value'}
+                    placeholder={sizeUnit}
+                    value={sizeUnit}
+                    onChange={item => setSizeUnit(item.value)}
+                  />
+                </View>
+                <CustomTextInput
+                  textInputContainer={{marginTop: hp(2), borderRadius: 8}}
+                  topText="Block"
+                  iconType="material"
+                  iconName="grid-view"
+                  iconSize={26}
+                  placeholder="Enter Block"
+                  valu={inventDataToAdd.block || ''}
+                  onChangeText={e => {
+                    setInventDataToAdd(prev => {
+                      return {...prev, block: e};
+                    });
                   }}
-                  onPress={() => setMB(!MB)}>
-                  <Text style={styles.priceTypeTextStyle}>M</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    ...(CP ? styles.priceTypeActice : styles.priceTypeInactice),
-                    marginLeft: wp(2),
-                  }}
-                  onPress={() => setCP(!CP)}>
-                  <Text style={styles.priceTypeTextStyle}>CP</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    ...(FP ? styles.priceTypeActice : styles.priceTypeInactice),
-                    marginLeft: wp(2),
-                  }}
-                  onPress={() => setFP(!FP)}>
-                  <Text style={styles.priceTypeTextStyle}>FP</Text>
-                </TouchableOpacity>
+                />
+                <View style={styles.priceTypeContainer}>
+                  <CustomTextInput
+                    topText="Price"
+                    iconType="material"
+                    iconName="local-offer"
+                    iconSize={26}
+                    placeholder="Enter Price"
+                    textInputContainer={styles.priceTextInputContainer}
+                    textInputStyles={styles.priceTextInputStyles}
+                    textInputView={styles.priceTextInputView}
+                    valu={inventDataToAdd.inventPrice || ''}
+                    onChangeText={e => {
+                      setInventDataToAdd(prev => {
+                        return {...prev, inventPrice: e};
+                      });
+                    }}
+                  />
+                  <TouchableOpacity
+                    style={
+                      priceTh
+                        ? styles.priceTypeActice
+                        : styles.priceTypeInactice
+                    }
+                    onPress={() => {
+                      setPriceTh(true), setPriceCr(false), setPriceLac(false);
+                    }}>
+                    <Text style={styles.priceTypeTextStyle}>Th</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      priceLac
+                        ? styles.priceTypeActice
+                        : styles.priceTypeInactice
+                    }
+                    onPress={() => {
+                      setPriceLac(true), setPriceCr(false), setPriceTh(false);
+                    }}>
+                    <Text style={styles.priceTypeTextStyle}>Lac</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      priceCr
+                        ? styles.priceTypeActice
+                        : styles.priceTypeInactice
+                    }
+                    onPress={() => {
+                      setPriceCr(true), setPriceLac(false), setPriceTh(false);
+                    }}>
+                    <Text style={styles.priceTypeTextStyle}>Cr</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{marginTop: hp(4)}}>
+                  <Text>Feature/Paid</Text>
+                  <View style={{flexDirection: 'row', marginTop: hp(1)}}>
+                    <TouchableOpacity
+                      style={
+                        PUP ? styles.priceTypeActice : styles.priceTypeInactice
+                      }
+                      onPress={() => setPUP(!PUP)}>
+                      <Text style={styles.priceTypeTextStyle}>PUP</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        ...(MB
+                          ? styles.priceTypeActice
+                          : styles.priceTypeInactice),
+                        marginLeft: wp(2),
+                      }}
+                      onPress={() => setMB(!MB)}>
+                      <Text style={styles.priceTypeTextStyle}>M</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        ...(CP
+                          ? styles.priceTypeActice
+                          : styles.priceTypeInactice),
+                        marginLeft: wp(2),
+                      }}
+                      onPress={() => setCP(!CP)}>
+                      <Text style={styles.priceTypeTextStyle}>CP</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        ...(FP
+                          ? styles.priceTypeActice
+                          : styles.priceTypeInactice),
+                        marginLeft: wp(2),
+                      }}
+                      onPress={() => setFP(!FP)}>
+                      <Text style={styles.priceTypeTextStyle}>FP</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{marginTop: hp(2)}}>
+                  <Text style={styles.bulkText}>
+                    Do you want to upload Inventories in Bulk?
+                  </Text>
+                  <TouchableOpacity onPress={() => setBulk(true)}>
+                    <Text style={{...styles.bulkText, color: colors.primary}}>
+                      Click Here
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-            <View style={{marginTop: hp(2)}}>
-              <Text style={styles.bulkText}>
-                Do you want to upload Inventories in Bulk?
-              </Text>
-              <TouchableOpacity>
-                <Text style={{...styles.bulkText, color: colors.primary}}>
-                  Click Here
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+            )}
+          </>
         ) : (
           <View>
             <View style={styles.photoContainer}>
@@ -587,6 +703,8 @@ export default function AddInventoriesClassified(props) {
           btnText="Submit"
           btnTextStyles={styles.btnTextStyles}
           onPress={() => createClassified()}
+          indicator={indicator}
+          onPress={submitInventory}
         />
         <View style={{height: hp(8)}}></View>
       </ScrollView>

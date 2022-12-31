@@ -11,6 +11,7 @@ import AgencyProfile from '../Screens/AppFlow/AgencyProfile';
 import AllAgencies from '../Screens/AppFlow/AllAgencies';
 import FeaturedDetails from '../Screens/AppFlow/FeaturedDetails';
 import PackageDetails from '../Screens/AppFlow/PackageDetails';
+import AgencyProperties from '../Screens/AppFlow/AgencyProperties';
 
 export default function AppFlow() {
   const MainFlow = createNativeStackNavigator();
@@ -27,6 +28,7 @@ export default function AppFlow() {
       <MainFlow.Screen name="AllAgencies" component={AllAgencies} />
       <MainFlow.Screen name="FeaturedDetails" component={FeaturedDetails} />
       <MainFlow.Screen name="PackageDetails" component={PackageDetails} />      
+      <MainFlow.Screen name="AgencyProperties" component={AgencyProperties} />      
     </MainFlow.Navigator>
   );
 }

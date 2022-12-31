@@ -1,0 +1,294 @@
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {colors} from '../../Constants/Colors';
+import {hp, wp} from '../../Constants/Responsive';
+import {allImages} from '../../Constants/Images';
+import {fonts} from '../../Constants/Fonts';
+import CustomButton from '../../Components/CustomButton';
+import CustomHeader from '../../Components/CustomHeader';
+import InventoriesComp from '../../Components/InventoriesComp';
+import {topInventories} from '../../Constants/dummyData';
+import axios from 'axios';
+import { AppFlow } from '../../Api/ApiCalls';
+import { useFocusEffect } from '@react-navigation/native';
+import { URL } from '../../Constants/URL';
+
+
+
+export default function AgencyProperties(props) {
+  const {id} = props.route.params;
+  const listData = [
+    {
+      company: 'IronStone Equities',
+      developer: 'Tamjeed\nDevelopers',
+      person: 'Danial Babar',
+      town: 'Bahria Town',
+      society: 'Tulip Extensions',
+      marlas: '05 Marla Plot',
+      description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
+    },
+    {
+      company: 'IronStone Equities',
+      developer: 'Tamjeed\nDevelopers',
+      person: 'Danial Babar',
+      town: 'Bahria Town',
+      society: 'Tulip Extensions',
+      marlas: '05 Marla Plot',
+      description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
+    },
+  ];
+  const [screenData, setScreenData] = useState();
+  const [inventData, setInventData] = useState();
+  useFocusEffect(
+    React.useCallback(() => {
+      getData();
+    }, []),
+  );
+  
+  const getData = () => {
+    AppFlow.agencyProperties(id)
+      .then(function (response) {
+        console.log('Response data', response);
+        setScreenData(response.data.data);
+        setInventData(response.data.data.inventory)
+      })
+      .catch(function (error) {
+        console.log('Agency Profile Error', error.response);
+      });
+  };
+  // const headerComponent = () => {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.headingText}>Hot Properties</Text>
+  //       <InventoriesComp
+  //         data={topInventories}
+  //         inventoryCard={styles.inventoryCard}
+  //         horizontal={true}
+  //         flatListStyle={styles.flatListStyle}
+  //         profileImgStyle={styles.profileImgStyle}
+  //         profileImgContainer={styles.profileImgContainer}
+  //       />
+  //     </View>
+  //   );
+  // };
+  console.log('Egency properties', inventData);
+
+  return (
+    <View style={styles.container}>
+      <CustomHeader
+        headerStyle={styles.headerStyle}
+        iconContainer={styles.iconContainer}
+        leftIconName="arrow-back"
+        leftIconType="material"
+        leftIconColor={colors.white}
+        leftIconSize={30}
+        onLeftIconPress={() => props.navigation.goBack()}
+        inputViewStyle={styles.inputViewStyle}
+        textInputStyle={styles.textInputStyle}
+        placeholder="Search"
+        placeholderTextColor={colors.grey}
+        screenTitle="Properties"
+        screenTitleStyle={styles.screenTitleStyle}
+      />
+      <Text style={styles.titleText}>Agency Properties</Text>
+      <FlatList
+      contentContainerStyle={{paddingBottom:hp(10)}}
+        data={inventData}
+        // ListHeaderComponent={headerComponent}
+        showsVerticalScrollIndicator={false}
+        // contentContainerStyle={{paddingLeft: wp(5)}}
+        renderItem={({item, index}) => {
+          return (
+            <View style={styles.listContainer} key={index}>
+              <View style={styles.listLeftView}>
+                <Image
+                  source={
+                    item.agency?.file?.file
+                      ? {uri: URL.imageURL + item.agency?.file?.file}
+                      : allImages.agencydummy
+                  }
+                  style={styles.listImage}
+                  resizeMode="contain"
+                />
+                <Text style={styles.listImageText}>
+                  {item.agency.name || 'N/A'}
+                </Text>
+              </View>
+              <View style={styles.listRightView}>
+                <Text style={styles.listHeading}>{item.agency.name || 'N/A'}</Text>
+                <Text style={styles.listPersonName}>
+                  {item.agency.ceo_name || 'N/A'}
+                </Text>
+                <Text style={[styles.listText, {marginTop: hp(1)}]}>
+                  {item.city.name || 'N/A'}
+                </Text>
+                <Text style={styles.listText}>{item.society.name || 'N/A'}</Text>
+                <Text style={styles.listText}>{item.size} {item.size_unit}</Text>
+                {/* <Text style={styles.listText}>{item.description || 'N/A'}</Text> */}
+                <View style={styles.listBtnView}>
+                  <Text style={styles.listPersonName}>1 day ago</Text>
+                  <CustomButton
+                    btnText="See Details"
+                    indicator={false}
+                    onPress={() =>
+                      props.navigation.navigate('InventoryDetails',{inventory:item})
+                    }
+                    btnContainer={styles.btnContainer}
+                    btnTextStyles={styles.btnTextStyles}
+                  />
+                </View>
+              </View>
+            </View>
+          );
+        }}
+      />
+      
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
+  headingText: {
+    fontFamily: fonts.bold,
+    color: colors.primary,
+    width: wp(90),
+    marginVertical: hp(1),
+  },
+  headerStyle: {
+    width: wp(100),
+    height: hp(20),
+    backgroundColor: colors.primary,
+  },
+  titleText:{
+    fontFamily:fonts.bold,
+    fontSize:hp(2.5),
+    color:colors.black,
+    marginVertical:hp(2),
+    width:wp(90)
+
+  },
+  inputViewStyle: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    marginHorizontal: wp(5),
+    borderRadius: 5,
+    alignItems: 'center',
+    paddingHorizontal: wp(2),
+    marginTop: hp(2),
+  },
+  textInputStyle: {
+    width: wp(75),
+    fontFamily: fonts.regular,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: wp(5),
+    marginTop: hp(4),
+  },
+  screenTitleStyle: {
+    fontFamily: fonts.semiBold,
+    fontSize: hp(2.4),
+    color: colors.white,
+  },
+  btnContainer: {
+    width: wp(22),
+    height: hp(3.5),
+    backgroundColor: colors.secondary,
+    borderRadius: hp(6),
+  },
+  btnTextStyles: {
+    fontFamily: fonts.regular,
+    color: colors.white,
+    fontSize: hp(1.5),
+  },
+  listContainer: {
+    backgroundColor: colors.white,
+    width: wp(95),
+    elevation: 5,
+    marginVertical: hp(1),
+    borderRadius: 10,
+    borderWidth: 1,
+    flexDirection: 'row',
+  },
+  listLeftView: {
+    backgroundColor: colors.grey,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    width: wp(30),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listImage: {
+    width: hp(10),
+    height: hp(10),
+    borderRadius: hp(20),
+    backgroundColor: colors.white,
+  },
+
+  listImageText: {
+    fontFamily: fonts.bold,
+    textAlign: 'center',
+    fontSize: hp(1.5),
+    color: colors.white,
+  },
+  listRightView: {
+    width: wp(64),
+    backgroundColor: colors.white,
+    paddingHorizontal: wp(5),
+    paddingVertical: hp(1),
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  listHeading: {
+    fontFamily: fonts.bold,
+    color: colors.black,
+    fontSize: hp(1.8),
+  },
+  listPersonName: {
+    fontFamily: fonts.regular,
+    color: colors.grey,
+    fontSize: hp(1.6),
+  },
+  listText: {
+    fontFamily: fonts.bold,
+    color: colors.grey,
+    fontSize: hp(1.6),
+  },
+  listBtnView: {
+    width: wp(55),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  //hot properties
+  flatListStyle: {
+    marginBottom: hp(2),
+  },
+  inventoryCard: {
+    width: wp(75),
+    height: hp(30),
+    backgroundColor: colors.white,
+    elevation: 5,
+    borderRadius: 14,
+    marginRight: wp(5),
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.08)',
+  },
+  profileImgStyle: {
+    width: wp(12),
+    height: hp(6),
+    borderRadius: wp(8),
+  },
+  profileImgContainer: {
+    width: wp(14),
+    height: hp(7),
+    borderRadius: wp(7),
+    backgroundColor: colors.white,
+    elevation: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

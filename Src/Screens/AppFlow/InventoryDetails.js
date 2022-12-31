@@ -14,6 +14,7 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import {AppFlow} from '../../Api/ApiCalls';
 import {useFocusEffect} from '@react-navigation/native';
+import { URL } from '../../Constants/URL';
 
 export default function InventoryDetails(props) {
   const {inventory} = props.route.params;
@@ -26,7 +27,7 @@ export default function InventoryDetails(props) {
   );
 
   const Inventories = () => {
-    AppFlow.InventoryDetails(inventory.agency_id)
+    AppFlow.InventoryDetails(inventory?.agency_id)
       .then(function (response) {
         console.log('Response data', response);
         setInventoryData(response.data.data);
@@ -59,11 +60,11 @@ export default function InventoryDetails(props) {
             />
           </View>
           <Image
-            source={
-              inventoryData?.file
-                ? {uri: inventoryData.file}
-                : allImages.agencydummy
-            }
+           source={
+                    inventoryData?.agency?.file?.file
+                      ? {uri: URL.imageURL + inventoryData?.agency?.file?.file}
+                      : allImages.agencydummy
+                  }
             style={styles.agencyProfileImage}
           />
           <Text style={styles.agencyNameText}>Test Agency</Text>
@@ -74,7 +75,7 @@ export default function InventoryDetails(props) {
                 {inventoryData?.block || 'Loading'}
               </Text>
               <Text style={styles.priceText}>
-                RS. {inventoryData?.price || 'Loading'}{' '}
+                RS. {inventoryData?.price || 'Loading'}{''}
                 {inventoryData?.price_unit}
               </Text>
             </View>

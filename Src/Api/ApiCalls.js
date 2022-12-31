@@ -43,6 +43,8 @@ export const AppFlow = {
   GetClassiffiedDetails: id => requests.get(`classified/${id}`),
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
+  agencyProperties: id => requests.get(`agency/inventory/${id}`),
+  createEnventory: data => requests.get('inventory/store', data),
   createClassiffied: data => requests.post('classified/store', data),
 };
 

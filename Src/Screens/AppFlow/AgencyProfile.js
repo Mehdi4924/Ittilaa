@@ -39,17 +39,20 @@ export default function AgencyProfile(props) {
         setIsLoading(false);
       });
   }
+  console.log('agency details', agencyData);
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
+          <TouchableOpacity onPress={()=>props.navigation.goBack()}>
             <Icon
               name={'arrow-back-circle'}
               type={'ionicon'}
               color={colors.primary}
               size={hp(5)}
             />
+            </TouchableOpacity>
             <Text style={styles.headingText}>Agency Details</Text>
             <View></View>
           </View>
@@ -88,11 +91,8 @@ export default function AgencyProfile(props) {
                   <CustomButton
                     btnText="Properties"
                     indicator={false}
-                    // onPress={() =>
-                    //   props.navigation.navigate('AppFlow', {
-                    //     screen: 'InventoryDetails',
-                    //   })
-                    // }
+                    onPress={() =>
+                      props.navigation.navigate('AgencyProperties', {id:agencyData.id})}
                     btnContainer={styles.btnContainer}
                     btnTextStyles={styles.btnTextStyles}
                   />
@@ -118,9 +118,9 @@ export default function AgencyProfile(props) {
               <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
                 Team
               </Text>
-              {[agencyData?.team || {name: 'Loading'}].map(item => {
+              {[agencyData?.team || {name: 'Loading'}].map((item, index) => {
                 return (
-                  <View style={styles.listMainView}>
+                  <View style={styles.listMainView} key={index}>
                     <Image
                       source={allImages.tamjeed}
                       style={styles.teamAgentProfile}
