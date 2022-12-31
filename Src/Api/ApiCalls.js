@@ -13,7 +13,7 @@ export const configureAxiosHeaders = async () => {
   const parsedData = JSON.parse(userData);
   console.log('Async User Data', parsedData);
   axios.defaults.headers['Authorization'] = 'Bearer '.concat(
-    parsedData.accessToken,
+    parsedData?.accessToken || '',
   );
 };
 
@@ -43,6 +43,7 @@ export const AppFlow = {
   GetClassiffiedDetails: id => requests.get(`classified/${id}`),
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
+  createClassiffied: data => requests.post('classified/store', data),
 };
 
 export const GetCities = {

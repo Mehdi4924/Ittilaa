@@ -105,31 +105,31 @@ export default function RegisterAgency(props) {
     } else {
       setIndicator(true);
       var data = new FormData();
-      data.append('agency_name', dataToSend.agencyName);
-      data.append('name', dataToSend.userName);
-      data.append('designation', dataToSend.designation);
-      data.append('phone', dataToSend.phone);
-      data.append('society', dataToSend.society);
-      data.append('address', dataToSend.address);
-      data.append('ceo_name', dataToSend.ceoName);
-      data.append('ceo_mobile1', dataToSend.ceoNum1);
-      data.append('ceo_mobile2', dataToSend.ceoNum2);
-      data.append('landline', dataToSend.landline);
-      data.append('whatapp_no', dataToSend.whatsapp);
-      data.append('email', dataToSend.email);
-      data.append('fax', dataToSend.fax);
-      data.append('facebook', dataToSend.facebookLink);
-      data.append('youtube', dataToSend.youTubeLink);
-      data.append('twitter', dataToSend.twitterLink);
-      data.append('instagram', dataToSend.instagramLink);
-      data.append('message', dataToSend.message);
-      data.append('website', dataToSend.website);
-      data.append('about', dataToSend.about);
-      data.append('password', dataToSend.password);
-      data.append('photo[]', {
-        uri: imageUri.uri,
-        name: imageUri.fileName,
-        type: imageUri.type,
+      data.append('agency_name', dataToSend?.agencyName);
+      data?.append('name', dataToSend?.userName);
+      data?.append('designation', dataToSend?.designation || '');
+      data?.append('phone', dataToSend?.phone);
+      data?.append('society', dataToSend?.society);
+      data?.append('address', dataToSend?.address || '');
+      data?.append('ceo_name', dataToSend?.ceoName || '');
+      data?.append('ceo_mobile1', dataToSend?.ceoNum1 || '');
+      data?.append('ceo_mobile2', dataToSend?.ceoNum2 || '');
+      data?.append('landline', dataToSend?.landline || '');
+      data?.append('whatapp_no', dataToSend?.whatsapp || '');
+      data?.append('email', dataToSend?.email || '');
+      data?.append('fax', dataToSend?.fax || '');
+      data?.append('facebook', dataToSend?.facebookLink || '');
+      data?.append('youtube', dataToSend?.youTubeLink || '');
+      data?.append('twitter', dataToSend?.twitterLink || '');
+      data?.append('instagram', dataToSend?.instagramLink || '');
+      data?.append('message', dataToSend?.message || '');
+      data?.append('website', dataToSend?.website || '');
+      data?.append('about', dataToSend?.about || '');
+      data?.append('password', dataToSend?.password);
+      data?.append('photo[]', {
+        uri: imageUri?.uri,
+        name: imageUri?.fileName,
+        type: imageUri?.type,
       });
       data.append('agency_photo[]', {
         uri: imageUri.uri,
@@ -141,7 +141,7 @@ export default function RegisterAgency(props) {
           props.navigation.navigate('Login');
         })
         .catch(function (error) {
-          console.log(error, null, 2);
+          console.log(JSON.stringify(error, null, 2));
         })
         .finally(function () {
           setIndicator(false);

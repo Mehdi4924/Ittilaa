@@ -27,11 +27,14 @@ import {
 } from '../../Constants/dummyData';
 import CustomDropdown from '../../Components/CustomDropdown';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
 import {Icon} from '@rneui/themed';
+import {AppFlow} from '../../Api/ApiCalls';
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
   const [classify, setClassify] = useState(false);
+  const [clsTitle, setClsTitle] = useState('');
   const [priceLac, setPriceLac] = useState(false);
   const [priceCr, setPriceCr] = useState(false);
   const [priceTh, setPriceTh] = useState(true);
@@ -40,13 +43,13 @@ export default function AddInventoriesClassified(props) {
   const [fileName, setFileName] = useState('');
   const [socValue, setSocValue] = useState('');
   const [typeValue, setTypeValue] = useState('');
-  const [clsTypeValue, setClsTypeValue] = useState('');
+  const [clsTypeValue, setClsTypeValue] = useState();
   const [propPurpose, setpropPurpose] = useState('');
   const [clsProPurpose, setclsProPurpose] = useState('');
   const [category, setCategory] = useState('');
   const [clsCategory, setClsCategory] = useState('');
-  const [plotSize, setplotSize] = useState('Marla');
-  const [clsPlotSize, setclsPlotSize] = useState('Marla');
+  const [plotSize, setplotSize] = useState('');
+  const [clsPlotSize, setclsPlotSize] = useState('');
   const [city, setCity] = useState('');
   const [block, setBlock] = useState('');
   const [price, setPrice] = useState('');
@@ -54,6 +57,12 @@ export default function AddInventoriesClassified(props) {
   const [CP, setCP] = useState(false);
   const [MB, setMB] = useState(false);
   const [FP, setFP] = useState(false);
+  const [clsBeds, setClsBeds] = useState('');
+  const [clsBath, setClsBath] = useState('');
+  const [clsFloor, setClsFloor] = useState('');
+  const [clsPrice, setClsPrice] = useState('');
+  const [clsDetails, setClsDetails] = useState('');
+  const [clsAreaType, setClsAreaType] = useState();
 
   const openGallery = () => {
     let options = {
@@ -78,6 +87,59 @@ export default function AddInventoriesClassified(props) {
       }
     });
   };
+
+  async function createClassified() {
+    if (
+      clsTitle == '' ||
+      !clsTypeValue ||
+      !clsCategory ||
+      !clsProPurpose ||
+      clsPlotSize == '' ||
+      !clsAreaType ||
+      clsPrice == '' ||
+      clsDetails == '' ||
+      !imageUri
+    ) {
+      Toast.show('Please Fill All The Data', Toast.SHORT);
+    } else if (
+      (clsCategory?.value == 'House' || clsCategory?.value == 'Apartment') &&
+      (clsBath == '' || clsBeds == '' || clsFloor == '')
+    ) {
+      Toast.show(
+        'Please Add Bath, Beds and Floor FOr House & Appartments',
+        Toast.LONG,
+      );
+    } else {
+      // clsCategory?.value == 'House' ||
+      //         clsCategory?.value == 'Apartment'
+      const data = new FormData();
+      data.append('title', clsTitle);
+      data.append('type', clsTypeValue.value);
+      data.append('category', clsCategory.value);
+      data.append('purpose', clsProPurpose.value);
+      if (clsCategory?.value == 'House' || clsCategory?.value == 'Apartment') {
+        data.append('bed', clsBeds);
+        data.append('bath', clsBath);
+        data.append('floor', clsFloor);
+      }
+      data.append('size', clsPlotSize);
+      data.append('size_unit', clsAreaType.value);
+      data.append('price', clsPrice);
+      data.append('description', clsDetails);
+      data.append('file', {
+        uri: imageUri?.uri,
+        name: imageUri?.fileName,
+        type: imageUri?.type,
+      });
+      await AppFlow.createClassiffied(data)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
   return (
     <View style={styles.mainContainer}>
       <ScrollView
@@ -335,7 +397,7 @@ export default function AddInventoriesClassified(props) {
                 <>
                   <TouchableOpacity
                     onPress={() => {
-                      openGallery(); 
+                      openGallery();
                     }}>
                     <Icon
                       type="material"
@@ -370,6 +432,8 @@ export default function AddInventoriesClassified(props) {
               iconName="title"
               iconSize={26}
               placeholder="Enter plot title"
+              value={clsTitle}
+              onChange={item => setClsTitle(item)}
             />
             <CustomDropdown
               container={{marginTop: hp(4)}}
@@ -381,7 +445,7 @@ export default function AddInventoriesClassified(props) {
               iconName="merge-type"
               placeholder={'Select Type'}
               value={clsTypeValue}
-              onChange={item => setClsTypeValue(item.value)}
+              onChange={item => setClsTypeValue(item)}
             />
             <CustomDropdown
               container={{marginTop: hp(2.5)}}
@@ -393,7 +457,7 @@ export default function AddInventoriesClassified(props) {
               iconName="business"
               placeholder={'Select Purpose'}
               value={clsProPurpose}
-              onChange={item => setclsProPurpose(item.value)}
+              onChange={item => setclsProPurpose(item)}
             />
             <CustomDropdown
               container={{marginTop: hp(2.5)}}
@@ -405,9 +469,10 @@ export default function AddInventoriesClassified(props) {
               iconName="category"
               placeholder={'Select Category'}
               value={clsCategory}
-              onChange={item => setClsCategory(item.value)}
+              onChange={item => setClsCategory(item)}
             />
-            {clsCategory == 'House' || clsCategory == 'Apartment' ? (
+            {clsCategory?.value == 'House' ||
+            clsCategory?.value == 'Apartment' ? (
               <View style={styles.amenitiesMainContainer}>
                 <CustomTextInput
                   topText="Beds"
@@ -418,6 +483,9 @@ export default function AddInventoriesClassified(props) {
                   textInputContainer={styles.amenitiesContainer}
                   textInputStyles={styles.amenitiesInputStyles}
                   textInputView={styles.amenitiesInputView}
+                  keyboardType={'number-pad'}
+                  value={clsBeds}
+                  onChangeText={t => setClsBeds(t)}
                 />
                 <CustomTextInput
                   topText="Bath"
@@ -428,7 +496,11 @@ export default function AddInventoriesClassified(props) {
                   textInputContainer={styles.amenitiesContainer}
                   textInputStyles={styles.amenitiesInputStyles}
                   textInputView={styles.amenitiesInputView}
+                  keyboardType={'number-pad'}
+                  value={clsBath}
+                  onChangeText={t => setClsBath(t)}
                 />
+                {console.log(clsBath, clsBeds, clsFloor, clsPlotSize)}
                 <CustomTextInput
                   topText="Floor"
                   iconType="material-community"
@@ -438,6 +510,9 @@ export default function AddInventoriesClassified(props) {
                   textInputContainer={styles.amenitiesContainer}
                   textInputStyles={styles.amenitiesInputStyles}
                   textInputView={styles.amenitiesInputView}
+                  keyboardType={'number-pad'}
+                  value={clsFloor}
+                  onChangeText={t => setClsFloor(t)}
                 />
               </View>
             ) : null}
@@ -450,7 +525,11 @@ export default function AddInventoriesClassified(props) {
               }}>
               <CustomDropdown
                 // container={{marginTop: hp(4)}}
-                dropdown={{...styles.sizesDropdown, width: wp(60)}}
+                dropdown={{
+                  ...styles.sizesDropdown,
+                  width: wp(60),
+                  height: hp(8),
+                }}
                 data={sizes}
                 topLabelText={'Area'}
                 labelFieldName={'label'}
@@ -458,18 +537,21 @@ export default function AddInventoriesClassified(props) {
                 iconType="material"
                 iconName="fullscreen"
                 placeholder={'Area'}
-                value={plotSize}
-                onChange={item => setplotSize(item.value)}
+                value={clsAreaType}
+                onChange={item => setClsAreaType(item)}
               />
-              <CustomDropdown
-                dropdown={styles.sizesDropdown}
-                data={sizes}
-                topLabelText={'Size'}
-                labelFieldName={'label'}
-                valueFieldName={'value'}
-                placeholder={clsPlotSize}
+              <CustomTextInput
+                topText="Size"
+                iconType="material-community"
+                iconName="floor-plan"
+                iconSize={20}
+                placeholder="Size"
+                textInputContainer={styles.amenitiesContainer}
+                textInputStyles={styles.amenitiesInputStyles}
+                textInputView={styles.amenitiesInputView}
+                keyboardType={'number-pad'}
                 value={clsPlotSize}
-                onChange={item => setclsPlotSize(item.value)}
+                onChangeText={t => setclsPlotSize(t)}
               />
             </View>
             <CustomTextInput
@@ -479,18 +561,23 @@ export default function AddInventoriesClassified(props) {
               iconName="local-offer"
               iconSize={26}
               placeholder="Enter Price"
+              keyboardType={'number-pad'}
+              value={clsPrice}
+              onChangeText={t => setClsPrice(t)}
             />
             <CustomTextInput
               topText="Details"
               iconType="material"
               iconName="info"
               iconSize={26}
-              placeholder="Enter Price PKR"
+              placeholder="Enter Details"
               textInputContainer={styles.textInputContainer}
               textInputStyles={styles.textInputStyles}
               iconStyles={styles.iconStyles}
               multiline={true}
               textInputView={styles.textInputView}
+              value={clsDetails}
+              onChangeText={t => setClsDetails(t)}
             />
           </View>
         )}
@@ -499,6 +586,7 @@ export default function AddInventoriesClassified(props) {
           btnContainer={styles.submitBtnContainer}
           btnText="Submit"
           btnTextStyles={styles.btnTextStyles}
+          onPress={() => createClassified()}
         />
         <View style={{height: hp(8)}}></View>
       </ScrollView>
