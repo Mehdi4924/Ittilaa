@@ -1,5 +1,5 @@
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
@@ -9,72 +9,41 @@ import CustomHeader from '../../Components/CustomHeader';
 import InventoriesComp from '../../Components/InventoriesComp';
 import {topInventories} from '../../Constants/dummyData';
 import axios from 'axios';
-import { AppFlow } from '../../Api/ApiCalls';
-import { useFocusEffect } from '@react-navigation/native';
-import { URL } from '../../Constants/URL';
-
-
+import {AppFlow} from '../../Api/ApiCalls';
+import {useFocusEffect} from '@react-navigation/native';
+import {URL} from '../../Constants/URL';
+import CustomLoader from '../../Components/CustomLoader';
+import EmptyComponent from '../../Components/EmptyComponent';
 
 export default function AgencyProperties(props) {
   const {id} = props.route.params;
-  const listData = [
-    {
-      company: 'IronStone Equities',
-      developer: 'Tamjeed\nDevelopers',
-      person: 'Danial Babar',
-      town: 'Bahria Town',
-      society: 'Tulip Extensions',
-      marlas: '05 Marla Plot',
-      description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
-    },
-    {
-      company: 'IronStone Equities',
-      developer: 'Tamjeed\nDevelopers',
-      person: 'Danial Babar',
-      town: 'Bahria Town',
-      society: 'Tulip Extensions',
-      marlas: '05 Marla Plot',
-      description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
-    },
-  ];
   const [screenData, setScreenData] = useState();
   const [inventData, setInventData] = useState();
+  const [loading, setLoading] = useState(true);
+
   useFocusEffect(
     React.useCallback(() => {
       getData();
-    }, []),
+    }, [id]),
   );
-  
+
   const getData = () => {
     AppFlow.agencyProperties(id)
       .then(function (response) {
-        console.log('Response data', response);
+        console.log('success getting agency data', response);
         setScreenData(response.data.data);
-        setInventData(response.data.data.inventory)
+        setInventData(response.data.data.inventory);
       })
       .catch(function (error) {
-        console.log('Agency Profile Error', error.response);
+        console.log('Error getting agency data', error.response);
+      })
+      .finally(function () {
+        setLoading(false);
       });
   };
-  // const headerComponent = () => {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text style={styles.headingText}>Hot Properties</Text>
-  //       <InventoriesComp
-  //         data={topInventories}
-  //         inventoryCard={styles.inventoryCard}
-  //         horizontal={true}
-  //         flatListStyle={styles.flatListStyle}
-  //         profileImgStyle={styles.profileImgStyle}
-  //         profileImgContainer={styles.profileImgContainer}
-  //       />
-  //     </View>
-  //   );
-  // };
-  console.log('Egency properties', inventData);
-
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -92,11 +61,10 @@ export default function AgencyProperties(props) {
       />
       <Text style={styles.titleText}>Agency Properties</Text>
       <FlatList
-      contentContainerStyle={{paddingBottom:hp(10)}}
+        contentContainerStyle={{paddingBottom: hp(10)}}
         data={inventData}
-        // ListHeaderComponent={headerComponent}
         showsVerticalScrollIndicator={false}
-        // contentContainerStyle={{paddingLeft: wp(5)}}
+        ListEmptyComponent={EmptyComponent}
         renderItem={({item, index}) => {
           return (
             <View style={styles.listContainer} key={index}>
@@ -115,15 +83,21 @@ export default function AgencyProperties(props) {
                 </Text>
               </View>
               <View style={styles.listRightView}>
-                <Text style={styles.listHeading}>{item.agency.name || 'N/A'}</Text>
+                <Text style={styles.listHeading}>
+                  {item.agency.name || 'N/A'}
+                </Text>
                 <Text style={styles.listPersonName}>
                   {item.agency.ceo_name || 'N/A'}
                 </Text>
                 <Text style={[styles.listText, {marginTop: hp(1)}]}>
                   {item.city.name || 'N/A'}
                 </Text>
-                <Text style={styles.listText}>{item.society.name || 'N/A'}</Text>
-                <Text style={styles.listText}>{item.size} {item.size_unit}</Text>
+                <Text style={styles.listText}>
+                  {item.society.name || 'N/A'}
+                </Text>
+                <Text style={styles.listText}>
+                  {item.size} {item.size_unit}
+                </Text>
                 {/* <Text style={styles.listText}>{item.description || 'N/A'}</Text> */}
                 <View style={styles.listBtnView}>
                   <Text style={styles.listPersonName}>1 day ago</Text>
@@ -131,7 +105,9 @@ export default function AgencyProperties(props) {
                     btnText="See Details"
                     indicator={false}
                     onPress={() =>
-                      props.navigation.navigate('InventoryDetails',{inventory:item})
+                      props.navigation.navigate('InventoryDetails', {
+                        inventory: item,
+                      })
                     }
                     btnContainer={styles.btnContainer}
                     btnTextStyles={styles.btnTextStyles}
@@ -142,7 +118,6 @@ export default function AgencyProperties(props) {
           );
         }}
       />
-      
     </View>
   );
 }
@@ -160,13 +135,12 @@ const styles = StyleSheet.create({
     height: hp(20),
     backgroundColor: colors.primary,
   },
-  titleText:{
-    fontFamily:fonts.bold,
-    fontSize:hp(2.5),
-    color:colors.black,
-    marginVertical:hp(2),
-    width:wp(90)
-
+  titleText: {
+    fontFamily: fonts.bold,
+    fontSize: hp(2.5),
+    color: colors.black,
+    marginVertical: hp(2),
+    width: wp(90),
   },
   inputViewStyle: {
     flexDirection: 'row',

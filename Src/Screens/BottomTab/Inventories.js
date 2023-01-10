@@ -1,5 +1,12 @@
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import React, { useEffect } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {allImages} from '../../Constants/Images';
@@ -9,43 +16,38 @@ import CustomHeader from '../../Components/CustomHeader';
 import InventoriesComp from '../../Components/InventoriesComp';
 import {topInventories} from '../../Constants/dummyData';
 import axios from 'axios';
-
+import {URL} from '../../Constants/URL';
+import {AppFlow} from '../../Api/ApiCalls';
+import {useFocusEffect} from '@react-navigation/native';
+import moment from 'moment';
+import EmptyComponent from '../../Components/EmptyComponent';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function Inventories(props) {
-  const listData = [
-    {
-      company: 'IronStone Equities',
-      developer: 'Tamjeed\nDevelopers',
-      person: 'Danial Babar',
-      town: 'Bahria Town',
-      society: 'Tulip Extensions',
-      marlas: '05 Marla Plot',
-      description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
-    },
-    {
-      company: 'IronStone Equities',
-      developer: 'Tamjeed\nDevelopers',
-      person: 'Danial Babar',
-      town: 'Bahria Town',
-      society: 'Tulip Extensions',
-      marlas: '05 Marla Plot',
-      description: 'Plot 672, 8626, PU Paid, 96 Lacs Each',
-    },
-  ];
-  useEffect(()=>{
-    Inventories()
-  })
+  const [listData, setListData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Inventories();
+    }, []),
+  );
 
   const Inventories = () => {
-    axios({
-      method: 'get',
-      url: URL.baseURL + 'inventory/1',
-    })
+    AppFlow.allInventories()
       .then(function (response) {
-       console.log('Response data',response);
+        console.log(
+          'Response data',
+          // JSON.stringify(response, null, 2),
+          response,
+        );
+        setListData(response?.data?.data?.inventory);
       })
       .catch(function (error) {
-        console.log('Inventories Error', error.response);
+        console.log('Inventories Error', error);
+      })
+      .finally(function () {
+        setLoading(false);
       });
   };
   const headerComponent = () => {
@@ -65,6 +67,7 @@ export default function Inventories(props) {
   };
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -80,52 +83,75 @@ export default function Inventories(props) {
         screenTitle="Inventories"
         screenTitleStyle={styles.screenTitleStyle}
       />
-      <FlatList
-        data={listData}
-        ListHeaderComponent={headerComponent}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingLeft: wp(5)}}
-        renderItem={({item, index}) => {
-          return (
-            <View style={styles.listContainer}>
-              <View style={styles.listLeftView}>
-                <Image
-                  source={allImages.logo1}
-                  style={styles.listImage}
-                  resizeMode="contain"
-                />
-                <Text style={styles.listImageText}>
-                  {item.developer || 'N/A'}
-                </Text>
-              </View>
-              <View style={styles.listRightView}>
-                <Text style={styles.listHeading}>{item.company || 'N/A'}</Text>
-                <Text style={styles.listPersonName}>
-                  {item.person || 'N/A'}
-                </Text>
-                <Text style={[styles.listText, {marginTop: hp(1)}]}>
-                  {item.town || 'N/A'}
-                </Text>
-                <Text style={styles.listText}>{item.society || 'N/A'}</Text>
-                <Text style={styles.listText}>{item.marlas || 'N/A'}</Text>
-                <Text style={styles.listText}>{item.description || 'N/A'}</Text>
-                <View style={styles.listBtnView}>
-                  <Text style={styles.listPersonName}>1 day ago</Text>
-                  <CustomButton
-                    btnText="See Details"
-                    indicator={false}
-                    onPress={() =>
-                      props.navigation.navigate('AppFlow',{screen:'InventoryDetails'})
+      <>
+        <FlatList
+          data={listData}
+          ListHeaderComponent={headerComponent}
+          ListEmptyComponent={
+            <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingLeft: wp(5)}}
+          renderItem={({item, index}) => {
+            return (
+              <View style={styles.listContainer}>
+                <View style={styles.listLeftView}>
+                  <Image
+                    source={
+                      item?.agency?.file?.file
+                        ? {uri: URL.imageURL + item?.agency?.file?.file}
+                        : allImages.logo1
                     }
-                    btnContainer={styles.btnContainer}
-                    btnTextStyles={styles.btnTextStyles}
+                    style={styles.listImage}
+                    resizeMode="contain"
                   />
+                  <Text style={styles.listImageText}>
+                    {item?.agency?.name || 'N/A'}
+                  </Text>
+                </View>
+                <View style={styles.listRightView}>
+                  <Text style={styles.listHeading}>
+                    {item?.agency?.ceo_name || 'N/A'}
+                  </Text>
+                  <Text style={[styles.listText, {marginTop: hp(1)}]}>
+                    {item?.city?.name || 'N/A'}
+                  </Text>
+                  <Text style={styles.listText}>
+                    {item?.society?.name || 'N/A'}
+                  </Text>
+                  <Text style={styles.listText}>
+                    {item?.size || 'N/A'} {item?.size_unit || 'N/A'}
+                  </Text>
+                  <Text style={styles.listText}>
+                    {item?.description || 'N/A'}
+                  </Text>
+                  <View style={styles.listBtnView}>
+                    <Text style={styles.listPersonName}>
+                      {item?.created_at
+                        ? moment(item.created_at).fromNow()
+                        : 'N/A'}
+                    </Text>
+                    <CustomButton
+                      btnText="See Details"
+                      indicator={false}
+                      onPress={() =>
+                        props.navigation.navigate('AppFlow', {
+                          screen: 'InventoryDetails',
+                          params: {
+                            inventory: item,
+                          },
+                        })
+                      }
+                      btnContainer={styles.btnContainer}
+                      btnTextStyles={styles.btnTextStyles}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      </>
     </View>
   );
 }

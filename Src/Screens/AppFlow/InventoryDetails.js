@@ -14,12 +14,14 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import {AppFlow} from '../../Api/ApiCalls';
 import {useFocusEffect} from '@react-navigation/native';
-import { URL } from '../../Constants/URL';
+import {URL} from '../../Constants/URL';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function InventoryDetails(props) {
   const {inventory} = props.route.params;
   console.log('data', inventory);
   const [inventoryData, setInventoryData] = useState();
+  const [loading, setLoading] = useState(true);
   useFocusEffect(
     React.useCallback(() => {
       Inventories();
@@ -27,18 +29,22 @@ export default function InventoryDetails(props) {
   );
 
   const Inventories = () => {
-    AppFlow.InventoryDetails(inventory?.agency_id)
+    AppFlow.InventoryDetails(inventory?.id)
       .then(function (response) {
-        console.log('Response data', response);
+        console.log('Response getting inventory details', response);
         setInventoryData(response.data.data);
       })
       .catch(function (error) {
-        console.log('Inventories Error', error.response);
+        console.log('Error getting inventory details', error);
+      })
+      .finally(function () {
+        setLoading(false);
       });
   };
 
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={loading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
@@ -60,11 +66,11 @@ export default function InventoryDetails(props) {
             />
           </View>
           <Image
-           source={
-                    inventoryData?.agency?.file?.file
-                      ? {uri: URL.imageURL + inventoryData?.agency?.file?.file}
-                      : allImages.agencydummy
-                  }
+            source={
+              inventoryData?.agency?.file?.file
+                ? {uri: URL.imageURL + inventoryData?.agency?.file?.file}
+                : allImages.agencydummy
+            }
             style={styles.agencyProfileImage}
           />
           <Text style={styles.agencyNameText}>Test Agency</Text>
@@ -75,7 +81,8 @@ export default function InventoryDetails(props) {
                 {inventoryData?.block || 'Loading'}
               </Text>
               <Text style={styles.priceText}>
-                RS. {inventoryData?.price || 'Loading'}{''}
+                RS. {inventoryData?.price || 'Loading'}
+                {''}
                 {inventoryData?.price_unit}
               </Text>
             </View>
@@ -85,11 +92,12 @@ export default function InventoryDetails(props) {
               {inventoryData?.size_unit || ''}
             </Text>
             <Text style={styles.normalText}>
-              {inventoryData?.type} Plot {inventoryData?.plot_no}
+              {inventoryData?.type} {inventoryData?.category}{' '}
+              {inventoryData?.plot_no}
             </Text>
             <Text style={styles.textHighlited}>
               {' '}
-              {inventoryData?.type} Plots For Sale{' '}
+              {inventoryData?.type} {inventoryData?.category} For Sale{' '}
             </Text>
             <View style={styles.locationTextView}>
               <Icon
@@ -100,7 +108,8 @@ export default function InventoryDetails(props) {
                 style={{marginRight: wp(2)}}
               />
               <Text style={styles.normalText}>
-                Uni Shopping Centre, 9th Floor, Abdullah Haroon Road Lahore
+                {inventoryData?.block}, {inventoryData?.society?.name},{' '}
+                {inventoryData?.city?.name}
               </Text>
             </View>
           </View>
@@ -114,7 +123,9 @@ export default function InventoryDetails(props) {
             />
             <View>
               <Text style={styles.normalText}>Call the agent</Text>
-              <Text style={styles.phoneNumberText}>033333333333</Text>
+              <Text style={styles.phoneNumberText}>
+                {inventoryData?.agency?.landline}
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bottomIconView}>
@@ -129,7 +140,11 @@ export default function InventoryDetails(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.bottomIconView}
-            onPress={() => props.navigation.navigate('AgencyProfile')}>
+            onPress={() =>
+              props.navigation.navigate('AgencyProfile', {
+                agency: inventoryData,
+              })
+            }>
             <Icon
               name={'md-person-circle-outline'}
               type={'ionicon'}

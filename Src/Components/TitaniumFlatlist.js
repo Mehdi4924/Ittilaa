@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {hp, wp} from '../Constants/Responsive';
 import {URL} from '../Constants/URL';
+import EmptyComponent from './EmptyComponent';
 
 export default function TitaniumFlatlist(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -45,13 +46,9 @@ export default function TitaniumFlatlist(props) {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         data={props.data}
+        ref={r => (props.data.length > 0 ? (flatListRef.current = r) : null)}
         keyExtractor={item => item.id}
-        ref={r => (flatListRef.current = r)}
-        ListEmptyComponent={
-          <View>
-            <Text>No Data Found</Text>
-          </View>
-        }
+        ListEmptyComponent={<EmptyComponent emptyContainer={{height: hp(5)}} />}
         onScrollToIndexFailed={info => {
           nextIndex = 0;
           const wait = new Promise(resolve => setTimeout(resolve, 500));

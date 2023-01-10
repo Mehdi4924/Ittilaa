@@ -42,6 +42,10 @@ export default function Login(props) {
         })
         .catch(function (error) {
           console.log(error);
+          Toast.show(
+            error?.response?.data?.message || 'Error Occured Logging In',
+            Toast.SHORT,
+          );
         })
         .finally(function () {
           setIndicator(false);

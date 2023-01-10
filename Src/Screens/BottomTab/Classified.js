@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {ImageBackground} from 'react-native';
@@ -9,27 +9,35 @@ import {Icon} from '@rneui/themed';
 import CustomLoader from '../../Components/CustomLoader';
 import CustomHeader from '../../Components/CustomHeader';
 import axios from 'axios';
-
+import {URL} from '../../Constants/URL';
+import {useFocusEffect} from '@react-navigation/native';
+import moment from 'moment';
+import {AppFlow} from '../../Api/ApiCalls';
 
 export default function Classified(props) {
-  useEffect(()=>{
-    getData()
-  })
-
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useFocusEffect(
+    React.useCallback(() => {
+      getData();
+    }, []),
+  );
   const getData = () => {
-    axios({
-      method: 'get',
-      url: URL.baseURL + 'classified',
-    })
+    AppFlow.getAllClassifieds()
       .then(function (response) {
-       console.log('Response data',response);
+        console.log('Response data', response);
+        setData(response?.data?.data);
       })
       .catch(function (error) {
-        console.log('Dashboard Error', error.response);
+        console.log('Dashboard Error', error);
+      })
+      .finally(function () {
+        setLoading(false);
       });
   };
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -43,13 +51,16 @@ export default function Classified(props) {
       />
       <CustomLoader isLoading={false} />
       <FlatList
-        data={[1, 23, 4, 5, 5, 5, 6]}
+        data={data}
         renderItem={({item, index}) => (
           <TouchableOpacity
             style={styles.listContainer}
             onPress={() =>
               props.navigation.navigate('AppFlow', {
                 screen: 'ClassifiedDetails',
+                params: {
+                  classified: item,
+                },
               })
             }>
             <ImageBackground
@@ -58,17 +69,27 @@ export default function Classified(props) {
                 borderRadius: 15,
               }}
               source={{
-                uri: 'https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg',
+                uri: item?.file?.file
+                  ? URL.imageURL + item.file.file
+                  : allImages.classifiedImages,
               }}>
-              <Text style={styles.listTimeText}>2 Minutes Ago</Text>
+              <Text style={styles.listTimeText}>
+                {item?.created_at ? moment(item?.created_at).fromNow() : 'N/A'}
+              </Text>
             </ImageBackground>
             <View style={styles.listSubView}>
               <View style={styles.listItemDetailsView}>
-                <Text style={styles.itemDescriptionText}>House For Sale</Text>
-                <Text style={styles.itemTypeText}>Residential Plot</Text>
+                <Text style={styles.itemDescriptionText}>
+                  {item?.category || 'N/A'} for {item?.purpose}
+                </Text>
+                <Text style={styles.itemTypeText}>
+                  {item?.type || 'N/A'} {item?.category || 'N/A'}
+                </Text>
               </View>
               <View style={styles.listItemDetailsView}>
-                <Text style={styles.itemDimensionsText}>3 Marla</Text>
+                <Text style={styles.itemDimensionsText}>
+                  {item?.size} {item?.size_unit}
+                </Text>
                 <Icon
                   name={'expand'}
                   type={'font-awesome-5'}
@@ -97,7 +118,9 @@ export default function Classified(props) {
                     color={colors.white}
                     size={hp(2)}
                   />
-                  <Text style={styles.listBottomIconsText}>1</Text>
+                  <Text style={styles.listBottomIconsText}>
+                    {item?.bath || '0'}
+                  </Text>
                 </View>
                 <View style={styles.listBottomViewDivider}></View>
                 <View style={styles.listItemDetailsView}>
@@ -107,7 +130,9 @@ export default function Classified(props) {
                     color={colors.white}
                     size={hp(1.7)}
                   />
-                  <Text style={styles.listBottomIconsText}>1</Text>
+                  <Text style={styles.listBottomIconsText}>
+                    {item?.bed || '0'}
+                  </Text>
                 </View>
               </View>
             </View>

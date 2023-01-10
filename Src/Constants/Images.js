@@ -9,4 +9,6 @@ export const allImages = {
   whatsapp: require('../Assets/Images/whatsapp.png'),
   call: require('../Assets/Images/call.png'),
   agencydummy: require('../Assets/Images/agency-dummy.png'),
+  classifiedImages:
+    'https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg',
 };

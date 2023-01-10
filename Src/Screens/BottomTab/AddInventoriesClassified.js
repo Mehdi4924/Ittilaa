@@ -30,8 +30,6 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
-import {AppFlow} from '../../Api/ApiCalls';
-import Toast from 'react-native-simple-toast'
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
@@ -94,58 +92,6 @@ export default function AddInventoriesClassified(props) {
     });
   };
 
-  async function createClassified() {
-    if (
-      clsTitle == '' ||
-      !clsTypeValue ||
-      !clsCategory ||
-      !clsProPurpose ||
-      clsPlotSize == '' ||
-      !clsAreaType ||
-      clsPrice == '' ||
-      clsDetails == '' ||
-      !imageUri
-    ) {
-      Toast.show('Please Fill All The Data', Toast.SHORT);
-    } else if (
-      (clsCategory?.value == 'House' || clsCategory?.value == 'Apartment') &&
-      (clsBath == '' || clsBeds == '' || clsFloor == '')
-    ) {
-      Toast.show(
-        'Please Add Bath, Beds and Floor FOr House & Appartments',
-        Toast.LONG,
-      );
-    } else {
-      // clsCategory?.value == 'House' ||
-      //         clsCategory?.value == 'Apartment'
-      const data = new FormData();
-      data.append('title', clsTitle);
-      data.append('type', clsTypeValue.value);
-      data.append('category', clsCategory.value);
-      data.append('purpose', clsProPurpose.value);
-      if (clsCategory?.value == 'House' || clsCategory?.value == 'Apartment') {
-        data.append('bed', clsBeds);
-        data.append('bath', clsBath);
-        data.append('floor', clsFloor);
-      }
-      data.append('size', clsPlotSize);
-      data.append('size_unit', clsAreaType.value);
-      data.append('price', clsPrice);
-      data.append('description', clsDetails);
-      data.append('file', {
-        uri: imageUri?.uri,
-        name: imageUri?.fileName,
-        type: imageUri?.type,
-      });
-      await AppFlow.createClassiffied(data)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }
   const submitInventory = () => {
     if (typeValue == null) {
       Toast.show('Please select type', Toast.SHORT);
@@ -702,7 +648,6 @@ export default function AddInventoriesClassified(props) {
           btnContainer={styles.submitBtnContainer}
           btnText="Submit"
           btnTextStyles={styles.btnTextStyles}
-          onPress={() => createClassified()}
           indicator={indicator}
           onPress={submitInventory}
         />

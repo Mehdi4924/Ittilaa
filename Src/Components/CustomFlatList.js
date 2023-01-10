@@ -1,6 +1,8 @@
 import {StyleSheet, Text, View, FlatList, Image, Pressable} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {URL} from '../Constants/URL';
+import EmptyComponent from './EmptyComponent';
+import {hp} from '../Constants/Responsive';
 
 export default function CustomFlatList(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -35,7 +37,8 @@ export default function CustomFlatList(props) {
         showsHorizontalScrollIndicator={false}
         data={props.data}
         keyExtractor={item => item.id}
-        ref={r => (flatListRef.current = r)}
+        ListEmptyComponent={<EmptyComponent emptyContainer={{height: hp(5)}} />}
+        ref={r => (props.data.length > 0 ? (flatListRef.current = r) : null)}
         onScrollToIndexFailed={info => {
           nextIndex = 0;
           const wait = new Promise(resolve => setTimeout(resolve, 500));

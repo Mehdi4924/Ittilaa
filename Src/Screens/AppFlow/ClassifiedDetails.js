@@ -27,7 +27,7 @@ export default function ClassifiedDetails(props) {
     await AppFlow.GetClassiffiedDetails(classified.id)
       .then(function (response) {
         console.log('Classified data', JSON.stringify(response.data, null, 2));
-        setData(response.data.data);
+        setData(response.data.data); nb
       })
       .catch(function (error) {
         console.log('Classified Error', error.response);

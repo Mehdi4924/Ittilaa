@@ -15,11 +15,12 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
-import { URL } from '../../Constants/URL';
+import {URL} from '../../Constants/URL';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function AgencyProfile(props) {
   const {agency} = props.route.params;
-  console.log(JSON.stringify(props, null, 2));
+  console.log(props);
   const [agencyData, setAgencyData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -29,11 +30,11 @@ export default function AgencyProfile(props) {
     setIsLoading(true);
     AppFlow.getAgencyDetail(agency?.id)
       .then(res => {
-        console.log(res);
+        console.log('response getting agency details', res);
         setAgencyData(res?.data?.data);
       })
       .catch(err => {
-        console.log(err);
+        console.log('error getting agency details', err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -42,122 +43,119 @@ export default function AgencyProfile(props) {
   console.log('agency details', agencyData);
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={isLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
-          <TouchableOpacity onPress={()=>props.navigation.goBack()}>
-            <Icon
-              name={'arrow-back-circle'}
-              type={'ionicon'}
-              color={colors.primary}
-              size={hp(5)}
-            />
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
+              <Icon
+                name={'arrow-back-circle'}
+                type={'ionicon'}
+                color={colors.primary}
+                size={hp(5)}
+              />
             </TouchableOpacity>
             <Text style={styles.headingText}>Agency Details</Text>
             <View></View>
           </View>
-          {!isLoading ? (
-            <>
-              <View style={styles.topMainView}>
-                <Image
-                  source={
-                    agencyData?.file
-                      ? {uri: URL.imageURL + agencyData?.file.file}
-                      : allImages.agencydummy
-                  }
-                  style={styles.agencyProfileImage}
-                />
-                <View style={{marginLeft: wp(5), marginBottom: hp(1.5)}}>
-                  <Text style={styles.agencyNameText}>
-                    {agencyData?.name || 'Loading'}
-                  </Text>
-                  <Text style={styles.postByText}>
-                    By {agencyData?.ceo_name || 'Loading'}
-                  </Text>
-                </View>
-                <View style={styles.topTextView}>
-                  <TouchableOpacity>
-                    <Image
-                      source={allImages.call}
-                      style={{width: hp(4), height: hp(4)}}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={allImages.whatsapp}
-                      style={{width: hp(4), height: hp(4)}}
-                    />
-                  </TouchableOpacity>
-                  <CustomButton
-                    btnText="Properties"
-                    indicator={false}
-                    onPress={() =>
-                      props.navigation.navigate('AgencyProperties', {id:agencyData.id})}
-                    btnContainer={styles.btnContainer}
-                    btnTextStyles={styles.btnTextStyles}
-                  />
-                </View>
-              </View>
-              <Text style={styles.descText}>Location</Text>
-              <Text style={styles.descDetailsText}>
-                {agencyData?.address || 'Loading'}{' '}
+
+          <View style={styles.topMainView}>
+            <Image
+              source={
+                agencyData?.file
+                  ? {uri: URL.imageURL + agencyData?.file.file}
+                  : allImages.agencydummy
+              }
+              style={styles.agencyProfileImage}
+            />
+            <View style={{marginLeft: wp(5), marginBottom: hp(1.5)}}>
+              <Text style={styles.agencyNameText}>
+                {agencyData?.name || 'Loading'}
               </Text>
-              <Image
-                source={allImages.map}
-                style={{height: hp(25), width: wp(85), marginVertical: hp(1)}}
-              />
-              <Text style={styles.connectionsText}>Social Connections</Text>
-              <View style={{flexDirection: 'row'}}>
-                <Image source={allImages.call} style={styles.socialIcon} />
-                <Image source={allImages.call} style={styles.socialIcon} />
-                <Image source={allImages.call} style={styles.socialIcon} />
-                <Image source={allImages.call} style={styles.socialIcon} />
-                <Image source={allImages.call} style={styles.socialIcon} />
-              </View>
-              <View style={styles.seperator} />
-              <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
-                Team
+              <Text style={styles.postByText}>
+                By {agencyData?.ceo_name || 'Loading'}
               </Text>
-              {[agencyData?.team || {name: 'Loading'}].map((item, index) => {
-                return (
-                  <View style={styles.listMainView} key={index}>
-                    <Image
-                      source={allImages.tamjeed}
-                      style={styles.teamAgentProfile}
-                    />
-                    <View style={styles.listNameView}>
-                      <View style={{justifyContent: 'space-around'}}>
-                        <Text style={styles.agentNameText}>
-                          {item?.name || 'Loading'}
-                        </Text>
-                        <Text style={styles.agentDesgText}>
-                          {item?.role || 'Loading'}
-                        </Text>
-                      </View>
-                      <View style={styles.topTextView}>
-                        <TouchableOpacity>
-                          <Image
-                            source={allImages.call}
-                            style={{width: hp(7), height: hp(7)}}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                          <Image
-                            source={allImages.whatsapp}
-                            style={{width: hp(7), height: hp(7)}}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                );
-              })}
-            </>
-          ) : (
-            <View style={styles.indicator}>
-              <ActivityIndicator size={'small'} color={colors.primary} />
             </View>
-          )}
+            <View style={styles.topTextView}>
+              <TouchableOpacity>
+                <Image
+                  source={allImages.call}
+                  style={{width: hp(4), height: hp(4)}}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image
+                  source={allImages.whatsapp}
+                  style={{width: hp(4), height: hp(4)}}
+                />
+              </TouchableOpacity>
+              <CustomButton
+                btnText="Properties"
+                indicator={false}
+                onPress={() =>
+                  props.navigation.navigate('AgencyProperties', {
+                    id: agencyData.id,
+                  })
+                }
+                btnContainer={styles.btnContainer}
+                btnTextStyles={styles.btnTextStyles}
+              />
+            </View>
+          </View>
+          <Text style={styles.descText}>Location</Text>
+          <Text style={styles.descDetailsText}>
+            {agencyData?.address || 'Loading'}{' '}
+          </Text>
+          <Image
+            source={allImages.map}
+            style={{height: hp(25), width: wp(85), marginVertical: hp(1)}}
+          />
+          <Text style={styles.connectionsText}>Social Connections</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Image source={allImages.call} style={styles.socialIcon} />
+            <Image source={allImages.call} style={styles.socialIcon} />
+            <Image source={allImages.call} style={styles.socialIcon} />
+            <Image source={allImages.call} style={styles.socialIcon} />
+            <Image source={allImages.call} style={styles.socialIcon} />
+          </View>
+          <View style={styles.seperator} />
+          <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
+            Team
+          </Text>
+          {[agencyData?.team || {name: 'Loading'}].map((item, index) => {
+            return (
+              <View style={styles.listMainView} key={index}>
+                <Image
+                  source={allImages.tamjeed}
+                  style={styles.teamAgentProfile}
+                />
+                <View style={styles.listNameView}>
+                  <View style={{justifyContent: 'space-around'}}>
+                    <Text style={styles.agentNameText}>
+                      {item?.name || 'Loading'}
+                    </Text>
+                    <Text style={styles.agentDesgText}>
+                      {item?.role || 'Loading'}
+                    </Text>
+                  </View>
+                  <View style={styles.topTextView}>
+                    <TouchableOpacity>
+                      <Image
+                        source={allImages.call}
+                        style={{width: hp(7), height: hp(7)}}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Image
+                        source={allImages.whatsapp}
+                        style={{width: hp(7), height: hp(7)}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </View>

@@ -13,9 +13,11 @@ import {fonts} from '../../Constants/Fonts';
 import {topClassified} from '../../Constants/dummyData';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
 import {AppFlow} from '../../Api/ApiCalls';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function TopClassified(props) {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     GetInventories();
   }, []);
@@ -23,17 +25,22 @@ export default function TopClassified(props) {
     await AppFlow.getAllClassifieds()
       .then(function (response) {
         console.log(
-          'Top Classified data',
-          JSON.stringify(response.data, null, 2),
+          'success getting Top Classified data',
+          // JSON.stringify(response.data, null, 2),
+          response,
         );
         setData(response.data.data);
       })
       .catch(function (error) {
-        console.log('Top Classified Error', error.response);
+        console.log('error getting Top Classified Error', error.response);
+      })
+      .finally(function () {
+        setLoading(false);
       });
   }
   return (
     <View style={styles.mainContainer}>
+      <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}

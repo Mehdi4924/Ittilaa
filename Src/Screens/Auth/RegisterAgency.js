@@ -107,24 +107,24 @@ export default function RegisterAgency(props) {
       var data = new FormData();
       data.append('agency_name', dataToSend?.agencyName);
       data?.append('name', dataToSend?.userName);
-      data?.append('designation', dataToSend?.designation || '');
+      data?.append('designation', dataToSend?.designation || null);
       data?.append('phone', dataToSend?.phone);
       data?.append('society', dataToSend?.society);
-      data?.append('address', dataToSend?.address || '');
-      data?.append('ceo_name', dataToSend?.ceoName || '');
-      data?.append('ceo_mobile1', dataToSend?.ceoNum1 || '');
-      data?.append('ceo_mobile2', dataToSend?.ceoNum2 || '');
-      data?.append('landline', dataToSend?.landline || '');
-      data?.append('whatapp_no', dataToSend?.whatsapp || '');
-      data?.append('email', dataToSend?.email || '');
-      data?.append('fax', dataToSend?.fax || '');
-      data?.append('facebook', dataToSend?.facebookLink || '');
-      data?.append('youtube', dataToSend?.youTubeLink || '');
-      data?.append('twitter', dataToSend?.twitterLink || '');
-      data?.append('instagram', dataToSend?.instagramLink || '');
-      data?.append('message', dataToSend?.message || '');
-      data?.append('website', dataToSend?.website || '');
-      data?.append('about', dataToSend?.about || '');
+      data?.append('address', dataToSend?.address || null);
+      data?.append('ceo_name', dataToSend?.ceoName || null);
+      data?.append('ceo_mobile1', dataToSend?.ceoNum1 || null);
+      data?.append('ceo_mobile2', dataToSend?.ceoNum2 || null);
+      data?.append('landline', dataToSend?.landline || null);
+      data?.append('whatapp_no', dataToSend?.whatsapp || null);
+      data?.append('email', dataToSend?.email || null);
+      data?.append('fax', dataToSend?.fax || null);
+      data?.append('facebook', dataToSend?.facebookLink || null);
+      data?.append('youtube', dataToSend?.youTubeLink || null);
+      data?.append('twitter', dataToSend?.twitterLink || null);
+      data?.append('instagram', dataToSend?.instagramLink || null);
+      data?.append('message', dataToSend?.message || null);
+      data?.append('website', dataToSend?.website || null);
+      data?.append('about', dataToSend?.about || null);
       data?.append('password', dataToSend?.password);
       data?.append('photo[]', {
         uri: imageUri?.uri,
@@ -138,10 +138,19 @@ export default function RegisterAgency(props) {
       });
       Auth.registerAgency(data)
         .then(function (response) {
+          console.log('Success REgistering', response);
           props.navigation.navigate('Login');
         })
         .catch(function (error) {
-          console.log(JSON.stringify(error, null, 2));
+          console.log(
+            'error registering agency',
+            // JSON.stringify(error, null, 2),
+            error,
+          );
+          Toast.show(
+            error?.response?.data?.message || 'Error Occured Creating',
+            Toast.SHORT,
+          );
         })
         .finally(function () {
           setIndicator(false);

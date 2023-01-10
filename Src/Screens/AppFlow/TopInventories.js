@@ -15,18 +15,26 @@ import InventoriesComp from '../../Components/InventoriesComp';
 import {AppFlow} from '../../Api/ApiCalls';
 
 export default function TopInventories(props) {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   useEffect(() => {
     GetInventories();
   }, []);
   async function GetInventories() {
-    await AppFlow.getAllClassifieds()
+    await AppFlow.allInventories()
       .then(function (response) {
-        console.log('Response data', JSON.stringify(response.data, null, 2));
-        // setData(response.data.data);
+        console.log(
+          'Response data',
+          // JSON.stringify(response.data, null, 2),
+          response,
+        );
+        setData(response?.data?.data?.inventory);
       })
       .catch(function (error) {
         console.log('Dashboard Error', error.response);
+      })
+      .finally(function () {
+        setLoading(false);
       });
   }
   return (
@@ -55,6 +63,12 @@ export default function TopInventories(props) {
         flatListStyle={styles.flatListStyle}
         profileImgStyle={styles.profileImgStyle}
         profileImgContainer={styles.profileImgContainer}
+        onPress={item =>
+          props.navigation.navigate('AppFlow', {
+            screen: 'InventoryDetails',
+            params: {inventory: item},
+          })
+        }
       />
     </View>
   );

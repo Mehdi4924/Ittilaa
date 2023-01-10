@@ -28,18 +28,22 @@ import TopClassifiedComp from '../../Components/TopClassifiedComp';
 import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
 import {URL} from '../../Constants/URL';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function AllAgencies(props) {
   const [agencies, setAgencies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     getAllAgencies();
   }, []);
   async function getAllAgencies() {
-    setIsLoading(true);
     AppFlow.getAllAgencies()
       .then(res => {
-        console.log(JSON.stringify(res.data, null, 2));
+        console.log(
+          'response getting all agences',
+          // JSON.stringify(res.data, null, 2),
+          res,
+        );
         setAgencies(res?.data?.data);
       })
       .catch(err => {
@@ -51,6 +55,7 @@ export default function AllAgencies(props) {
   }
   return (
     <View style={styles.mainContainer}>
+      <CustomLoader isLoading={isLoading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -66,67 +71,62 @@ export default function AllAgencies(props) {
         screenTitle="All Agencies"
         screenTitleStyle={styles.screenTitleStyle}
       />
-      {isLoading ? (
-        <View style={styles.indicator}>
-          <ActivityIndicator size={'small'} color={colors.primary} />
-        </View>
-      ) : (
-        <FlatList
-          data={agencies}
-          contentContainerStyle={{
-            paddingHorizontal: wp(5),
-            marginVertical: hp(2),
-          }}
-          renderItem={({item, index}) => {
-            const a = index % 2;
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  props.navigation.navigate('AgencyProfile', {agency: item})
+
+      <FlatList
+        data={agencies}
+        contentContainerStyle={{
+          paddingHorizontal: wp(5),
+          marginVertical: hp(2),
+        }}
+        renderItem={({item, index}) => {
+          const a = index % 2;
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate('AgencyProfile', {agency: item})
+              }
+              style={[
+                styles.listContainer,
+                {backgroundColor: a == 1 ? colors.white : colors.black},
+              ]}>
+              <Image
+                source={
+                  item?.file
+                    ? {uri: URL.imageURL + item.file.file}
+                    : allImages.agencydummy
                 }
-                style={[
-                  styles.listContainer,
-                  {backgroundColor: a == 1 ? colors.white : colors.black},
-                ]}>
-                <Image
-                  source={
-                    item?.file ? {uri: URL.imageURL + item.file.file} : allImages.agencydummy
-                  }
-                  style={
-                    a == 1
-                      ? styles.agencyProfileImage
-                      : styles.agencyProfileImage1
-                  }
-                />
-                <View style={styles.listTextView}>
-                  <Text style={styles.vendorName}>
-                    {item?.name || 'Loading'}
+                style={
+                  a == 1
+                    ? styles.agencyProfileImage
+                    : styles.agencyProfileImage1
+                }
+              />
+              <View style={styles.listTextView}>
+                <Text style={styles.vendorName}>{item?.name || 'Loading'}</Text>
+                <Text
+                  style={[
+                    styles.developerName,
+                    {color: a == 1 ? colors.black : colors.white},
+                  ]}>
+                  Atif Developers{' '}
+                </Text>
+                <View style={styles.locationView}>
+                  <Icon
+                    name={'location'}
+                    type={'ionicon'}
+                    color={colors.primary}
+                    size={hp(2)}
+                    style={{marginRight: wp(2)}}
+                  />
+                  <Text style={styles.locationText}>
+                    {item?.address || 'Loading'}
                   </Text>
-                  <Text
-                    style={[
-                      styles.developerName,
-                      {color: a == 1 ? colors.black : colors.white},
-                    ]}>
-                    Atif Developers{' '}
-                  </Text>
-                  <View style={styles.locationView}>
-                    <Icon
-                      name={'location'}
-                      type={'ionicon'}
-                      color={colors.primary}
-                      size={hp(2)}
-                      style={{marginRight: wp(2)}}
-                    />
-                    <Text style={styles.locationText}>
-                      {item?.address || 'Loading'}
-                    </Text>
-                  </View>
                 </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      )}
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
     </View>
   );
 }

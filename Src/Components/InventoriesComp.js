@@ -12,6 +12,7 @@ import {fonts} from '../Constants/Fonts';
 import {colors} from '../Constants/Colors';
 import {Icon} from '@rneui/themed';
 import {URL} from '../Constants/URL';
+import EmptyComponent from './EmptyComponent';
 
 export default function InventoriesComp(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -50,7 +51,10 @@ export default function InventoriesComp(props) {
           showsVerticalScrollIndicator={false}
           data={props.data}
           keyExtractor={item => item.id}
-          ref={r => (flatListRef.current = r)}
+          ListEmptyComponent={
+            <EmptyComponent emptyContainer={{height: hp(5)}} />
+          }
+          ref={r => (props.data.length > 0 ? (flatListRef.current = r) : null)}
           onScrollToIndexFailed={info => {
             nextIndex = 0;
             const wait = new Promise(resolve => setTimeout(resolve, 500));
