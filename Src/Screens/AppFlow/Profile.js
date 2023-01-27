@@ -7,7 +7,8 @@ import {colors} from '../../Constants/Colors';
 import {fonts} from '../../Constants/Fonts';
 import {color} from '@rneui/base';
 
-const dummUri = 'https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic-300x300.jpg'
+const dummUri =
+  'https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic-300x300.jpg';
 export default function Profile(props) {
   const [parseUser, setParseUser] = useState();
   useEffect(() => {
@@ -29,14 +30,18 @@ export default function Profile(props) {
           />
         </TouchableOpacity>
         <Text style={styles.headingText}>Agency Profile</Text>
-        <TouchableOpacity style={styles.editView}>
-            <Text style={styles.editText}>Edit</Text>
+        <TouchableOpacity
+          style={styles.editView}
+          onPress={() =>
+            props.navigation.navigate('UpdateProfile', {data: parseUser})
+          }>
+          <Text style={styles.editText}>Edit</Text>
         </TouchableOpacity>
       </View>
       <View style={{alignItems: 'center'}}>
         <Image
           source={{
-            uri:parseUser?.photo?parseUser.photo:dummUri 
+            uri: parseUser?.photo ? parseUser.photo : dummUri,
           }}
           style={styles.imgStyle}
           resizeMode="contain"
@@ -122,15 +127,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
   },
-  editView:{
-    backgroundColor:colors.primary,
-    paddingVertical:hp(.5),
-    paddingHorizontal:wp(2),
-    borderRadius:4
+  editView: {
+    backgroundColor: colors.primary,
+    paddingVertical: hp(0.5),
+    paddingHorizontal: wp(2),
+    borderRadius: 4,
   },
-  editText:{
-    fontFamily:fonts.medium,
-    color:colors.white,
-
-  }
+  editText: {
+    fontFamily: fonts.medium,
+    color: colors.white,
+  },
 });

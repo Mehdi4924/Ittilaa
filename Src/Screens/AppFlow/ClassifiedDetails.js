@@ -57,7 +57,7 @@ export default function ClassifiedDetails(props) {
             loop={true}
           />
           <View style={styles.bothChevronsView}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => carouselRef.current.snapToPrev()}
               style={styles.chevron}>
               <Icon
@@ -76,7 +76,7 @@ export default function ClassifiedDetails(props) {
                 color={colors.white}
                 size={hp(2)}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View style={styles.header}>
             <TouchableOpacity onPress={()=>props.navigation.goBack()}>
@@ -167,12 +167,7 @@ export default function ClassifiedDetails(props) {
           
         </View>
       </ScrollView>
-      <TouchableOpacity style={[styles.fabView, {bottom: wp(16)}]}>
-        <Image source={allImages.whatsapp} style={styles.fabImage} />
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.fabView, {bottom: wp(5)}]}>
-        <Image source={allImages.call} style={styles.fabImage} />
-      </TouchableOpacity>
+      
     </View>
   );
 }

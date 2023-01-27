@@ -33,6 +33,7 @@ import CustomLoader from '../../Components/CustomLoader';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   useFocusEffect(
     React.useCallback(() => {
       getData();
@@ -54,12 +55,15 @@ export default function HomeScreen(props) {
       })
       .catch(function (error) {
         console.log('Dashboard Error', error.response);
+      })
+      .finally(function () {
+        setIsLoading(false);
       });
   };
 
   return (
     <View style={styles.mainContainer}>
-      <CustomLoader isLoading={screenData ? false : true} />
+      <CustomLoader isLoading={isLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <CustomHeader
           headerStyle={styles.headerStyle}
@@ -195,7 +199,10 @@ export default function HomeScreen(props) {
             <Text style={styles.titleText}>News</Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('AppFlow', {screen: 'News'})
+                props.navigation.navigate('AppFlow', {
+                  screen: 'News',
+                  params: {data: screenData?.news},
+                })
               }>
               <Text style={styles.viewAllText}>View all</Text>
             </TouchableOpacity>
@@ -207,9 +214,10 @@ export default function HomeScreen(props) {
             featureCard={styles.newsCard}
             featureImageStyle={styles.newsImageStyle}
             featureNameText={styles.newsNameText}
-            onPress={() =>
+            onPress={item =>
               props.navigation.navigate('AppFlow', {
-                screen: 'News',
+                screen: 'NewsDetails',
+                params: {news: item},
               })
             }
             flatListStyle={styles.flatListStyle}

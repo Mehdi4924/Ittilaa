@@ -14,6 +14,7 @@ import CustomFlatList from '../../Components/CustomFlatList';
 import {NewsData} from '../../Constants/dummyData';
 
 export default function News(props) {
+  const data = props?.route?.params?.data || [];
   return (
     <View style={styles.mainContainer}>
       <CustomHeader
@@ -35,13 +36,13 @@ export default function News(props) {
         <Text style={styles.titleText}>News</Text>
       </View>
       <CustomFlatList
-        data={NewsData}
+        data={data}
         numColumns={3}
         featureCard={styles.newsCard}
         featureImageStyle={styles.newsImageStyle}
         featureNameText={styles.newsNameText}
         flatListStyle={styles.flatListStyle}
-        onPress={()=>props.navigation.navigate('NewsDetails')}
+        onPress={() => props.navigation.navigate('NewsDetails')}
       />
     </View>
   );
@@ -113,7 +114,6 @@ const styles = StyleSheet.create({
     paddingTop: hp(0.7),
     paddingBottom: hp(2),
     marginBottom: hp(1.8),
-    
   },
   newsImageStyle: {
     width: wp(25),

@@ -49,6 +49,7 @@ export const AppFlow = {
   createEnventory: data => requests.post('inventory/store', data),
   createClassiffied: data => requests.post('classified/store', data),
   getCitySociety: () => requests.get('inventory/create/data'),
+  getNewsDetails: id => requests.get(`news/${id}`),
 };
 
 export const GetCities = {

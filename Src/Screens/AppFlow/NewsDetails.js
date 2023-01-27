@@ -6,13 +6,35 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Icon} from '@rneui/themed';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
+import {AppFlow} from '../../Api/ApiCalls';
 
 export default function NewsDetails(props) {
+  const news = props?.route?.params?.news;
+  const [screenData, setScreenData] = useState();
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = () => {
+    AppFlow.getNewsDetails(news?.id || 1)
+      .then(function (response) {
+        console.log(
+          'Response data',
+          // JSON.stringify(response.data, null, 2),
+          response.data.data,
+        );
+        setScreenData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log('Dashboard Error', error.response);
+      });
+  };
+  console.log('Dashboard Error', screenData);
+
   return (
     <View style={styles.mainContainer}>
       <ScrollView
@@ -33,23 +55,19 @@ export default function NewsDetails(props) {
           <View></View>
         </View>
         <Image
-          source={require('../../Assets/Images/news1.jpg')}
+          source={
+            screenData?.file
+              ? {uri: URL.imageURL + screenData?.file?.file}
+              : require('../../Assets/Images/news1.jpg')
+          }
           style={{width: wp(90), height: hp(26), borderRadius: hp(2)}}
           resizeMode="cover"
         />
-        <Text style={styles.newsTitleStyle}>Sumsung Housing Schem</Text>
+        <Text style={styles.newsTitleStyle}>{screenData?.title || ''}</Text>
         <View style={{marginHorizontal: wp(5), marginTop: hp(2)}}>
-          <Text style={styles.newsHeadingStyle}>What is Lorem Ipsum?</Text>
+          <Text style={styles.newsHeadingStyle}>{screenData?.title || ''}</Text>
           <Text style={styles.newsDetailsText}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum. F
+            {screenData?.description || ''}
           </Text>
         </View>
       </ScrollView>

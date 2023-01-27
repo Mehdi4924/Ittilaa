@@ -14,10 +14,12 @@ import {topClassified} from '../../Constants/dummyData';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
 import {AppFlow} from '../../Api/ApiCalls';
 import CustomLoader from '../../Components/CustomLoader';
-
+var dataCopy = []
 export default function TopClassified(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState();
+
   useEffect(() => {
     GetInventories();
   }, []);
@@ -30,6 +32,7 @@ export default function TopClassified(props) {
           response,
         );
         setData(response.data.data);
+        dataCopy=response.data?.data
       })
       .catch(function (error) {
         console.log('error getting Top Classified Error', error.response);
@@ -55,6 +58,19 @@ export default function TopClassified(props) {
         placeholderTextColor={colors.grey}
         screenTitle="Top Classified"
         screenTitleStyle={styles.screenTitleStyle}
+        onChangeText={t => {
+          if (t.length > 0) {
+            const newData = [...dataCopy];
+            const a = newData.filter(item =>
+              item?.purpose?.toLowerCase()?.includes(t.toLowerCase()),
+            );
+            setData(a);
+          } else {
+            setData(dataCopy);
+          }
+          setSearch(t);
+        }}  
+        value={search}
       />
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Top Classified</Text>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,50 +14,42 @@ import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
 import {societyItem} from '../../Constants/dummyData';
-import {Auth} from '../../Api/ApiCalls';
+import {AppFlow, Auth} from '../../Api/ApiCalls';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import CustomDropdown from '../../Components/CustomDropdown';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function RegisterAgency(props) {
+export default function UpdateProfile(props) {
+  const {data} = props?.route?.params;
+  useEffect(() => {
+    getAgencyDetail();
+  }, []);
   const [selectedIndex, setselectedIndex] = useState(0);
-  const [socItems, setSocItems] = useState(societyItem);
   const [dataToSend, setDataToSend] = useState({});
   const [indicator, setIndicator] = useState(false);
-  const [imageUri, setImageUri] = useState('');
-  const [fileName, setFileName] = useState('');
   const [logoUri, setLogoUri] = useState('');
   const [logoFileName, setLogoFileName] = useState('');
-  const [passwordSecure, setPasswordSecure] = useState(true);
-  const [confPasswordSecure, setConfPasswordSecure] = useState(true);
-  const [teamMembers, setTeamMembers] = useState([]);
 
-  const openPhotoGallery = () => {
-    let options = {
-      storageOption: {
-        path: 'images',
-        mediaType: 'photo',
-      },
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response =', response);
-      if (response.didCancel) {
-        console.log('User Cancelled image picker');
-      } else if (response.error) {
-        console.log('Image picker error', response.error);
-      } else if (response.btnClick) {
-        console.log('User Click button', response.btnClick);
-      } else {
-        const source = {uri: 'data:image/jpeg;base64' + response.assets};
-        console.log('This is URI', response.assets[0].uri);
-        setFileName(response.assets[0].uri);
-        setImageUri(response.assets[0]);
-      }
-    });
+  const getAgencyDetail = async () => {
+    const a = await AsyncStorage.getItem('AuthUser');
+    const b = JSON.parse(a);
+    AppFlow.getAgencyDetail(data?.id)
+      .then(function (response) {
+        console.log('Response getting inventory details', response);
+        console.log(JSON.stringify({...response.data.data, ...b}, null, 2));
+        setDataToSend({...response.data.data, ...b});
+        setLogoFileName(response?.data?.data?.file);
+      })
+      .catch(function (error) {
+        console.log('Error getting inventory details', error);
+      })
+      .finally(function () {
+        null;
+      });
   };
-
   const openLogoGallery = () => {
     let options = {
       storageOption: {
@@ -81,7 +73,6 @@ export default function RegisterAgency(props) {
       }
     });
   };
-
   const Register = () => {
     if (dataToSend.agencyName == null) {
       Toast.show('Please Enter agency name', Toast.SHORT);
@@ -99,8 +90,6 @@ export default function RegisterAgency(props) {
       Toast.show('Passwords dont match', Toast.SHORT);
     } else if (dataToSend.email == null) {
       Toast.show('Please Enter Email', Toast.SHORT);
-    } else if (fileName == null) {
-      Toast.show('Please select photo', Toast.SHORT);
     } else if (logoFileName == null) {
       Toast.show('Please select Logo', Toast.SHORT);
     } else {
@@ -127,15 +116,11 @@ export default function RegisterAgency(props) {
       data?.append('website', dataToSend?.website || null);
       data?.append('about', dataToSend?.about || null);
       data?.append('password', dataToSend?.password);
-      data?.append('photo[]', {
-        uri: imageUri?.uri,
-        name: imageUri?.fileName,
-        type: imageUri?.type,
-      });
+
       data.append('agency_photo[]', {
-        uri: imageUri.uri,
-        name: imageUri.fileName,
-        type: imageUri.type,
+        uri: logoUri.uri,
+        name: logoUri.fileName,
+        type: logoUri.type,
       });
       Auth.registerAgency(data)
         .then(function (response) {
@@ -158,6 +143,7 @@ export default function RegisterAgency(props) {
         });
     }
   };
+  console.log(JSON.stringify(dataToSend, null, 2));
 
   return (
     <View style={styles.container}>
@@ -215,24 +201,10 @@ export default function RegisterAgency(props) {
                 iconType="material-community"
                 topText="Agency Name"
                 placeholder="Enter Agency Name"
-                value={dataToSend.agencyName || ''}
+                value={dataToSend.name || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, agencyName: t};
-                  })
-                }
-                textInputContainer={{marginVertical: hp(2)}}
-                iconSize={hp(4)}
-              />
-              <CustomTextInput
-                iconName={'user'}
-                iconType="font-awesome"
-                topText="Name"
-                placeholder="Enter Your Name"
-                value={dataToSend.userName || ''}
-                onChangeText={t =>
-                  setDataToSend(prev => {
-                    return {...prev, userName: t};
+                    return {...prev, name: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -265,23 +237,10 @@ export default function RegisterAgency(props) {
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
+                editable={true}
                 keyboardType="phone-pad"
               />
-              <CustomDropdown
-                data={socItems}
-                topLabelText={'Society'}
-                labelFieldName={'label'}
-                valueFieldName={'value'}
-                placeholder={'Select Society'}
-                value={dataToSend.society}
-                iconName={'users'}
-                iconType="font-awesome"
-                onChange={item => {
-                  setDataToSend(prev => {
-                    return {...prev, society: item.label};
-                  });
-                }}
-              />
+
               <CustomTextInput
                 iconName={'location-pin'}
                 iconType="entypo"
@@ -296,46 +255,6 @@ export default function RegisterAgency(props) {
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
               />
-              <CustomTextInput
-                iconName={'lock'}
-                iconType="entypo"
-                topText="Password"
-                placeholder="Enter Password"
-                value={dataToSend.password || ''}
-                onChangeText={t =>
-                  setDataToSend(prev => {
-                    return {...prev, password: t};
-                  })
-                }
-                textInputContainer={{marginVertical: hp(2)}}
-                iconSize={hp(4)}
-                secureTextEntry={passwordSecure}
-                rightIcon
-                rightIconName={'eye'}
-                rightIconType="entypo"
-                rightIconPress={() => setPasswordSecure(!passwordSecure)}
-              />
-              <CustomTextInput
-                iconName={'lock'}
-                iconType="entypo"
-                topText="Confirm Password"
-                placeholder="Enter Confirm Password"
-                value={dataToSend.confPassword || ''}
-                onChangeText={t =>
-                  setDataToSend(prev => {
-                    return {...prev, confPassword: t};
-                  })
-                }
-                textInputContainer={{marginVertical: hp(2)}}
-                iconSize={hp(4)}
-                secureTextEntry={confPasswordSecure}
-                rightIcon
-                rightIconName={'eye'}
-                rightIconType="entypo"
-                rightIconPress={() =>
-                  setConfPasswordSecure(!confPasswordSecure)
-                }
-              />
             </>
           ) : selectedIndex == 1 ? (
             <>
@@ -344,10 +263,10 @@ export default function RegisterAgency(props) {
                 iconType="material-community"
                 topText="CEO Name"
                 placeholder="Enter CEO Name"
-                value={dataToSend.ceoName || ''}
+                value={dataToSend.ceo_name || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, ceoName: t};
+                    return {...prev, ceo_name: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -358,10 +277,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="CEO Mobile #1"
                 placeholder="Enter CEO Mobile #1"
-                value={dataToSend.ceoNum1 || ''}
+                value={dataToSend.ceo_mobile1 || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, ceoNum1: t};
+                    return {...prev, ceo_mobile1: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -373,116 +292,16 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="CEO Mobile #2"
                 placeholder="Enter CEO Mobile #2"
-                value={dataToSend.ceoNum2 || ''}
+                value={dataToSend.ceo_mobile2 || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, ceoNum2: t};
+                    return {...prev, ceo_mobile2: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(3.5)}
                 keyboardType="phone-pad"
               />
-              {teamMembers.map((item, index) => {
-                const even = index % 2;
-                return (
-                  <View
-                    style={{
-                      backgroundColor:
-                        even == 0 ? colors.white : colors.tertiary,
-                      width: wp(100),
-                      alignItems: 'center',
-                    }}>
-                    <CustomTextInput
-                      iconName={'user-plus'}
-                      iconType="font-awesome"
-                      topText={`Member ${index + 1} Name`}
-                      placeholder={`Member ${index + 1} Name`}
-                      value={teamMembers[index].name || ''}
-                      onChangeText={t => {
-                        const newTeam = [...teamMembers];
-                        newTeam[index].name = t;
-                        setTeamMembers(newTeam);
-                      }}
-                      textInputContainer={{marginVertical: hp(2)}}
-                      iconSize={hp(3.5)}
-                      inputHeading={{
-                        backgroundColor:
-                          even == 0 ? colors.white : colors.tertiary,
-                      }}
-                      keyboardType="phone-pad"
-                    />
-                    <CustomTextInput
-                      iconName={'phone'}
-                      iconType="font-awesome"
-                      topText={`Member ${index + 1} Number`}
-                      placeholder={`Member ${index + 1} Number`}
-                      value={teamMembers[index].number || ''}
-                      onChangeText={t => {
-                        const newTeam = [...teamMembers];
-                        newTeam[index].number = t;
-                        setTeamMembers(newTeam);
-                      }}
-                      textInputContainer={{marginVertical: hp(2)}}
-                      iconSize={hp(3.5)}
-                      keyboardType="phone-pad"
-                      inputHeading={{
-                        backgroundColor:
-                          even == 0 ? colors.white : colors.tertiary,
-                      }}
-                    />
-                    <CustomTextInput
-                      iconName={'whatsapp'}
-                      iconType="font-awesome"
-                      topText={`Member ${index + 1}`}
-                      placeholder={`Member ${index + 1} Whatsapp`}
-                      value={teamMembers[index].whatsapp || ''}
-                      onChangeText={t => {
-                        const newTeam = [...teamMembers];
-                        newTeam[index].whatsapp = t;
-                        setTeamMembers(newTeam);
-                      }}
-                      textInputContainer={{marginVertical: hp(2)}}
-                      iconSize={hp(3.5)}
-                      keyboardType="phone-pad"
-                      inputHeading={{
-                        backgroundColor:
-                          even == 0 ? colors.white : colors.tertiary,
-                      }}
-                    />
-                    <TouchableOpacity
-                      onPress={() => {
-                        const newTeam = teamMembers.filter(
-                          (item, indexFilter) => index != indexFilter,
-                        );
-                        setTeamMembers(newTeam);
-                      }}>
-                      <Icon
-                        name={'minus'}
-                        type={'font-awesome'}
-                        color={colors.primary}
-                        size={hp(2)}
-                        reverse
-                      />
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-              <TouchableOpacity
-                onPress={() =>
-                  setTeamMembers([
-                    ...teamMembers,
-                    {name: '', number: '', whatsapp: ''},
-                  ])
-                }>
-                <Icon
-                  name={'whatsapp'}
-                  type={'font-awesome'}
-                  color={colors.primary}
-                  size={hp(2)}
-                  reverse
-                />
-              </TouchableOpacity>
               <CustomTextInput
                 iconName={'phone'}
                 iconType="font-awesome"
@@ -503,10 +322,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="Whatsapp"
                 placeholder="Enter Whatsapp"
-                value={dataToSend.whatsapp || ''}
+                value={dataToSend.whatapp_no || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, whatsapp: t};
+                    return {...prev, whatapp_no: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -527,6 +346,7 @@ export default function RegisterAgency(props) {
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(3.5)}
                 keyboardType="email-address"
+                editable={true}
               />
               <CustomTextInput
                 iconName={'fax'}
@@ -551,10 +371,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="Facebook"
                 placeholder="Enter Facebook"
-                value={dataToSend.facebookLink || ''}
+                value={dataToSend.facebook || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, facebookLink: t};
+                    return {...prev, facebook: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -565,10 +385,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="YouTube"
                 placeholder="Enter YouTube"
-                value={dataToSend.youTubeLink || ''}
+                value={dataToSend.youtube || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, youTubeLink: t};
+                    return {...prev, youtube: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -579,10 +399,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="Twitter"
                 placeholder="Enter Twitter"
-                value={dataToSend.twitterLink || ''}
+                value={dataToSend.twitter || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, twitterLink: t};
+                    return {...prev, twitter: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -593,10 +413,10 @@ export default function RegisterAgency(props) {
                 iconType="font-awesome"
                 topText="Instagram"
                 placeholder="Enter Instagram"
-                value={dataToSend.instagramLink || ''}
+                value={dataToSend.instagram || ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, instagramLink: t};
+                    return {...prev, instagram: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -653,30 +473,6 @@ export default function RegisterAgency(props) {
             </>
           ) : (
             <View style={styles.imagesMainView}>
-              <TouchableOpacity
-                style={styles.imageContainerView}
-                onPress={() => {
-                  openPhotoGallery();
-                }}>
-                {fileName ? (
-                  <Image
-                    source={{uri: fileName}}
-                    style={styles.imageStyle}
-                    resizeMode="contain"
-                  />
-                ) : (
-                  <>
-                    <Icon
-                      name={'camera'}
-                      type="font-awesome"
-                      color={colors.primary}
-                      size={hp(5)}
-                      style={props.iconStyles}
-                    />
-                    <Text style={styles.imageText}>Photo</Text>
-                  </>
-                )}
-              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.imageContainerView}
                 onPress={() => {

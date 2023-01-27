@@ -82,7 +82,7 @@ export default function CustomFlatList(props) {
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }
           renderItem={({item, index}) => (
-            <Pressable key={index} onPress={item => props.onPress(item)}>
+            <Pressable key={index} onPress={() => props.onPress(item)}>
               <View style={props.featureCard}>
                 <Image
                   source={
