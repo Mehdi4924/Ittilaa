@@ -28,11 +28,11 @@ export default function News(props) {
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
         placeholderTextColor={colors.grey}
-        screenTitle="Featured Projects"
+        screenTitle="News"
         screenTitleStyle={styles.screenTitleStyle}
       />
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Featured Projects</Text>
+        <Text style={styles.titleText}>News</Text>
       </View>
       <CustomFlatList
         data={NewsData}

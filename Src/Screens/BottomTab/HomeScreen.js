@@ -45,7 +45,11 @@ export default function HomeScreen(props) {
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
-        console.log('Response data', JSON.stringify(response.data, null, 2));
+        console.log(
+          'Response data',
+          // JSON.stringify(response.data, null, 2),
+          response,
+        );
         setScreenData(response.data.data);
       })
       .catch(function (error) {
@@ -60,14 +64,13 @@ export default function HomeScreen(props) {
         <CustomHeader
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
-          leftImageStyle={{width: wp(50), height: hp(10)}}
-          rightIconName="logout"
+          leftImageStyle={{width: wp(42), height: hp(8)}}
+          rightIconName="account-circle"
           rightIconType="material"
           rightIconColor={colors.white}
-          rightIconSize={30}
+          rightIconSize={35}
           onRighttIconPress={() => {
-            AsyncStorage.clear();
-            props.navigation.navigate('AuthStack', {screen: 'Login'});
+            props.navigation.navigate('AppFlow', {screen: 'Profile'});
           }}
           inputViewStyle={styles.inputViewStyle}
           textInputStyle={styles.textInputStyle}
@@ -88,8 +91,8 @@ export default function HomeScreen(props) {
           </View>
           <TitaniumFlatlist
             horizontal={true}
-            // data={screenData?.agency?.length ? screenData?.agency : []}
-            data={[]}
+            data={screenData?.agency?.length ? screenData?.agency : []}
+            // data={[]}
             cardStyle={styles.cardStyle}
             listContainerstyle={styles.listContainerstyle}
             flatListStyle={styles.flatListStyle}
@@ -113,14 +116,14 @@ export default function HomeScreen(props) {
             </TouchableOpacity>
           </View>
           <InventoriesComp
-            // data={screenData?.inventory?.length ? screenData.inventory : []}
-            data={[]}
+            data={screenData?.inventory?.length ? screenData.inventory : []}
+            // data={[]}
             inventoryCard={styles.inventoryCard}
             horizontal={true}
             flatListStyle={styles.flatListStyle}
             profileImgStyle={styles.profileImgStyle}
             profileImgContainer={styles.profileImgContainer}
-            animation={true}
+            animation={false}
             onPress={item =>
               props.navigation.navigate('AppFlow', {
                 screen: 'InventoryDetails',
@@ -140,8 +143,8 @@ export default function HomeScreen(props) {
             </TouchableOpacity>
           </View>
           <TopClassifiedComp
-            // data={screenData.classified.length ? screenData.classified : []}
-            data={[]}
+            data={screenData?.classified.length ? screenData.classified : []}
+            // data={[]}
             horizontal={true}
             classifiedFlatListStyle={styles.flatListStyle}
             classifiedCardStyle={styles.classifiedCardStyle}
@@ -153,7 +156,7 @@ export default function HomeScreen(props) {
             classifiedAmenities={styles.classifiedAmenities}
             classifiedAmenitiesText={styles.classifiedAmenitiesText}
             amenitiesIconSize={10}
-            animation={true}
+            animation={false}
             onPress={item =>
               props.navigation.navigate('AppFlow', {
                 screen: 'ClassifiedDetails',
@@ -174,8 +177,9 @@ export default function HomeScreen(props) {
             </TouchableOpacity>
           </View>
           <CustomFlatList
-            // data={screenData.featured.length ? screenData.featured : []}
-            data={[]}
+            animation={false}
+            data={screenData?.featured?.length ? screenData?.featured : []}
+            // data={[]}
             horizontal={true}
             featureCard={styles.featureCard}
             featureImageStyle={styles.featureImageStyle}
@@ -197,12 +201,17 @@ export default function HomeScreen(props) {
             </TouchableOpacity>
           </View>
           <CustomFlatList
-            // data={screenData.news.length ? screenData.news : []}
-            data={[]}
+            data={screenData?.news?.length ? screenData?.news : []}
+            // data={[]}
             horizontal={true}
             featureCard={styles.newsCard}
             featureImageStyle={styles.newsImageStyle}
             featureNameText={styles.newsNameText}
+            onPress={() =>
+              props.navigation.navigate('AppFlow', {
+                screen: 'News',
+              })
+            }
             flatListStyle={styles.flatListStyle}
             news
           />

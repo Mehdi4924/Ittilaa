@@ -15,6 +15,7 @@ import {fonts} from '../../Constants/Fonts';
 import Carousel from 'react-native-snap-carousel';
 import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
+import { URL } from '../../Constants/URL';
 
 export default function ClassifiedDetails(props) {
   const {classified} = props.route.params;
@@ -27,7 +28,7 @@ export default function ClassifiedDetails(props) {
     await AppFlow.GetClassiffiedDetails(classified.id)
       .then(function (response) {
         console.log('Classified data', JSON.stringify(response.data, null, 2));
-        setData(response.data.data); nb
+        setData(response.data.data);
       })
       .catch(function (error) {
         console.log('Classified Error', error.response);
@@ -48,11 +49,7 @@ export default function ClassifiedDetails(props) {
             ref={c => {
               carouselRef.current = c;
             }}
-            data={[
-              allImages.homeImage,
-              allImages.homeImage,
-              allImages.homeImage,
-            ]}
+            data={[data?.file?.file ? URL.imageURL + data?.file?.file : allImages.homeImage]}
             renderItem={_renderItem}
             sliderWidth={wp(100)}
             itemWidth={wp(100)}
@@ -82,7 +79,7 @@ export default function ClassifiedDetails(props) {
             </TouchableOpacity>
           </View>
           <View style={styles.header}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>props.navigation.goBack()}>
               <Icon
                 name={'arrow-back-circle'}
                 type={'ionicon'}
@@ -114,7 +111,7 @@ export default function ClassifiedDetails(props) {
             />
           </View>
           <Text style={styles.locationText}>
-            Sector C, Tulip Block, Bahria Town, Lahore
+            {data?.address || 'N/A'}
           </Text>
           <View style={styles.amenitiesMainView}>
             <View style={styles.amenitiesSubView}>
@@ -124,7 +121,7 @@ export default function ClassifiedDetails(props) {
                 color={colors.primary}
                 size={hp(3)}
               />
-              <Text style={styles.amenitiesText}>3 Marla</Text>
+              <Text style={styles.amenitiesText}>{data?.size} {data?.size_unit}</Text>
             </View>
             <View style={styles.seperator}></View>
             <View style={styles.amenitiesSubView}>
@@ -134,7 +131,7 @@ export default function ClassifiedDetails(props) {
                 color={colors.primary}
                 size={hp(3)}
               />
-              <Text style={styles.amenitiesText}>3 Bedroom</Text>
+              <Text style={styles.amenitiesText}>{data?.bed} Bedroom</Text>
             </View>
             <View style={styles.seperator}></View>
             <View style={styles.amenitiesSubView}>
@@ -144,15 +141,12 @@ export default function ClassifiedDetails(props) {
                 color={colors.primary}
                 size={hp(2.5)}
               />
-              <Text style={styles.amenitiesText}>3</Text>
+              <Text style={styles.amenitiesText}>{data?.bath}</Text>
             </View>
           </View>
           <Text style={styles.descText}>Description</Text>
           <Text style={styles.descDetailsText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            porttitor dolor ex, ac tempor magna tempus quis. Maecenas pharetra
-            eros eu urna tincidunt, id porttitor diam dignissim. Aenean in porta
-            odio, nec pellentesque massa.
+            {data?.description}
           </Text>
           <Text style={styles.descText}>Location</Text>
           <TouchableOpacity>
@@ -170,29 +164,7 @@ export default function ClassifiedDetails(props) {
               />
             </View>
           </TouchableOpacity>
-          <Text style={styles.descText}>Agency Details</Text>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', width: wp(85)}}>
-            <Image
-              source={allImages.tamjeed}
-              style={styles.agencyProfileImage}
-            />
-            <View style={{marginLeft: wp(5)}}>
-              <Text style={styles.agencyNameText}>IronStone Equities</Text>
-              <Text style={styles.postByText}>By Danial Babar</Text>
-              <CustomButton
-                btnText="See Details"
-                indicator={false}
-                onPress={() =>
-                  props.navigation.navigate('AppFlow', {
-                    screen: 'InventoryDetails',
-                  })
-                }
-                btnContainer={styles.btnContainer}
-                btnTextStyles={styles.btnTextStyles}
-              />
-            </View>
-          </View>
+          
         </View>
       </ScrollView>
       <TouchableOpacity style={[styles.fabView, {bottom: wp(16)}]}>

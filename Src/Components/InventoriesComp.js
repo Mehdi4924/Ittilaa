@@ -16,9 +16,7 @@ import EmptyComponent from './EmptyComponent';
 
 export default function InventoriesComp(props) {
   const [sliderIndex, setSliderIndex] = useState(0);
-
   const [maxSlider, setMaxSlider] = useState(props.data.length - 1);
-
   const flatListRef = useRef();
   useEffect(() => {
     listAnimator();
@@ -40,7 +38,6 @@ export default function InventoriesComp(props) {
   async function scrollToIndex(index, animated) {
     flatListRef.current && flatListRef.current.scrollToIndex({index, animated});
   }
-
   return (
     <View>
       {props.animation ? (
@@ -132,26 +129,44 @@ export default function InventoriesComp(props) {
           data={props.data}
           keyExtractor={item => item.id}
           renderItem={({item, index}) => (
-            <View key={index} style={props.inventoryCard}>
+            <TouchableOpacity
+              key={index}
+              style={props.inventoryCard}
+              onPress={() => props.onPress(item)}>
               <View style={styles.profileContainer}>
                 <View style={props.profileImgContainer}>
                   <Image
-                    source={item.image}
+                    source={
+                      item?.file
+                        ? {uri: URL.imageURL + item.file.file}
+                        : require('../Assets/Images/agency-dummy.png')
+                    }
                     style={props.profileImgStyle}
                     resizeMode="contain"
                   />
                 </View>
                 <View style={{marginLeft: wp(4)}}>
-                  <Text style={styles.title}>{item.name}</Text>
-                  <Text style={styles.byUser}>By:{item.by}</Text>
+                  <Text style={styles.title}>
+                    {item?.agency?.name || 'N/A'}
+                  </Text>
+                  <Text style={styles.byUser}>
+                    By: {item?.agency?.ceo_name || 'N/A'}
+                  </Text>
                 </View>
               </View>
               <View style={styles.detailsContainer}>
-                <Text style={styles.text2}>{item.details}</Text>
+                <Text style={styles.text2}>
+                  Plot Number {item?.plot_no} is available {'\n'} in{' '}
+                  {item?.block}, {item?.society?.name}, {item?.city?.name}{' '}
+                  {'\n'} at {item?.price}
+                  {item?.price_unit} Rupees
+                </Text>
               </View>
               <View style={styles.locationMain}>
                 <View style={styles.locationContainer}>
-                  <Text style={styles.locationText}>Plot for Sale</Text>
+                  <Text style={styles.locationText}>
+                    {item?.type || ''} for {item?.purpose || ''}
+                  </Text>
                   <Icon
                     type="material"
                     name="place"
@@ -160,12 +175,16 @@ export default function InventoriesComp(props) {
                   />
                 </View>
                 <Text
-                  style={{...styles.text2, marginLeft: wp(2), maxWidth: wp(45)}}
+                  style={{
+                    ...styles.text2,
+                    marginLeft: wp(2),
+                    maxWidth: wp(45),
+                  }}
                   numberOfLines={1}>
-                  {item.address}
+                  Plot No. {item?.plot_no} in {item?.block}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}

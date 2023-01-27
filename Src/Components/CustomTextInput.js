@@ -19,6 +19,7 @@ export default function CustomTextInput(props) {
         style={
           props.textInputView ? props.textInputView : styles.textInputView
         }>
+        <View>
         <Icon
           name={props.iconName}
           type={props.iconType}
@@ -26,6 +27,7 @@ export default function CustomTextInput(props) {
           size={props.iconSize ? props.iconSize : hp(5)}
           style={props.iconStyles}
         />
+        </View>
         <TextInput
           secureTextEntry={props.secureTextEntry ? true : false}
           placeholder={props.placeholder}
@@ -50,7 +52,7 @@ export default function CustomTextInput(props) {
               style={props.rightIconStyles}
             />
           </TouchableOpacity>
-        ) : null}
+        ) : <View style={{width:hp(4)}}></View>}
       </View>
     </View>
   );
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textInputStyles: {
-    width: wp(70),
+    width: wp(60),
     fontFamily: fonts.regular,
   },
   dropDownStyles: {

@@ -307,8 +307,9 @@ export const cityItem = [
   {label: 'Sargodha', value: 'Sargodha'},
 ]
 export const societyItem = [
-  {label: 'Bahria', value: 'bahria'},
-  {label: 'Township', value: 'township'},
+  {label: 'Bahria', value: 'Bahria'},
+  {label: 'Township', value: 'Township'},
+  {label: 'Other', value: 'Other'},
 ]
 export const typeItem = [
   {label: 'Residential', value: 'residential'},
@@ -320,7 +321,7 @@ export const purpose = [
   {label: 'Required', value: 'required'},
 ]
 export const invenCategories = [
-  {label: 'Plot', value: 'plot'},
+  {label: 'Plot', value: 'Plot'},
   {label: 'House', value: 'House'},
   {label: 'Flat', value: 'flat'},
   {label: 'Villa', value: 'villa'},

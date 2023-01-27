@@ -7,7 +7,7 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CustomHeader from '../../Components/CustomHeader';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
@@ -22,7 +22,7 @@ import {
   plotType,
   purpose,
   sizes,
-  societyItem,
+  // societyItem,
   typeItem,
 } from '../../Constants/dummyData';
 import CustomDropdown from '../../Components/CustomDropdown';
@@ -49,7 +49,7 @@ export default function AddInventoriesClassified(props) {
   const [clsProPurpose, setclsProPurpose] = useState('');
   const [category, setCategory] = useState('');
   const [clsCategory, setClsCategory] = useState('');
-  const [sizeUnit, setSizeUnit] = useState('');
+  const [sizeUnit, setSizeUnit] = useState('Marla');
   const [clsPlotSize, setclsPlotSize] = useState('');
   const [city, setCity] = useState('');
   const [block, setBlock] = useState('');
@@ -66,7 +66,10 @@ export default function AddInventoriesClassified(props) {
   const [clsDetails, setClsDetails] = useState('');
   const [clsAreaType, setClsAreaType] = useState();
   const [indicator, setIndicator] = useState(false);
+  const [clsIndicator, setClsIndicator] = useState(false);
   const [inventDataToAdd, setInventDataToAdd] = useState({});
+  const [cities, setCities] = useState([]);
+  const [societyItem, setSocietyItem] = useState([]);
 
   const openGallery = () => {
     let options = {
@@ -112,8 +115,8 @@ export default function AddInventoriesClassified(props) {
     } else {
       setIndicator(true);
       var data = new FormData();
-      data.append('city_id', 1);
-      data.append('society_id', 1);
+      data.append('city_id', city || 1);
+      data.append('society_id', socValue || 1 );
       data.append('type', typeValue);
       data.append('purpose', propPurpose);
       data.append('size', inventDataToAdd.plotSize);
@@ -122,13 +125,14 @@ export default function AddInventoriesClassified(props) {
       data.append('plot_no', inventDataToAdd.propNo);
       data.append('price', inventDataToAdd.inventPrice);
       data.append('category', category);
-      data.append('price_unit', priceTh ? 'Th' : priceLac ? 'Lac' : 'Cr');
-      data.append('featuret', 'cp');
+      // data.append('price_unit', priceTh ? 'Th' : priceLac ? 'Lac' : 'Cr');
+      data.append('price_unit', 'lac');
+      data.append('feature', 'cp');
 
       AppFlow.createEnventory(data)
         .then(function (response) {
-          // props.navigation.navigate('Login');
-          // Toast.show('')
+          Toast.show('Inventory Submited Successfuly', Toast.SHORT);
+          props.navigation.navigate('HomeScreen');
           console.log('responseeee', response);
         })
         .catch(function (error) {
@@ -138,6 +142,96 @@ export default function AddInventoriesClassified(props) {
           setIndicator(false);
         });
     }
+  };
+  const submitClassified = () => {
+    if (typeValue == null) {
+      Toast.show('Please select type', Toast.SHORT);
+    } else if (clsTitle == null) {
+      Toast.show('Please Enter Title', Toast.SHORT);
+    } else if (clsTypeValue == null) {
+      Toast.show('Please Select Type', Toast.SHORT);
+    } else if (clsProPurpose == null) {
+      Toast.show('Please Select Purpose', Toast.SHORT);
+    } else if (clsCategory == null) {
+      Toast.show('Please Select Category', Toast.SHORT);
+    } else if (clsPlotSize == null) {
+      Toast.show('Please Enter Plot Area', Toast.SHORT);
+    } else if (clsAreaType == null) {
+      Toast.show('Please Select Size Unit', Toast.SHORT);
+    } else if (clsPrice == null) {
+      Toast.show('Please enter Price', Toast.SHORT);
+    } else if (clsDetails == null) {
+      Toast.show('Please Enter details', Toast.SHORT);
+    } else {
+      console.log('thissssss');
+      setClsIndicator(true);
+      var clsData = new FormData();
+      clsData.append('title', clsTitle);
+      clsData.append('type', clsTypeValue);
+      clsData.append('category', clsCategory);
+      clsData.append('purpose', clsProPurpose);
+      clsData.append('bed', clsBeds);
+      clsData.append('bath', clsBath);
+      clsData.append('floor', clsFloor);
+      clsData.append('size', clsPlotSize);
+      clsData.append('size_unit', clsAreaType);
+      clsData.append('price', clsPrice);
+      clsData.append('description', clsDetails);
+      clsData?.append('file', {
+        uri: imageUri?.uri,
+        name: imageUri?.fileName,
+        type: imageUri?.type,
+      });
+      console.log('formmm dtata', clsData);
+      AppFlow.createClassiffied(clsData)
+        .then(function (response) {
+          Toast.show('Classified Submited Successfuly', Toast.SHORT);
+          props.navigation.navigate('HomeScreen');
+          console.log('responseeee', response);
+        })
+        .catch(function (error) {
+          console.log('erorrrr', error);
+        })
+        .finally(function () {
+          setClsIndicator(false);
+        });
+    }
+  };
+  useEffect(() => {
+    getCities();
+  }, []);
+  const getCities = async () => {
+    setCities([]);
+    setSocietyItem([]);
+    await AppFlow.getCitySociety()
+      .then(res => {
+        console.log(res.data);
+        setCities(res?.data?.data?.city);
+        setSocietyItem(res?.data?.data?.society);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+    // setCitiesLoader(true)
+    // const myHeaders = new Headers();
+    // myHeaders.append('accept', 'application/json')
+    // myHeaders.append("Content-Type", "application/json");
+    // let data1 = JSON.stringify({
+    //   country: 'pakistan'
+    // });
+    // fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+    //   method: 'post',
+    //   headers: myHeaders,
+    //   body: data1
+    // })
+    //   .then(res => res.json())
+    //   .then(res => {console.log(res.data,res.data.length)
+    //     const data = res.data.map((item) => {
+    //       return { label: item, value: item }
+    //     })
+    //     setCities(data)
+    //   })
+    //   .catch(error => console.log('error', error))
+    //   .finally(() => {})
   };
   return (
     <View style={styles.mainContainer}>
@@ -210,10 +304,10 @@ export default function AddInventoriesClassified(props) {
             ) : (
               <View>
                 <CustomDropdown
-                  data={cityItem}
+                  data={cities}
                   topLabelText={'City'}
-                  labelFieldName={'label'}
-                  valueFieldName={'value'}
+                  labelFieldName={'name'}
+                  valueFieldName={'id'}
                   iconType="material"
                   iconName="place"
                   placeholder={'Select City'}
@@ -223,14 +317,33 @@ export default function AddInventoriesClassified(props) {
                 <CustomDropdown
                   data={societyItem}
                   topLabelText={'Society'}
-                  labelFieldName={'label'}
-                  valueFieldName={'value'}
+                  labelFieldName={'name'}
+                  valueFieldName={'id'}
                   placeholder={'Select Society'}
                   iconName={'users'}
                   iconType="font-awesome"
                   value={socValue}
                   onChange={item => setSocValue(item.value)}
                 />
+                {socValue == 'Other' ? (
+                  <CustomTextInput
+                    textInputContainer={{
+                      marginVertical: hp(2),
+                      borderRadius: 8,
+                    }}
+                    topText="Socciety Name"
+                    iconType="font-awesome"
+                    iconName="users"
+                    iconSize={26}
+                    placeholder="Enter Society Name"
+                    valu={inventDataToAdd.other || ''}
+                    onChangeText={e => {
+                      setInventDataToAdd(prev => {
+                        return {...prev, other: e};
+                      });
+                    }}
+                  />
+                ) : null}
                 <CustomDropdown
                   data={typeItem}
                   topLabelText={'Type'}
@@ -396,7 +509,7 @@ export default function AddInventoriesClassified(props) {
                         marginLeft: wp(2),
                       }}
                       onPress={() => setMB(!MB)}>
-                      <Text style={styles.priceTypeTextStyle}>M</Text>
+                      <Text style={styles.priceTypeTextStyle}>MB</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{
@@ -430,6 +543,16 @@ export default function AddInventoriesClassified(props) {
                     </Text>
                   </TouchableOpacity>
                 </View>
+                <CustomButton
+                  btnContainer={{
+                    ...styles.submitBtnContainer,
+                    alignSelf: 'center',
+                  }}
+                  btnText="Submit"
+                  btnTextStyles={styles.btnTextStyles}
+                  indicator={indicator}
+                  onPress={submitInventory}
+                />
               </View>
             )}
           </>
@@ -495,7 +618,7 @@ export default function AddInventoriesClassified(props) {
               iconSize={26}
               placeholder="Enter plot title"
               value={clsTitle}
-              onChange={item => setClsTitle(item)}
+              onChangeText={item => setClsTitle(item)}
             />
             <CustomDropdown
               container={{marginTop: hp(4)}}
@@ -507,7 +630,7 @@ export default function AddInventoriesClassified(props) {
               iconName="merge-type"
               placeholder={'Select Type'}
               value={clsTypeValue}
-              onChange={item => setClsTypeValue(item)}
+              onChange={item => setClsTypeValue(item.value)}
             />
             <CustomDropdown
               container={{marginTop: hp(2.5)}}
@@ -519,7 +642,7 @@ export default function AddInventoriesClassified(props) {
               iconName="business"
               placeholder={'Select Purpose'}
               value={clsProPurpose}
-              onChange={item => setclsProPurpose(item)}
+              onChange={item => setclsProPurpose(item.value)}
             />
             <CustomDropdown
               container={{marginTop: hp(2.5)}}
@@ -531,10 +654,10 @@ export default function AddInventoriesClassified(props) {
               iconName="category"
               placeholder={'Select Category'}
               value={clsCategory}
-              onChange={item => setClsCategory(item)}
+              onChange={item => setClsCategory(item.value)}
             />
-            {clsCategory?.value == 'House' ||
-            clsCategory?.value == 'Apartment' ? (
+
+            {clsCategory == 'House' || clsCategory == 'Apartment' ? (
               <View style={styles.amenitiesMainContainer}>
                 <CustomTextInput
                   topText="Beds"
@@ -593,21 +716,21 @@ export default function AddInventoriesClassified(props) {
                   height: hp(8),
                 }}
                 data={sizes}
-                topLabelText={'Area'}
+                topLabelText={'Size'}
                 labelFieldName={'label'}
                 valueFieldName={'value'}
                 iconType="material"
                 iconName="fullscreen"
-                placeholder={'Area'}
+                placeholder={'Select Size'}
                 value={clsAreaType}
-                onChange={item => setClsAreaType(item)}
+                onChange={item => setClsAreaType(item.value)}
               />
               <CustomTextInput
-                topText="Size"
+                topText="Area"
                 iconType="material-community"
                 iconName="floor-plan"
                 iconSize={20}
-                placeholder="Size"
+                placeholder="Area"
                 textInputContainer={styles.amenitiesContainer}
                 textInputStyles={styles.amenitiesInputStyles}
                 textInputView={styles.amenitiesInputView}
@@ -641,16 +764,16 @@ export default function AddInventoriesClassified(props) {
               value={clsDetails}
               onChangeText={t => setClsDetails(t)}
             />
+            <CustomButton
+              btnContainer={{...styles.submitBtnContainer, alignSelf: 'center'}}
+              btnText="Submit"
+              btnTextStyles={styles.btnTextStyles}
+              indicator={clsIndicator}
+              onPress={submitClassified}
+            />
           </View>
         )}
 
-        <CustomButton
-          btnContainer={styles.submitBtnContainer}
-          btnText="Submit"
-          btnTextStyles={styles.btnTextStyles}
-          indicator={indicator}
-          onPress={submitInventory}
-        />
         <View style={{height: hp(8)}}></View>
       </ScrollView>
     </View>

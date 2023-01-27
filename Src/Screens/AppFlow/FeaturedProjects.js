@@ -41,6 +41,7 @@ export default function TopClassified(props) {
         featureImageStyle={styles.featureImageStyle}
         featureNameText={styles.featureNameText}
         flatListStyle={styles.flatListStyle}
+        onPress={() => null}
       />
     </View>
   );
@@ -106,9 +107,9 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(1.5),
     alignItems: 'center',
     borderRadius: hp(1),
-    marginBottom:hp(1.5),
-    borderWidth:.5,
-    borderColor:'rgba(0,0,0,0.08)'
+    marginBottom: hp(1.5),
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.08)',
   },
   featureImageStyle: {
     width: wp(26),

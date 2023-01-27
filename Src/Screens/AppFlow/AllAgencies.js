@@ -29,10 +29,12 @@ import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
 import {URL} from '../../Constants/URL';
 import CustomLoader from '../../Components/CustomLoader';
-
+var dataCopy = [];
 export default function AllAgencies(props) {
   const [agencies, setAgencies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState();
+
   useEffect(() => {
     getAllAgencies();
   }, []);
@@ -41,10 +43,11 @@ export default function AllAgencies(props) {
       .then(res => {
         console.log(
           'response getting all agences',
-          // JSON.stringify(res.data, null, 2),
-          res,
+          JSON.stringify(res.data, null, 2),
+          // res,
         );
         setAgencies(res?.data?.data);
+        dataCopy = res?.data?.data;
       })
       .catch(err => {
         console.log(err);
@@ -70,6 +73,19 @@ export default function AllAgencies(props) {
         placeholderTextColor={colors.grey}
         screenTitle="All Agencies"
         screenTitleStyle={styles.screenTitleStyle}
+        onChangeText={t => {
+          if (t.length > 0) {
+            const newData = [...dataCopy];
+            const a = newData.filter(item =>
+              item?.name?.toLowerCase()?.includes(t.toLowerCase()),
+            );
+            setAgencies(a);
+          } else {
+            setAgencies(dataCopy);
+          }
+          setSearch(t);
+        }}
+        value={search}
       />
 
       <FlatList

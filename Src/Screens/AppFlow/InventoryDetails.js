@@ -73,8 +73,12 @@ export default function InventoryDetails(props) {
             }
             style={styles.agencyProfileImage}
           />
-          <Text style={styles.agencyNameText}>Test Agency</Text>
-          <Text style={styles.postByText}>By Muhammad Atif</Text>
+          <Text style={styles.agencyNameText}>
+            {inventoryData?.agency?.name}
+          </Text>
+          <Text style={styles.postByText}>
+            By {inventoryData?.agency?.ceo_name}
+          </Text>
           <View style={styles.detailsView}>
             <View style={styles.callAgentView}>
               <Text style={styles.normalText}>
@@ -142,7 +146,7 @@ export default function InventoryDetails(props) {
             style={styles.bottomIconView}
             onPress={() =>
               props.navigation.navigate('AgencyProfile', {
-                agency: inventoryData,
+                agency: {...inventoryData, id: inventoryData.agency_id},
               })
             }>
             <Icon

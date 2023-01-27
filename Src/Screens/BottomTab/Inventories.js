@@ -55,12 +55,18 @@ export default function Inventories(props) {
       <View style={styles.container}>
         <Text style={styles.headingText}>Hot Properties</Text>
         <InventoriesComp
-          data={topInventories}
+          data={[]}
           inventoryCard={styles.inventoryCard}
           horizontal={true}
           flatListStyle={styles.flatListStyle}
           profileImgStyle={styles.profileImgStyle}
           profileImgContainer={styles.profileImgContainer}
+          onPress={item =>
+              props.navigation.navigate('AppFlow', {
+                screen: 'InventoryDetails',
+                params: {inventory: item},
+              })
+            }
         />
       </View>
     );
@@ -254,7 +260,7 @@ const styles = StyleSheet.create({
     fontSize: hp(1.6),
   },
   listText: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.regular,
     color: colors.grey,
     fontSize: hp(1.6),
   },

@@ -9,6 +9,7 @@ export const configureAxiosHeaders = async () => {
   axios.defaults.headers['Pragma'] = 'no-cache';
   axios.defaults.headers['Cache-Control'] = 'no-cache';
   axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+  axios.defaults.headers['Accept'] = 'application/json';
   const userData = await AsyncStorage.getItem('AuthUser');
   const parsedData = JSON.parse(userData);
   console.log('Async User Data', parsedData);
@@ -45,8 +46,9 @@ export const AppFlow = {
   getAllAgencies: () => requests.get('agency'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
   agencyProperties: id => requests.get(`agency/inventory/${id}`),
-  createEnventory: data => requests.get('inventory/store', data),
+  createEnventory: data => requests.post('inventory/store', data),
   createClassiffied: data => requests.post('classified/store', data),
+  getCitySociety: () => requests.get('inventory/create/data'),
 };
 
 export const GetCities = {
