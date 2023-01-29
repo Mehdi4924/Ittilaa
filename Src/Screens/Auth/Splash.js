@@ -17,7 +17,7 @@ export default function Splash(props) {
       } else {
         props.navigation.navigate('BottomNavigator');
       }
-    }, 3000);
+    }, 1000);
   };
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
