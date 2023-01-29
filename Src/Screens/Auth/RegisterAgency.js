@@ -106,6 +106,7 @@ export default function RegisterAgency(props) {
     } else {
       setIndicator(true);
       var data = new FormData();
+      data.append('referral_by', dataToSend?.refferal || null);
       data.append('agency_name', dataToSend?.agencyName);
       data?.append('name', dataToSend?.userName);
       data?.append('designation', dataToSend?.designation || null);
@@ -127,6 +128,7 @@ export default function RegisterAgency(props) {
       data?.append('website', dataToSend?.website || null);
       data?.append('about', dataToSend?.about || null);
       data?.append('password', dataToSend?.password);
+      data?.append('team', JSON.stringify(teamMembers));
       data?.append('photo[]', {
         uri: imageUri?.uri,
         name: imageUri?.fileName,
@@ -213,6 +215,20 @@ export default function RegisterAgency(props) {
               <CustomTextInput
                 iconName={'home-city-outline'}
                 iconType="material-community"
+                topText="Referral Code"
+                placeholder="Enter Refferal Code"
+                value={dataToSend.referral || ''}
+                onChangeText={t =>
+                  setDataToSend(prev => {
+                    return {...prev, referral: t};
+                  })
+                }
+                textInputContainer={{marginVertical: hp(2)}}
+                iconSize={hp(4)}
+              />
+              <CustomTextInput
+                iconName={'home-city-outline'}
+                iconType="material-community"
                 topText="Agency Name"
                 placeholder="Enter Agency Name"
                 value={dataToSend.agencyName || ''}
@@ -224,6 +240,7 @@ export default function RegisterAgency(props) {
                 textInputContainer={{marginVertical: hp(2)}}
                 iconSize={hp(4)}
               />
+
               <CustomTextInput
                 iconName={'user'}
                 iconType="font-awesome"
@@ -410,17 +427,16 @@ export default function RegisterAgency(props) {
                         backgroundColor:
                           even == 0 ? colors.white : colors.tertiary,
                       }}
-                      keyboardType="phone-pad"
                     />
                     <CustomTextInput
                       iconName={'phone'}
                       iconType="font-awesome"
                       topText={`Member ${index + 1} Number`}
                       placeholder={`Member ${index + 1} Number`}
-                      value={teamMembers[index].number || ''}
+                      value={teamMembers[index].phone || ''}
                       onChangeText={t => {
                         const newTeam = [...teamMembers];
-                        newTeam[index].number = t;
+                        newTeam[index].phone = t;
                         setTeamMembers(newTeam);
                       }}
                       textInputContainer={{marginVertical: hp(2)}}
@@ -434,12 +450,12 @@ export default function RegisterAgency(props) {
                     <CustomTextInput
                       iconName={'whatsapp'}
                       iconType="font-awesome"
-                      topText={`Member ${index + 1}`}
+                      topText={`Member ${index + 1} whatsapp`}
                       placeholder={`Member ${index + 1} Whatsapp`}
-                      value={teamMembers[index].whatsapp || ''}
+                      value={teamMembers[index].whatsapp_no || ''}
                       onChangeText={t => {
                         const newTeam = [...teamMembers];
-                        newTeam[index].whatsapp = t;
+                        newTeam[index].whatsapp_no = t;
                         setTeamMembers(newTeam);
                       }}
                       textInputContainer={{marginVertical: hp(2)}}
@@ -476,7 +492,7 @@ export default function RegisterAgency(props) {
                   ])
                 }>
                 <Icon
-                  name={'whatsapp'}
+                  name={'plus'}
                   type={'font-awesome'}
                   color={colors.primary}
                   size={hp(2)}
