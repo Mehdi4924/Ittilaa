@@ -10,12 +10,12 @@ export default function Splash(props) {
   const navigateToConfirmation = async () => {
     let userData = await AsyncStorage.getItem('AuthUser');
     let parseUser = JSON.parse(userData);
-    console.log('Async storage', parseUser);
+    // console.log('Async storage', parseUser);
     setTimeout(() => {
       if (userData == null) {
-        props.navigation.navigate('Login');
+        props.navigation.replace('Login');
       } else {
-        props.navigation.navigate('BottomNavigator');
+        props.navigation.replace('BottomNavigator');
       }
     }, 1000);
   };
@@ -23,7 +23,7 @@ export default function Splash(props) {
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Image
         source={require('../../Assets/Images/logo.png')}
-        style={{width: hp(40), height: hp(20)}}
+        style={{width: hp(44), height: hp(22)}}
         resizeMode="contain"
       />
     </View>

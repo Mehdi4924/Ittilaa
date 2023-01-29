@@ -13,10 +13,13 @@ import {fonts} from '../../Constants/Fonts';
 import {topInventories} from '../../Constants/dummyData';
 import InventoriesComp from '../../Components/InventoriesComp';
 import {AppFlow} from '../../Api/ApiCalls';
+import CustomLoader from '../../Components/CustomLoader';
 
+var dataCopy = [];
 export default function TopInventories(props) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState();
   useEffect(() => {
     GetInventories();
   }, []);
@@ -29,6 +32,7 @@ export default function TopInventories(props) {
           response,
         );
         setData(response?.data?.data?.inventory);
+        dataCopy=response?.data?.data?.inventory;
       })
       .catch(function (error) {
         console.log('Dashboard Error', error.response);
@@ -39,6 +43,7 @@ export default function TopInventories(props) {
   }
   return (
     <View style={styles.mainContainer}>
+    <CustomLoader isLoading={loading}/>
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -53,12 +58,25 @@ export default function TopInventories(props) {
         placeholderTextColor={colors.grey}
         screenTitle="Top Inventories"
         screenTitleStyle={styles.screenTitleStyle}
+        onChangeText={t => {
+          if (t.length > 0) {
+            const newData = [...dataCopy];
+            const a = newData.filter(item =>
+              item?.agency?.name?.toLowerCase()?.includes(t.toLowerCase()),
+            );
+            setData(a);
+          } else {
+            setData(dataCopy);
+          }
+          setSearch(t);
+        }}  
+        value={search}
       />
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Top Inventories</Text>
       </View>
       <InventoriesComp
-        data={topInventories}
+        data={data}
         inventoryCard={styles.inventoryCard}
         flatListStyle={styles.flatListStyle}
         profileImgStyle={styles.profileImgStyle}

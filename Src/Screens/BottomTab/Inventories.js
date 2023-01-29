@@ -25,6 +25,7 @@ import CustomLoader from '../../Components/CustomLoader';
 
 export default function Inventories(props) {
   const [listData, setListData] = useState([]);
+  const [hotData, setHotData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useFocusEffect(
@@ -42,6 +43,7 @@ export default function Inventories(props) {
           response,
         );
         setListData(response?.data?.data?.inventory);
+        setHotData(response?.data?.data?.hot_inventory);
       })
       .catch(function (error) {
         console.log('Inventories Error', error);
@@ -55,12 +57,18 @@ export default function Inventories(props) {
       <View style={styles.container}>
         <Text style={styles.headingText}>Hot Properties</Text>
         <InventoriesComp
-          data={topInventories}
+          data={hotData}
           inventoryCard={styles.inventoryCard}
           horizontal={true}
           flatListStyle={styles.flatListStyle}
           profileImgStyle={styles.profileImgStyle}
           profileImgContainer={styles.profileImgContainer}
+          onPress={item =>
+              props.navigation.navigate('AppFlow', {
+                screen: 'InventoryDetails',
+                params: {inventory: item},
+              })
+            }
         />
       </View>
     );
@@ -254,7 +262,7 @@ const styles = StyleSheet.create({
     fontSize: hp(1.6),
   },
   listText: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.regular,
     color: colors.grey,
     fontSize: hp(1.6),
   },

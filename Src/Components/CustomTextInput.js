@@ -12,20 +12,25 @@ import {colors} from '../Constants/Colors';
 import {Icon} from '@rneui/themed';
 import DropDownPicker from 'react-native-dropdown-picker';
 export default function CustomTextInput(props) {
+  console.log(props.editable);
   return (
     <View style={[styles.textInputContainer, props.textInputContainer]}>
-      <Text style={styles.inputHeading}>{props.topText || 'N/A'}</Text>
+      <Text style={[styles.inputHeading, props.inputHeading]}>
+        {props.topText || 'N/A'}
+      </Text>
       <View
         style={
           props.textInputView ? props.textInputView : styles.textInputView
         }>
-        <Icon
-          name={props.iconName}
-          type={props.iconType}
-          color={colors.primary}
-          size={props.iconSize ? props.iconSize : hp(5)}
-          style={props.iconStyles}
-        />
+        <View>
+          <Icon
+            name={props.iconName}
+            type={props.iconType}
+            color={colors.primary}
+            size={props.iconSize ? props.iconSize : hp(5)}
+            style={props.iconStyles}
+          />
+        </View>
         <TextInput
           secureTextEntry={props.secureTextEntry ? true : false}
           placeholder={props.placeholder}
@@ -39,6 +44,7 @@ export default function CustomTextInput(props) {
           labelStyle={{
             fontWeight: 'bold',
           }}
+          editable={props?.editable ? !props.editable : true}
         />
         {props.rightIcon ? (
           <TouchableOpacity onPress={props.rightIconPress}>
@@ -50,7 +56,9 @@ export default function CustomTextInput(props) {
               style={props.rightIconStyles}
             />
           </TouchableOpacity>
-        ) : null}
+        ) : (
+          <View style={{width: hp(4)}}></View>
+        )}
       </View>
     </View>
   );
@@ -80,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textInputStyles: {
-    width: wp(70),
+    width: wp(60),
     fontFamily: fonts.regular,
   },
   dropDownStyles: {

@@ -73,12 +73,12 @@ export default function TopClassifiedComp(props) {
                   For Sale
                 </Text>
                 <Text style={props.classifiedPriceText}>
-                  {item?.price || 'Loading'} Lacs
+                  {item?.price || 'Loading'} {item?.size_unit || 'Loading'}
                 </Text>
               </View>
               <View></View>
               <Text style={props.classifiedAddressStyle}>
-                {item.block || 'Loading'}
+                {item?.description || 'Loading'}
               </Text>
               <View style={styles.classifiedAmenitiesContainer}>
                 <View style={props.classifiedAmenities}>
@@ -89,7 +89,7 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bedRoom || '2'}
+                    {item?.bed || '0'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
@@ -100,12 +100,12 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bedRoom || '3'}
+                    {item?.bath || '0'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bedRoom || '4'} Marla
+                    {item?.size || 'N/A'} {item?.size_unit || 'N/A'}
                   </Text>
                 </View>
               </View>
@@ -141,12 +141,12 @@ export default function TopClassifiedComp(props) {
                   For Sale
                 </Text>
                 <Text style={props.classifiedPriceText}>
-                  {item?.price || 'Loading'} Lacs
+                  {item?.price || 'Loading'} {item?.size_unit || 'Loading'}
                 </Text>
               </View>
               <View></View>
               <Text style={props.classifiedAddressStyle}>
-                {item.block || 'Loading'}
+                {item?.description || 'Loading'}
               </Text>
               <View style={styles.classifiedAmenitiesContainer}>
                 <View style={props.classifiedAmenities}>
@@ -157,7 +157,7 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bedRoom || '2'}
+                    {item?.bed || '0'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
@@ -168,12 +168,12 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bedRoom || '3'}
+                    {item?.bath || '0'}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bedRoom || '4'} Marla
+                    {item?.size || 'N/A'} {item?.size_unit || 'N/A'}
                   </Text>
                 </View>
               </View>

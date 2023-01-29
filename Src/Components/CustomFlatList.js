@@ -30,43 +30,79 @@ export default function CustomFlatList(props) {
   }
   return (
     <View>
-      <FlatList
-        contentContainerStyle={props.flatListStyle}
-        horizontal={props.horizontal}
-        numColumns={props.numColumns}
-        showsHorizontalScrollIndicator={false}
-        data={props.data}
-        keyExtractor={item => item.id}
-        ListEmptyComponent={<EmptyComponent emptyContainer={{height: hp(5)}} />}
-        ref={r => (props.data.length > 0 ? (flatListRef.current = r) : null)}
-        onScrollToIndexFailed={info => {
-          nextIndex = 0;
-          const wait = new Promise(resolve => setTimeout(resolve, 500));
-          wait.then(() => {
-            scrollToIndex(0, true);
-          });
-        }}
-        renderItem={({item, index}) => (
-          <Pressable key={index} onPress={item => props.onPress(item)}>
-            <View style={props.featureCard}>
-              <Image
-                source={
-                  item?.file
-                    ? {uri: URL.imageURL + item.file.file}
-                    : require('../Assets/Images/feature1.jpg')
-                }
-                style={props.featureImageStyle}
-                resizeMode="contain"
-              />
-              <Text style={props.featureNameText} numberOfLines={3}>
-                {props?.news
-                  ? `${item.description}`
-                  : `${item?.agency_name} working with ${item.developer_name}`}
-              </Text>
-            </View>
-          </Pressable>
-        )}
-      />
+      {props.animation ? (
+        <FlatList
+          contentContainerStyle={props.flatListStyle}
+          horizontal={props.horizontal}
+          numColumns={props.numColumns}
+          showsHorizontalScrollIndicator={false}
+          data={props.data}
+          keyExtractor={item => item.id}
+          ListEmptyComponent={
+            <EmptyComponent emptyContainer={{height: hp(5)}} />
+          }
+          ref={r => (props.data.length > 0 ? (flatListRef.current = r) : null)}
+          onScrollToIndexFailed={info => {
+            nextIndex = 0;
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              scrollToIndex(0, true);
+            });
+          }}
+          renderItem={({item, index}) => (
+            <Pressable key={index} onPress={item => props.onPress(item)}>
+              <View style={props.featureCard}>
+                <Image
+                  source={
+                    item?.file
+                      ? {uri: URL.imageURL + item.file.file}
+                      : require('../Assets/Images/feature1.jpg')
+                  }
+                  style={props.featureImageStyle}
+                  resizeMode="contain"
+                />
+                <Text style={props.featureNameText} numberOfLines={3}>
+                  {props?.news
+                    ? `${item.description}`
+                    : `${item?.agency_name} working with ${item.developer_name}`}
+                </Text>
+              </View>
+            </Pressable>
+          )}
+        />
+      ) : (
+        <FlatList
+          contentContainerStyle={props.flatListStyle}
+          horizontal={props.horizontal}
+          numColumns={props.numColumns}
+          showsHorizontalScrollIndicator={false}
+          data={props.data}
+          keyExtractor={item => item.id}
+          ListEmptyComponent={
+            <EmptyComponent emptyContainer={{height: hp(5)}} />
+          }
+          renderItem={({item, index}) => (
+            <Pressable key={index} onPress={() => props.onPress(item)}>
+              <View style={props.featureCard}>
+                <Image
+                  source={
+                    item?.file
+                      ? {uri: URL.imageURL + item.file.file}
+                      : require('../Assets/Images/feature1.jpg')
+                  }
+                  style={props.featureImageStyle}
+                  resizeMode="contain"
+                />
+                <Text style={props.featureNameText} numberOfLines={3}>
+                  {props?.news
+                    ? `${item.description}`
+                    : `${item?.agency_name} working with ${item.developer_name}`}
+                </Text>
+              </View>
+            </Pressable>
+          )}
+        />
+      )}
     </View>
   );
 }

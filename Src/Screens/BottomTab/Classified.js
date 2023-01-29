@@ -79,7 +79,7 @@ export default function Classified(props) {
             </ImageBackground>
             <View style={styles.listSubView}>
               <View style={styles.listItemDetailsView}>
-                <Text style={styles.itemDescriptionText}>
+                <Text style={styles.itemDescriptionText} numberOfLines={1}>
                   {item?.category || 'N/A'} for {item?.purpose}
                 </Text>
                 <Text style={styles.itemTypeText}>
@@ -107,7 +107,7 @@ export default function Classified(props) {
                   size={hp(2)}
                 />
                 <Text style={styles.listAddressText}>
-                  Sector C, Tulip Block, Bahria Town, Lahore
+                  {item?.location || 'N/A'}{' '}
                 </Text>
               </View>
               <View style={styles.listBottomIconsView}>
@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     color: colors.black,
     fontSize: hp(2),
+    width:wp(35)
   },
   itemTypeText: {
     fontFamily: fonts.regular,

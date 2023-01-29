@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -20,7 +21,7 @@ import CustomLoader from '../../Components/CustomLoader';
 
 export default function AgencyProfile(props) {
   const {agency} = props.route.params;
-  console.log(props);
+  console.log('-=-=-=',props);
   const [agencyData, setAgencyData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -77,13 +78,17 @@ export default function AgencyProfile(props) {
               </Text>
             </View>
             <View style={styles.topTextView}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => Linking.openURL(`tel:${agencyData?.team?.number}`)}>
                 <Image
                   source={allImages.call}
                   style={{width: hp(4), height: hp(4)}}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  Linking.openURL(`whatsapp://send?phone=${agencyData?.team?.whatapp_no}`)
+                }>
                 <Image
                   source={allImages.whatsapp}
                   style={{width: hp(4), height: hp(4)}}
@@ -126,8 +131,12 @@ export default function AgencyProfile(props) {
             return (
               <View style={styles.listMainView} key={index}>
                 <Image
-                  source={allImages.tamjeed}
-                  style={styles.teamAgentProfile}
+                  source={
+                          agencyData?.file
+                            ? {uri: URL.imageURL + agencyData?.file?.file}
+                            : allImages.agencydummy
+                        }
+                  style={styles.agencyProfileImage}
                 />
                 <View style={styles.listNameView}>
                   <View style={{justifyContent: 'space-around'}}>
@@ -139,13 +148,19 @@ export default function AgencyProfile(props) {
                     </Text>
                   </View>
                   <View style={styles.topTextView}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => Linking.openURL(`tel:${item?.number}`)}>
                       <Image
                         source={allImages.call}
                         style={{width: hp(7), height: hp(7)}}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          `whatsapp://send?phone=${item?.whatapp_no}`,
+                        )
+                      }>
                       <Image
                         source={allImages.whatsapp}
                         style={{width: hp(7), height: hp(7)}}

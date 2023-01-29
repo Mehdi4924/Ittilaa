@@ -48,6 +48,8 @@ export default function CustomHeader(props) {
             numberOfLine={1}
             placeholder={props.placeholder}
             placeholderTextColor={props.placeholderTextColor}
+            onChangeText={t => props.onChangeText(t)}
+            value={props.value}
           />
         </View>
       ) : null}
