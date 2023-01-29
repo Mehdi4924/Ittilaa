@@ -35,7 +35,7 @@ const requests = {
 export const Auth = {
   registerAgency: data => requests.post('auth/register', data),
   login: data => requests.post('auth/login', data),
-  forgot_Password: data => requests.post('forget-password', data),
+  forgot_Password: data => requests.post('auth/forget-password', data),
 };
 export const AppFlow = {
   dashboard: () => requests.get('dashboard'),
@@ -48,6 +48,7 @@ export const AppFlow = {
   agencyProperties: id => requests.get(`agency/inventory/${id}`),
   createEnventory: data => requests.post('inventory/store', data),
   createClassiffied: data => requests.post('classified/store', data),
+  forgot: data => requests.post('auth/forget-password', data),
   getCitySociety: () => requests.get('inventory/create/data'),
   getNewsDetails: id => requests.get(`news/${id}`),
 };

@@ -6,9 +6,38 @@ import {fonts} from '../../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
 import CustomButton from '../../Components/CustomButton';
+import { Auth } from '../../Api/ApiCalls';
+import Toast from 'react-native-simple-toast'
 
 export default function ForgotPass(props) {
   const [email, setEmail] = useState('');
+  const [indicator, setIndicator] = useState(false);
+
+  const Forgot = () => {
+    if (email == '') {
+      Toast.show('Please enter email', Toast.SHORT);
+    } else {
+      setIndicator(true);
+      var data = new FormData();
+      data.append('email', email);
+      Auth.forgot_Password(data)
+        .then(async function (response) {
+          console.log(response);
+        //   props.navigation.navigate('BottomNavigator');
+        })
+        .catch(function (error) {
+          console.log(error);
+        //   Toast.show(
+        //     error?.response?.data?.message || 'Error Occured Logging In',
+        //     Toast.SHORT,
+        //   );
+        })
+        .finally(function () {
+          setIndicator(false);
+        });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -37,8 +66,8 @@ export default function ForgotPass(props) {
       
       <CustomButton
         btnText="Send"
-        // indicator={indicator}
-        onPress={()=>props.navigation.navigate('OTP')}
+        indicator={indicator}
+        onPress={Forgot}
         btnContainer={{marginTop: hp(20)}}
       />
      <View style={{flexDirection: 'row', marginTop:hp(2)}}>
