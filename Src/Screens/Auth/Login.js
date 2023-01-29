@@ -83,7 +83,7 @@ export default function Login(props) {
           rightIconType="entypo"
           rightIconPress={() => setConfPasswordSecure(!confPasswordSecure)}
         />
-        <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}}>
+        <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}} onPress={()=>props.navigation.navigate('ForgotPass')}>
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>
