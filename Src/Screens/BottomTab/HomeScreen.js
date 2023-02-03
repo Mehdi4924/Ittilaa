@@ -33,16 +33,21 @@ import CustomLoader from '../../Components/CustomLoader';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
+  const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   useFocusEffect(
     React.useCallback(() => {
       getData();
+      GetUser();
     }, []),
   );
   // useEffect(() => {
   //   getData();
   // });
-
+  const GetUser = async () => {
+    let userData = await AsyncStorage.getItem('AuthUser');
+    setUser(JSON.parse(userData));
+  };
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
@@ -69,12 +74,14 @@ export default function HomeScreen(props) {
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
           leftImageStyle={{width: wp(42), height: hp(8)}}
-          rightIconName="account-circle"
+          rightIconName={user ? 'account-circle' : 'login'}
           rightIconType="material"
           rightIconColor={colors.white}
           rightIconSize={35}
           onRighttIconPress={() => {
-            props.navigation.navigate('AppFlow', {screen: 'Profile'});
+            user
+              ? props.navigation.navigate('AppFlow', {screen: 'Profile'})
+              : props.navigation.navigate('AuthStack', {screen: 'Login'});
           }}
           inputViewStyle={styles.inputViewStyle}
           textInputStyle={styles.textInputStyle}
@@ -189,9 +196,10 @@ export default function HomeScreen(props) {
             featureImageStyle={styles.featureImageStyle}
             featureNameText={styles.featureNameText}
             flatListStyle={styles.flatListStyle}
-            onPress={() =>
+            onPress={item =>
               props.navigation.navigate('AppFlow', {
                 screen: 'FeaturedDetails',
+                params: {data: item},
               })
             }
           />
@@ -248,6 +256,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     paddingHorizontal: wp(2),
+    marginTop: hp(1),
   },
   textInputStyle: {
     width: wp(75),
@@ -258,6 +267,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: wp(5),
+    marginTop: hp(1),
   },
   cardStyle: {
     height: wp(25),

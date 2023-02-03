@@ -18,10 +18,10 @@ import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
 import {URL} from '../../Constants/URL';
 import CustomLoader from '../../Components/CustomLoader';
+import Toast from 'react-native-simple-toast';
 
 export default function AgencyProfile(props) {
   const {agency} = props.route.params;
-  console.log('-=-=-=',props);
   const [agencyData, setAgencyData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -41,7 +41,16 @@ export default function AgencyProfile(props) {
         setIsLoading(false);
       });
   }
-  console.log('agency details', agencyData);
+  const handleClickSocial = url => {
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        Toast.show('Cannot Open' + url, Toast.SHORT);
+        console.log("Don't know how to open URI: " + this.props.url);
+      }
+    });
+  };
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={isLoading} />
@@ -79,7 +88,7 @@ export default function AgencyProfile(props) {
             </View>
             <View style={styles.topTextView}>
               <TouchableOpacity
-                onPress={() => Linking.openURL(`tel:${agencyData?.team?.number}`)}>
+                onPress={() => Linking.openURL(`tel:${agencyData?.landline}`)}>
                 <Image
                   source={allImages.call}
                   style={{width: hp(4), height: hp(4)}}
@@ -87,7 +96,9 @@ export default function AgencyProfile(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
-                  Linking.openURL(`whatsapp://send?phone=${agencyData?.team?.whatapp_no}`)
+                  Linking.openURL(
+                    `whatsapp://send?phone=${agencyData?.whatapp_no}`,
+                  )
                 }>
                 <Image
                   source={allImages.whatsapp}
@@ -111,66 +122,130 @@ export default function AgencyProfile(props) {
           <Text style={styles.descDetailsText}>
             {agencyData?.address || 'Loading'}{' '}
           </Text>
-          <Image
+          {/* <Image
             source={allImages.map}
             style={{height: hp(25), width: wp(85), marginVertical: hp(1)}}
-          />
+          /> */}
           <Text style={styles.connectionsText}>Social Connections</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Image source={allImages.call} style={styles.socialIcon} />
-            <Image source={allImages.call} style={styles.socialIcon} />
-            <Image source={allImages.call} style={styles.socialIcon} />
-            <Image source={allImages.call} style={styles.socialIcon} />
-            <Image source={allImages.call} style={styles.socialIcon} />
+          <View
+            style={{
+              flexDirection: 'row',
+              width: wp(55),
+              justifyContent: 'space-between',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                agencyData?.facebook != 'null'
+                  ? handleClickSocial(agencyData?.facebook)
+                  : null;
+              }}>
+              <Icon
+                type="material-community"
+                name="facebook"
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                agencyData?.youtube != 'null'
+                  ? handleClickSocial(agencyData?.youtube)
+                  : null;
+              }}>
+              <Icon
+                type="material-community"
+                name="youtube"
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                agencyData?.instagram != 'null'
+                  ? handleClickSocial(agencyData?.instagram)
+                  : null;
+              }}>
+              <Icon
+                type="material-community"
+                name="instagram"
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                agencyData?.twitter != 'null'
+                  ? handleClickSocial(agencyData?.twitter)
+                  : null;
+              }}>
+              <Icon
+                type="material-community"
+                name="twitter"
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                agencyData?.website != 'null'
+                  ? handleClickSocial(agencyData?.website)
+                  : null;
+              }}>
+              <Icon
+                type="material-community"
+                name="web"
+                color={colors.primary}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.seperator} />
-          <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
-            Team
-          </Text>
-          {[agencyData?.team || {name: 'Loading'}].map((item, index) => {
-            return (
-              <View style={styles.listMainView} key={index}>
-                <Image
-                  source={
-                          agencyData?.file
-                            ? {uri: URL.imageURL + agencyData?.file?.file}
-                            : allImages.agencydummy
-                        }
-                  style={styles.agencyProfileImage}
-                />
-                <View style={styles.listNameView}>
-                  <View style={{justifyContent: 'space-around'}}>
-                    <Text style={styles.agentNameText}>
-                      {item?.name || 'Loading'}
-                    </Text>
-                    <Text style={styles.agentDesgText}>
-                      {item?.role || 'Loading'}
-                    </Text>
+          {agencyData?.team?.length ? (
+            <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
+              Team
+            </Text>
+          ) : null}
+          {agencyData?.team?.length
+            ? agencyData.team?.map((item, index) => {
+                return (
+                  <View style={styles.listMainView} key={index}>
+                    <Image
+                      source={
+                        agencyData?.file
+                          ? {uri: URL.imageURL + agencyData?.file?.file}
+                          : allImages.agencydummy
+                      }
+                      style={styles.agencyProfileImage}
+                    />
+                    <View style={styles.listNameView}>
+                      <View style={{justifyContent: 'space-around'}}>
+                        <Text style={styles.agentNameText}>
+                          {item?.name || 'Loading'}
+                        </Text>
+                        <Text style={styles.agentDesgText}>
+                          {item?.phone || 'Loading'}
+                        </Text>
+                      </View>
+                      <View style={styles.topTextView}>
+                        <TouchableOpacity
+                          onPress={() => Linking.openURL(`tel:${item?.phone}`)}>
+                          <Image
+                            source={allImages.call}
+                            style={{width: hp(7), height: hp(7)}}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            Linking.openURL(
+                              `whatsapp://send?phone=${item?.whatsapp_no}`,
+                            )
+                          }>
+                          <Image
+                            source={allImages.whatsapp}
+                            style={{width: hp(7), height: hp(7)}}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
-                  <View style={styles.topTextView}>
-                    <TouchableOpacity
-                      onPress={() => Linking.openURL(`tel:${item?.number}`)}>
-                      <Image
-                        source={allImages.call}
-                        style={{width: hp(7), height: hp(7)}}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        Linking.openURL(
-                          `whatsapp://send?phone=${item?.whatapp_no}`,
-                        )
-                      }>
-                      <Image
-                        source={allImages.whatsapp}
-                        style={{width: hp(7), height: hp(7)}}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            );
-          })}
+                );
+              })
+            : null}
         </View>
       </ScrollView>
     </View>

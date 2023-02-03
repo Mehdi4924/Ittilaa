@@ -12,6 +12,7 @@ import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
 import {AppFlow} from '../../Api/ApiCalls';
+import {URL} from '../../Constants/URL';
 
 export default function NewsDetails(props) {
   const news = props?.route?.params?.news;

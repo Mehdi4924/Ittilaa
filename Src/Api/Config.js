@@ -1,4 +1,4 @@
 export default Config = {
-  baseURL: 'https://agency.brogrammersteam.com/api/v1/',
+  baseURL: 'https://ittelaapp.com/api/v1/',
   googleMapKey: '',
 };

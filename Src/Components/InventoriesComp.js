@@ -69,8 +69,8 @@ export default function InventoriesComp(props) {
                   <View style={props.profileImgContainer}>
                     <Image
                       source={
-                        item?.file
-                          ? {uri: URL.imageURL + item.file.file}
+                        item?.agency?.file
+                          ? {uri: URL.imageURL + item?.agency?.file?.file}
                           : require('../Assets/Images/agency-dummy.png')
                       }
                       style={props.profileImgStyle}
@@ -126,6 +126,9 @@ export default function InventoriesComp(props) {
           horizontal={props.horizontal}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <EmptyComponent emptyContainer={{height: hp(5)}} />
+          }
           data={props.data}
           keyExtractor={item => item.id}
           renderItem={({item, index}) => (
@@ -137,8 +140,8 @@ export default function InventoriesComp(props) {
                 <View style={props.profileImgContainer}>
                   <Image
                     source={
-                      item?.file
-                        ? {uri: URL.imageURL + item.file.file}
+                      item?.agency?.file
+                        ? {uri: URL.imageURL + item?.agency?.file?.file}
                         : require('../Assets/Images/agency-dummy.png')
                     }
                     style={props.profileImgStyle}
@@ -178,9 +181,9 @@ export default function InventoriesComp(props) {
                   style={{
                     ...styles.text2,
                     marginLeft: wp(2),
-                    maxWidth: wp(45),
+                    maxWidth: wp(38),
                   }}
-                  numberOfLines={1}>
+                  numberOfLines={2}>
                   Plot No. {item?.plot_no} in {item?.block}
                 </Text>
               </View>

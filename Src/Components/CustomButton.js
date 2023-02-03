@@ -14,11 +14,14 @@ export default function CustomButton(props) {
   return (
     <TouchableOpacity
       style={[styles.btnContainer, props.btnContainer]}
+      disabled={props?.disabled || false}
       onPress={props.onPress}>
       {props.indicator ? (
         <ActivityIndicator color={colors.white} size="small" />
       ) : (
-        <Text style={[styles.btnTextStyles, props.btnTextStyles]}>{props.btnText}</Text>
+        <Text style={[styles.btnTextStyles, props.btnTextStyles]}>
+          {props.btnText}
+        </Text>
       )}
     </TouchableOpacity>
   );

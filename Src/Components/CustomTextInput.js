@@ -12,7 +12,6 @@ import {colors} from '../Constants/Colors';
 import {Icon} from '@rneui/themed';
 import DropDownPicker from 'react-native-dropdown-picker';
 export default function CustomTextInput(props) {
-  console.log(props.editable);
   return (
     <View style={[styles.textInputContainer, props.textInputContainer]}>
       <Text style={[styles.inputHeading, props.inputHeading]}>

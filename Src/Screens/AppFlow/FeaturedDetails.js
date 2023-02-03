@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -15,8 +15,35 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import Carousel from 'react-native-snap-carousel';
 import CustomButton from '../../Components/CustomButton';
+import {AppFlow} from '../../Api/ApiCalls';
+import CustomLoader from '../../Components/CustomLoader';
+import {URL} from '../../Constants/URL';
 
 export default function FeaturedDetails(props) {
+  const {data} = props.route.params;
+  const [screenData, setScreenData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    getProjectDetails();
+  }, []);
+  async function getProjectDetails() {
+    AppFlow.getSingleFeatured(data.id)
+      .then(res => {
+        console.log(
+          // JSON.stringify(res.data, null, 2),
+          'respose getting featured details',
+          res,
+        );
+        setScreenData(res?.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(function () {
+        setIsLoading(false);
+      });
+  }
+
   const carouselRef = useRef();
   const _renderItem = ({item, index}) => {
     return (
@@ -27,17 +54,18 @@ export default function FeaturedDetails(props) {
   };
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={isLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.container, {marginBottom: wp(5)}]}>
           <Carousel
             ref={c => {
               carouselRef.current = c;
             }}
-            data={[
-              allImages.homeImage,
-              allImages.homeImage,
-              allImages.homeImage,
-            ]}
+            data={
+              screenData?.data?.file
+                ? [URL.imageURL + screenData?.data?.file?.file]
+                : [allImages.homeImage]
+            }
             renderItem={_renderItem}
             sliderWidth={wp(100)}
             itemWidth={wp(100)}
@@ -67,7 +95,7 @@ export default function FeaturedDetails(props) {
             </TouchableOpacity>
           </View>
           <View style={styles.header}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
               <Icon
                 name={'arrow-back-circle'}
                 type={'ionicon'}
@@ -76,7 +104,8 @@ export default function FeaturedDetails(props) {
               />
             </TouchableOpacity>
             <Text style={styles.headingText}>
-              EliteHomes - Tamjeed Developers
+              {screenData?.data?.title || ''} -{' '}
+              {screenData?.data?.developer_name || ''}
             </Text>
             <View style={styles.societyTextView}>
               <Icon
@@ -86,18 +115,26 @@ export default function FeaturedDetails(props) {
                 size={hp(2)}
                 style={{marginRight: 10}}
               />
-              <Text style={styles.townText}>Bahria Town, Lahore</Text>
+              <Text style={styles.townText}>
+                {screenData?.data?.society.name || ''}
+                {', '}
+                {screenData?.data?.address || ''}
+              </Text>
             </View>
           </View>
           <View style={styles.developersView}>
             <View style={{alignItems: 'center'}}>
-              <Image source={allImages.user} style={styles.userImage} />
-              <Text style={styles.developersText}>Tamjeed Developers</Text>
+              <Image source={allImages.agencydummy} style={styles.userImage} />
+              <Text style={styles.developersText}>
+                {screenData?.data?.title || ''}
+              </Text>
             </View>
             <View style={styles.centeralLine} />
             <View style={{alignItems: 'center'}}>
               <Image source={allImages.user} style={styles.userImage} />
-              <Text style={styles.developersText}>Tamjeed Developers</Text>
+              <Text style={styles.developersText}>
+                {screenData?.data?.developer_name || ''}
+              </Text>
             </View>
           </View>
           <View style={styles.locationTextView}>
@@ -109,12 +146,14 @@ export default function FeaturedDetails(props) {
               style={{marginRight: 10}}
             />
             <Text style={styles.locationText}>
-              Sector C, Tulip Block, Bahria Town, Lahore
+              {screenData?.data?.society.name || ''}
+              {', '}
+              {screenData?.data?.address || ''}
             </Text>
           </View>
           <Text style={styles.plansText}>Plan</Text>
           <FlatList
-            data={['a', 'a', 'a', 'a']}
+            data={screenData?.data?.payment_plan}
             contentContainerStyle={{
               paddingHorizontal: wp(5),
               marginVertical: hp(0.5),
@@ -129,13 +168,13 @@ export default function FeaturedDetails(props) {
                     {backgroundColor: a == 1 ? colors.white : colors.black},
                   ]}
                   onPress={() =>
-                //   console.log('kjdsfjhsafsfjhgs')
                     props.navigation.navigate('AppFlow', {
                       screen: 'PackageDetails',
+                      params: {planId: item},
                     })
                   }>
                   <Image
-                    source={allImages.tamjeed}
+                    source={allImages.agencydummy}
                     style={
                       a == 1
                         ? styles.agencyProfileImage

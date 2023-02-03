@@ -14,9 +14,13 @@ import {useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 import {AppFlow} from '../../Api/ApiCalls';
 
+var dataCopy = [];
+
 export default function Classified(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState();
+
   useFocusEffect(
     React.useCallback(() => {
       getData();
@@ -27,6 +31,8 @@ export default function Classified(props) {
       .then(function (response) {
         console.log('Response data', response);
         setData(response?.data?.data);
+        dataCopy=response?.data?.data
+
       })
       .catch(function (error) {
         console.log('Dashboard Error', error);
@@ -48,6 +54,21 @@ export default function Classified(props) {
         placeholderTextColor={colors.grey}
         screenTitle="Classified"
         screenTitleStyle={styles.screenTitleStyle}
+        onChangeText={t => {
+          if (t.length > 0) {
+            const newData = [...dataCopy];
+            const a = newData.filter(item =>
+              item?.title?.toLowerCase()?.includes(t.toLowerCase()),
+            );
+            setData(a);
+            
+          } else {
+            setData(dataCopy);
+            
+          }
+          setSearch(t);
+        }}
+        value={search}
       />
       <CustomLoader isLoading={false} />
       <FlatList

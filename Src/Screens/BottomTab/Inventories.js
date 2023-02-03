@@ -23,10 +23,12 @@ import moment from 'moment';
 import EmptyComponent from '../../Components/EmptyComponent';
 import CustomLoader from '../../Components/CustomLoader';
 
+var dataCopy = [];
 export default function Inventories(props) {
   const [listData, setListData] = useState([]);
   const [hotData, setHotData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -44,6 +46,7 @@ export default function Inventories(props) {
         );
         setListData(response?.data?.data?.inventory);
         setHotData(response?.data?.data?.hot_inventory);
+        dataCopy =response?.data?.data?.inventory
       })
       .catch(function (error) {
         console.log('Inventories Error', error);
@@ -52,6 +55,7 @@ export default function Inventories(props) {
         setLoading(false);
       });
   };
+  console.log('Copieeeee', dataCopy);
   const headerComponent = () => {
     return (
       <View style={styles.container}>
@@ -64,11 +68,11 @@ export default function Inventories(props) {
           profileImgStyle={styles.profileImgStyle}
           profileImgContainer={styles.profileImgContainer}
           onPress={item =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'InventoryDetails',
-                params: {inventory: item},
-              })
-            }
+            props.navigation.navigate('AppFlow', {
+              screen: 'InventoryDetails',
+              params: {inventory: item},
+            })
+          }
         />
       </View>
     );
@@ -90,6 +94,21 @@ export default function Inventories(props) {
         placeholderTextColor={colors.grey}
         screenTitle="Inventories"
         screenTitleStyle={styles.screenTitleStyle}
+        onChangeText={t => {
+          if (t.length > 0) {
+            const newData = [...dataCopy];
+            const a = newData.filter(item =>
+              item?.purpose?.toLowerCase()?.includes(t.toLowerCase()),
+            );
+            setHotData(a);
+            setListData(a)
+          } else {
+            setHotData(dataCopy);
+            setListData(dataCopy)
+          }
+          setSearch(t);
+        }}
+        value={search}
       />
       <>
         <FlatList
@@ -99,7 +118,10 @@ export default function Inventories(props) {
             <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingLeft: wp(5)}}
+          contentContainerStyle={{
+            paddingHorizontal: wp(2.5),
+            paddingBottom: hp(5),
+          }}
           renderItem={({item, index}) => {
             return (
               <View style={styles.listContainer}>
@@ -121,17 +143,13 @@ export default function Inventories(props) {
                   <Text style={styles.listHeading}>
                     {item?.agency?.ceo_name || 'N/A'}
                   </Text>
-                  <Text style={[styles.listText, {marginTop: hp(1)}]}>
-                    {item?.city?.name || 'N/A'}
-                  </Text>
-                  <Text style={styles.listText}>
-                    {item?.society?.name || 'N/A'}
-                  </Text>
-                  <Text style={styles.listText}>
-                    {item?.size || 'N/A'} {item?.size_unit || 'N/A'}
-                  </Text>
-                  <Text style={styles.listText}>
-                    {item?.description || 'N/A'}
+                  <Text style={[styles.listText, {marginVertical: hp(1)}]}>
+                    Plot {item?.plot_no || ''}, {item?.block || ''}{' '}
+                    {item?.block?.toLowerCase().includes('block')
+                      ? ''
+                      : 'Block'}{' '}
+                    @{item?.price} {item?.price_unit} {item?.feature}{' '}
+                    {item?.size} {item?.size_unit}
                   </Text>
                   <View style={styles.listBtnView}>
                     <Text style={styles.listPersonName}>
@@ -215,6 +233,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     backgroundColor: colors.white,
+    minHeight: hp(15),
     width: wp(95),
     elevation: 5,
     marginVertical: hp(1),

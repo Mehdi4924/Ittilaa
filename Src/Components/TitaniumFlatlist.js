@@ -40,6 +40,7 @@ export default function TitaniumFlatlist(props) {
   }
   return (
     <View style={props.listContainerstyle}>
+    {props.animation?(
       <FlatList
         contentContainerStyle={props.flatListStyle}
         horizontal={props.horizontal}
@@ -75,7 +76,34 @@ export default function TitaniumFlatlist(props) {
             <Text style={props.listTitleStyle}>{item?.name || 'Loading'}</Text>
           </TouchableOpacity>
         )}
-      />
+      />):(
+      <FlatList
+        contentContainerStyle={props.flatListStyle}
+        horizontal={props.horizontal}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        data={props.data}
+        ListEmptyComponent={<EmptyComponent emptyContainer={{height: hp(5)}}/>}
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+            onPress={() => props.onPress(item)}
+            key={index}
+            style={{alignItems: 'center', marginRight: wp(2)}}>
+            <View style={props.cardStyle}>
+              <Image
+                source={
+                  item?.file
+                    ? {uri: URL.imageURL + item.file.file}
+                    : require('../Assets/Images/agency-icon.png')
+                }
+                style={{width: wp(20), height: wp(20), borderRadius: hp(10)}}
+                resizeMode="contain"
+              />
+            </View>
+            <Text style={props.listTitleStyle}>{item?.name || 'Loading'}</Text>
+          </TouchableOpacity>
+        )}
+      />)}
     </View>
   );
 }

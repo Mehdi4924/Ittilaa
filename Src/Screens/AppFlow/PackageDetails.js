@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -15,8 +15,30 @@ import {allImages} from '../../Constants/Images';
 import {fonts} from '../../Constants/Fonts';
 import Carousel from 'react-native-snap-carousel';
 import CustomButton from '../../Components/CustomButton';
+import {AppFlow} from '../../Api/ApiCalls';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function PackageDetails(props) {
+  const {planId} = props.route.params;
+  const [screenData, setScreenData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    getPlan();
+  }, []);
+
+  async function getPlan() {
+    AppFlow.getPaymentPlan(planId?.id || 1)
+      .then(res => {
+        console.log(JSON.stringify(res.data, null, 2), 'respose');
+        setScreenData(res?.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(function () {
+        setIsLoading(false);
+      });
+  }
   const carouselRef = useRef();
   const _renderItem = ({item, index}) => {
     console.log(item);
@@ -28,6 +50,7 @@ export default function PackageDetails(props) {
   };
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={isLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.container, {marginBottom: wp(5)}]}>
           <Carousel

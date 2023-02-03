@@ -15,7 +15,7 @@ import {fonts} from '../../Constants/Fonts';
 import Carousel from 'react-native-snap-carousel';
 import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
-import { URL } from '../../Constants/URL';
+import {URL} from '../../Constants/URL';
 
 export default function ClassifiedDetails(props) {
   const {classified} = props.route.params;
@@ -35,9 +35,10 @@ export default function ClassifiedDetails(props) {
       });
   }
   const _renderItem = ({item, index}) => {
+    const url = URL.imageURL + item.file;
     return (
       <View style={styles.slide}>
-        <Image source={{uri: item}} style={{width: wp(100), height: hp(30)}} />
+        <Image source={{uri: url}} style={{width: wp(100), height: hp(30)}} />
       </View>
     );
   };
@@ -49,7 +50,7 @@ export default function ClassifiedDetails(props) {
             ref={c => {
               carouselRef.current = c;
             }}
-            data={[data?.file?.file ? URL.imageURL + data?.file?.file : allImages.homeImage]}
+            data={data?.file?.length ? data.file : [allImages.homeImage]}
             renderItem={_renderItem}
             sliderWidth={wp(100)}
             itemWidth={wp(100)}
@@ -57,7 +58,7 @@ export default function ClassifiedDetails(props) {
             loop={true}
           />
           <View style={styles.bothChevronsView}>
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => carouselRef.current.snapToPrev()}
               style={styles.chevron}>
               <Icon
@@ -76,10 +77,10 @@ export default function ClassifiedDetails(props) {
                 color={colors.white}
                 size={hp(2)}
               />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
           <View style={styles.header}>
-            <TouchableOpacity onPress={()=>props.navigation.goBack()}>
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
               <Icon
                 name={'arrow-back-circle'}
                 type={'ionicon'}
@@ -89,16 +90,16 @@ export default function ClassifiedDetails(props) {
             </TouchableOpacity>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TouchableOpacity>
-                <Text style={styles.headingText}>Inventory Details</Text>
+                <Text style={styles.headingText}>Classified Details</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.shareIconStyles}>
+              {/* <TouchableOpacity style={styles.shareIconStyles}>
                 <Icon
                   name={'md-share-social'}
                   type={'ionicon'}
                   color={colors.white}
                   size={hp(1.5)}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <Image source={allImages.user} style={styles.userImage} />
           </View>
@@ -110,9 +111,7 @@ export default function ClassifiedDetails(props) {
               size={hp(3)}
             />
           </View>
-          <Text style={styles.locationText}>
-            {data?.address || 'N/A'}
-          </Text>
+          <Text style={styles.locationText}>{data?.address || 'N/A'}</Text>
           <View style={styles.amenitiesMainView}>
             <View style={styles.amenitiesSubView}>
               <Icon
@@ -121,7 +120,9 @@ export default function ClassifiedDetails(props) {
                 color={colors.primary}
                 size={hp(3)}
               />
-              <Text style={styles.amenitiesText}>{data?.size} {data?.size_unit}</Text>
+              <Text style={styles.amenitiesText}>
+                {data?.size} {data?.size_unit}
+              </Text>
             </View>
             <View style={styles.seperator}></View>
             <View style={styles.amenitiesSubView}>
@@ -145,10 +146,8 @@ export default function ClassifiedDetails(props) {
             </View>
           </View>
           <Text style={styles.descText}>Description</Text>
-          <Text style={styles.descDetailsText}>
-            {data?.description}
-          </Text>
-          <Text style={styles.descText}>Location</Text>
+          <Text style={styles.descDetailsText}>{data?.description}</Text>
+          {/* <Text style={styles.descText}>Location</Text>
           <TouchableOpacity>
             <Image
               source={allImages.map}
@@ -163,11 +162,9 @@ export default function ClassifiedDetails(props) {
                 style={styles.mapFab}
               />
             </View>
-          </TouchableOpacity>
-          
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
-      
     </View>
   );
 }

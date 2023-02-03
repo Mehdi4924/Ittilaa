@@ -1,5 +1,11 @@
-import React from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon} from '@rneui/themed';
 import {allImages} from '../Constants/Images';
@@ -10,15 +16,18 @@ import HomeScreen from '../Screens/BottomTab/HomeScreen';
 import Inventories from '../Screens/BottomTab/Inventories';
 import {colors} from '../Constants/Colors';
 import Maps from '../Screens/BottomTab/Maps';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavigator() {
+  const navigation = useNavigation();
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {backgroundColor: colors.primary},
+        tabBarStyle: {backgroundColor: colors.primary, paddingBottom: 5},
       }}>
       <Tab.Screen
         name="HomeScreen"
@@ -54,18 +63,34 @@ export default function BottomNavigator() {
       <Tab.Screen
         name="AddInventoriesClassified"
         component={AddInventoriesClassified}
+        listeners={{
+          tabPress: async e => {
+            e.preventDefault();
+          },
+        }}
         options={{
           tabBarLabel: '',
           tabBarLabelStyle: {color: colors.white},
           tabBarIcon: p => (
-            <View style={styles.bottomButton}>
+            <Pressable
+              style={styles.bottomButton}
+              onPress={async () => {
+                let userData = await AsyncStorage.getItem('AuthUser');
+                const user = JSON.parse(userData);
+                console.log(!user);
+                if (!user) {
+                  Toast.show('Please Login First', Toast.SHORT);
+                } else {
+                  navigation.navigate('AddInventoriesClassified');
+                }
+              }}>
               <Icon
                 name={'plus'}
                 type={'font-awesome'}
                 color={colors.primary}
                 size={hp(4)}
               />
-            </View>
+            </Pressable>
           ),
         }}
       />

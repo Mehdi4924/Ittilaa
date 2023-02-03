@@ -60,8 +60,8 @@ export default function TopClassifiedComp(props) {
               onPress={() => props.onPress(item)}>
               <Image
                 source={
-                  item?.file?.file
-                    ? {uri: URL.imageURL + item?.file?.file}
+                  item?.file?.length
+                    ? {uri: URL.imageURL + item?.file[0]?.file}
                     : require('../Assets/Images/classified.jpeg')
                 }
                 style={props.classifiedImageStyle}
@@ -73,7 +73,7 @@ export default function TopClassifiedComp(props) {
                   For Sale
                 </Text>
                 <Text style={props.classifiedPriceText}>
-                  {item?.price || 'Loading'} {item?.size_unit || 'Loading'}
+                  Rs/.{item?.price || 'Loading'}
                 </Text>
               </View>
               <View></View>
@@ -121,6 +121,9 @@ export default function TopClassifiedComp(props) {
           data={props.data}
           numColumns={props.numColumns}
           keyExtractor={item => item.id}
+          ListEmptyComponent={
+            <EmptyComponent emptyContainer={{height: hp(5)}} />
+          }
           renderItem={({item, index}) => (
             <Pressable
               key={index}
@@ -128,8 +131,8 @@ export default function TopClassifiedComp(props) {
               onPress={() => props.onPress(item)}>
               <Image
                 source={
-                  item?.file?.file
-                    ? {uri: URL.imageURL + item?.file?.file}
+                  item?.file?.length
+                    ? {uri: URL.imageURL + item?.file[0]?.file}
                     : require('../Assets/Images/classified.jpeg')
                 }
                 style={props.classifiedImageStyle}
@@ -141,7 +144,7 @@ export default function TopClassifiedComp(props) {
                   For Sale
                 </Text>
                 <Text style={props.classifiedPriceText}>
-                  {item?.price || 'Loading'} {item?.size_unit || 'Loading'}
+                  Rs/. {item?.price || 'Loading'}
                 </Text>
               </View>
               <View></View>

@@ -6,8 +6,8 @@ import {fonts} from '../../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
 import CustomButton from '../../Components/CustomButton';
-import { Auth } from '../../Api/ApiCalls';
-import Toast from 'react-native-simple-toast'
+import {Auth} from '../../Api/ApiCalls';
+import Toast from 'react-native-simple-toast';
 
 export default function ForgotPass(props) {
   const [email, setEmail] = useState('');
@@ -23,14 +23,16 @@ export default function ForgotPass(props) {
       Auth.forgot_Password(data)
         .then(async function (response) {
           console.log(response);
-        //   props.navigation.navigate('BottomNavigator');
+          props.navigation.navigate('OTP', {
+            email: email,
+          });
         })
         .catch(function (error) {
           console.log(error);
-        //   Toast.show(
-        //     error?.response?.data?.message || 'Error Occured Logging In',
-        //     Toast.SHORT,
-        //   );
+          Toast.show(
+            error?.response?.data?.message || 'Error Occured Sending Reset OTP',
+            Toast.SHORT,
+          );
         })
         .finally(function () {
           setIndicator(false);
@@ -63,17 +65,18 @@ export default function ForgotPass(props) {
         iconSize={hp(3.5)}
         keyboardType="email-address"
       />
-      
+
       <CustomButton
         btnText="Send"
         indicator={indicator}
         onPress={Forgot}
+        // onPress={()=>props.navigation.navigate('OTP')}
         btnContainer={{marginTop: hp(20)}}
       />
-     <View style={{flexDirection: 'row', marginTop:hp(2)}}>
+      <View style={{flexDirection: 'row', marginTop: hp(2)}}>
         <Text style={styles.text1}>Back to </Text>
-        <TouchableOpacity onPress={()=>props.navigation.navigate('Login')}>
-        <Text style={{...styles.text1, color:colors.primary}}>Login</Text>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Login')}>
+          <Text style={{...styles.text1, color: colors.primary}}>Login</Text>
         </TouchableOpacity>
       </View>
     </View>

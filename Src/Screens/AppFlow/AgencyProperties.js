@@ -64,7 +64,9 @@ export default function AgencyProperties(props) {
         contentContainerStyle={{paddingBottom: hp(10)}}
         data={inventData}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={EmptyComponent}
+        ListEmptyComponent={
+          <EmptyComponent emptyContainer={{height: hp(60)}} />
+        }
         renderItem={({item, index}) => {
           return (
             <View style={styles.listContainer} key={index}>

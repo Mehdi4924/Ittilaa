@@ -5,17 +5,41 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import CustomHeader from '../../Components/CustomHeader';
 import {fonts} from '../../Constants/Fonts';
 import {Featured} from '../../Constants/dummyData';
 import CustomFlatList from '../../Components/CustomFlatList';
+import {AppFlow} from '../../Api/ApiCalls';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function TopClassified(props) {
+  const [loading, setLoading] = useState(true);
+  const [screenData, setScreenData] = useState([]);
+  useEffect(() => {
+    getFeatured();
+  }, []);
+  async function getFeatured() {
+    AppFlow.getAllFeatured()
+      .then(res => {
+        console.log(
+          'success getting featured products',
+          JSON.stringify(res.data, null, 2),
+        );
+        setScreenData(res.data.data);
+      })
+      .catch(err => {
+        console.log('err getting featured products', err);
+      })
+      .finally(function () {
+        setLoading(false);
+      });
+  }
   return (
     <View style={styles.mainContainer}>
+      <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -35,13 +59,18 @@ export default function TopClassified(props) {
         <Text style={styles.titleText}>Featured Projects</Text>
       </View>
       <CustomFlatList
-        data={Featured}
+        data={screenData}
         numColumns={3}
         featureCard={styles.featureCard}
         featureImageStyle={styles.featureImageStyle}
         featureNameText={styles.featureNameText}
         flatListStyle={styles.flatListStyle}
-        onPress={() => null}
+        onPress={item =>
+              props.navigation.navigate('AppFlow', {
+                screen: 'FeaturedDetails',
+                params: {data: item},
+              })
+            }
       />
     </View>
   );

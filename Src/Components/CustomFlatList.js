@@ -96,7 +96,7 @@ export default function CustomFlatList(props) {
                 <Text style={props.featureNameText} numberOfLines={3}>
                   {props?.news
                     ? `${item.description}`
-                    : `${item?.agency_name} working with ${item.developer_name}`}
+                    : `${item?.title} working with ${item.developer_name}`}
                 </Text>
               </View>
             </Pressable>

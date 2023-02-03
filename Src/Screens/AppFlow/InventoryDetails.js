@@ -1,6 +1,7 @@
 import {
   Image,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -41,7 +42,32 @@ export default function InventoryDetails(props) {
         setLoading(false);
       });
   };
-
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${inventoryData?.agency?.name || ''} is having ${
+          inventoryData?.type || ''
+        } ${inventoryData?.category || ''} For ${
+          inventoryData?.purpose || ''
+        } at ${inventoryData?.block || ''}, in ${
+          inventoryData?.society?.name || ''
+        }, ${inventoryData?.city?.name || ''} at ${inventoryData?.price || ''}${
+          inventoryData?.price_unit || ''
+        }.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={loading} />
@@ -57,13 +83,15 @@ export default function InventoryDetails(props) {
               />
             </TouchableOpacity>
             <Text style={styles.headingText}>Inventory Details</Text>
-            <Icon
-              name={'md-share-social'}
-              reverse
-              type={'ionicon'}
-              color={colors.primary}
-              size={hp(2)}
-            />
+            <TouchableOpacity onPress={() => onShare()}>
+              <Icon
+                name={'md-share-social'}
+                reverse
+                type={'ionicon'}
+                color={colors.primary}
+                size={hp(2)}
+              />
+            </TouchableOpacity>
           </View>
           <Image
             source={
@@ -85,7 +113,7 @@ export default function InventoryDetails(props) {
                 {inventoryData?.block || 'Loading'}
               </Text>
               <Text style={styles.priceText}>
-                RS. {inventoryData?.price || 'Loading'}
+                {inventoryData?.price || 'Loading'}
                 {''}
                 {inventoryData?.price_unit}
               </Text>
@@ -101,7 +129,8 @@ export default function InventoryDetails(props) {
             </Text>
             <Text style={styles.textHighlited}>
               {' '}
-              {inventoryData?.type} {inventoryData?.category} For Sale{' '}
+              {inventoryData?.type} {inventoryData?.category} For{' '}
+              {inventoryData?.purpose || ''}{' '}
             </Text>
             <View style={styles.locationTextView}>
               <Icon
@@ -158,7 +187,7 @@ export default function InventoryDetails(props) {
             />
             <Text style={styles.normalText}>Agency Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomIconView}>
+          {/* <TouchableOpacity style={styles.bottomIconView}>
             <Icon
               name={'heart-outline' || 'heart-sharp'}
               type={'ionicon'}
@@ -167,7 +196,7 @@ export default function InventoryDetails(props) {
               style={{marginRight: wp(3)}}
             />
             <Text style={styles.normalText}>Add to favourite</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </View>

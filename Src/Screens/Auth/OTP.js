@@ -12,17 +12,39 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-const CELL_COUNT = 4;
+import Toast from 'react-native-simple-toast';
+import {Auth} from '../../Api/ApiCalls';
+const CELL_COUNT = 5;
 
 export default function OTP(props) {
-  const [email, setEmail] = useState('');
+  const {data, email} = props.route.params;
   const [value, setValue] = useState('');
-  const [codevalue, setcodevalue] = useState('');
+  const [loader, setLoader] = useState(false);
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [propss, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
+  async function confrimOTP() {
+    if (value != '') {
+      setLoader(true);
+      const form = new FormData();
+      form.append('email', email);
+      form.append('otp', value);
+      Auth.confirm_OTP(form)
+        .then(res => {
+          props.navigation.navigate('ResetPass', {email: email});
+        })
+        .catch(err => {
+          Toast.show('OTP Not Verified', Toast.SHORT);
+        })
+        .finally(function () {
+          setLoader(false);
+        });
+    } else {
+      Toast.show('Invalid OTP', Toast.SHORT);
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -54,16 +76,16 @@ export default function OTP(props) {
           </Text>
         )}
       />
-      <View style={{flexDirection: 'row', marginTop:hp(2)}}>
+      <View style={{flexDirection: 'row', marginTop: hp(2)}}>
         <Text style={styles.text1}>Have not received a OTP? </Text>
         <TouchableOpacity>
-        <Text style={{...styles.text1, color:colors.primary}}>Resend</Text>
+          <Text style={{...styles.text1, color: colors.primary}}>Resend</Text>
         </TouchableOpacity>
       </View>
       <CustomButton
         btnText="Submit"
-        // indicator={indicator}
-        onPress={() => props.navigation.navigate('ResetPass')}
+        indicator={loader}
+        onPress={() => confrimOTP()}
         btnContainer={{marginTop: hp(20)}}
       />
     </View>
@@ -88,13 +110,13 @@ const styles = StyleSheet.create({
     color: colors.grey,
     fontSize: 14,
   },
-  codeFieldRoot: { borderRadius: 30, marginTop:hp(4)},
+  codeFieldRoot: {borderRadius: 30, marginTop: hp(4)},
 
   cell: {
     width: wp(14),
     height: hp(7),
     lineHeight: hp(8),
-    fontFamily:fonts.bold,
+    fontFamily: fonts.bold,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: colors.primary,
