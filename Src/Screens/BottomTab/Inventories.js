@@ -41,12 +41,12 @@ export default function Inventories(props) {
       .then(function (response) {
         console.log(
           'Response data',
-          // JSON.stringify(response, null, 2),
-          response,
+          JSON.stringify(response.data, null, 2),
+          // response,
         );
         setListData(response?.data?.data?.inventory);
         setHotData(response?.data?.data?.hot_inventory);
-        dataCopy =response?.data?.data?.inventory
+        dataCopy = response?.data?.data?.inventory;
       })
       .catch(function (error) {
         console.log('Inventories Error', error);
@@ -101,10 +101,10 @@ export default function Inventories(props) {
               item?.purpose?.toLowerCase()?.includes(t.toLowerCase()),
             );
             setHotData(a);
-            setListData(a)
+            setListData(a);
           } else {
             setHotData(dataCopy);
-            setListData(dataCopy)
+            setListData(dataCopy);
           }
           setSearch(t);
         }}
@@ -136,15 +136,16 @@ export default function Inventories(props) {
                     resizeMode="contain"
                   />
                   <Text style={styles.listImageText}>
-                    {item?.agency?.name || 'N/A'}
+                    {item?.agency?.ceo_name || 'N/A'}
                   </Text>
                 </View>
                 <View style={styles.listRightView}>
                   <Text style={styles.listHeading}>
-                    {item?.agency?.ceo_name || 'N/A'}
+                    {item?.agency?.name || 'N/A'}
                   </Text>
                   <Text style={[styles.listText, {marginVertical: hp(1)}]}>
-                    Plot {item?.plot_no || ''}, {item?.block || ''}{' '}
+                    {item?.category || ''} {item?.plot_no || ''},{' '}
+                    {item?.block || ''}{' '}
                     {item?.block?.toLowerCase().includes('block')
                       ? ''
                       : 'Block'}{' '}

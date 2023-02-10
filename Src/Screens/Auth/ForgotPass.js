@@ -51,7 +51,7 @@ export default function ForgotPass(props) {
             size={hp(5)}
           />
         </TouchableOpacity>
-        <Text style={styles.headingText}>Inventory Details</Text>
+        <Text style={styles.headingText}>Forgot Password</Text>
         <View style={{width: hp(5)}}></View>
       </View>
       <CustomTextInput

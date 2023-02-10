@@ -28,8 +28,8 @@ export default function TopInventories(props) {
       .then(function (response) {
         console.log(
           'Response data',
-          // JSON.stringify(response.data, null, 2),
-          response,
+          JSON.stringify(response.data, null, 2),
+          // response,
         );
         setData(response?.data?.data?.inventory);
         dataCopy=response?.data?.data?.inventory;

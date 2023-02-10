@@ -159,7 +159,7 @@ export default function InventoriesComp(props) {
               </View>
               <View style={styles.detailsContainer}>
                 <Text style={styles.text2}>
-                  Plot Number {item?.plot_no} is available {'\n'} in{' '}
+                  {item?.category} {item?.plot_no} is available {'\n'} in{' '}
                   {item?.block}, {item?.society?.name}, {item?.city?.name}{' '}
                   {'\n'} at {item?.price}
                   {item?.price_unit} Rupees
@@ -168,7 +168,7 @@ export default function InventoriesComp(props) {
               <View style={styles.locationMain}>
                 <View style={styles.locationContainer}>
                   <Text style={styles.locationText}>
-                    {item?.type || ''} for {item?.purpose || ''}
+                    {item?.category} for {item?.purpose || ''}
                   </Text>
                   <Icon
                     type="material"
@@ -181,10 +181,10 @@ export default function InventoriesComp(props) {
                   style={{
                     ...styles.text2,
                     marginLeft: wp(2),
-                    maxWidth: wp(38),
+                    width: wp(55),
                   }}
-                  numberOfLines={2}>
-                  Plot No. {item?.plot_no} in {item?.block}
+                  numberOfLines={1}>
+                  {item?.category} {item?.plot_no} in {item?.block}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   locationMain: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginHorizontal: wp(4),
     marginTop: hp(2),
   },

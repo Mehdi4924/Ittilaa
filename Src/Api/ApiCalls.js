@@ -34,6 +34,7 @@ const requests = {
 };
 export const Auth = {
   registerAgency: data => requests.post('auth/register', data),
+  editAgencyData: data => requests.post('update-profile', data),
   login: data => requests.post('auth/login', data),
   forgot_Password: data => requests.post('auth/forget-password', data),
   confirm_OTP: data => requests.post('auth/otp-confirm', data),

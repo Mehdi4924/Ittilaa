@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(5),
     borderRadius: 5,
     borderWidth: 1,
+    backgroundColor:colors.tertiary
   },
   inputHeading: {
     fontFamily: fonts.bold,

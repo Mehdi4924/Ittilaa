@@ -30,7 +30,7 @@ export default function UpdateProfile(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
   const [dataToSend, setDataToSend] = useState({});
   const [indicator, setIndicator] = useState(false);
-  const [logoUri, setLogoUri] = useState('');
+  const [logoUri, setLogoUri] = useState({uri: ''});
   const [logoFileName, setLogoFileName] = useState('');
 
   const getAgencyDetail = async () => {
@@ -38,10 +38,16 @@ export default function UpdateProfile(props) {
     const b = JSON.parse(a);
     AppFlow.getAgencyDetail(data?.id)
       .then(function (response) {
-        console.log('Response getting inventory details', response);
-        console.log(JSON.stringify({...response.data.data, ...b}, null, 2));
-        setDataToSend({...response.data.data, ...b});
-        setLogoFileName(response?.data?.data?.file);
+        console.log(
+          'Response getting inventory details',
+          JSON.stringify(response, null, 2),
+        );
+        setDataToSend({
+          ...b,
+          ...response.data.data,
+          agency_name: response?.data?.data?.name,
+        });
+        setLogoFileName(response?.data?.data?.file?.file || null);
       })
       .catch(function (error) {
         console.log('Error getting inventory details', error);
@@ -74,64 +80,138 @@ export default function UpdateProfile(props) {
     });
   };
   const Register = () => {
-    if (dataToSend.agencyName == null) {
+    if (dataToSend?.agencyName == '') {
       Toast.show('Please Enter agency name', Toast.SHORT);
-    } else if (dataToSend.userName == null) {
+    } else if (dataToSend?.userName == '') {
       Toast.show('Please Enter your name', Toast.SHORT);
-    } else if (dataToSend.phone == null) {
+    } else if (dataToSend?.phone == '') {
       Toast.show('Please Enter phone number', Toast.SHORT);
-    } else if (dataToSend.society == null) {
+    } else if (dataToSend?.society == '') {
       Toast.show('Please select society', Toast.SHORT);
-    } else if (dataToSend.password == null) {
+    } else if (dataToSend?.password == '') {
       Toast.show('Please Enter [assword]', Toast.SHORT);
-    } else if (dataToSend.confPassword == null) {
+    } else if (dataToSend?.confPassword == '') {
       Toast.show('Please confirm password', Toast.SHORT);
-    } else if (dataToSend.password != dataToSend.confPassword) {
+    } else if (dataToSend?.password != dataToSend?.confPassword) {
       Toast.show('Passwords dont match', Toast.SHORT);
-    } else if (dataToSend.email == null) {
+    } else if (dataToSend?.email == '') {
       Toast.show('Please Enter Email', Toast.SHORT);
-    } else if (logoFileName == null) {
+    } else if (logoFileName == '') {
       Toast.show('Please select Logo', Toast.SHORT);
     } else {
       setIndicator(true);
       var data = new FormData();
-      data.append('agency_name', dataToSend?.agencyName);
-      data?.append('name', dataToSend?.userName);
-      data?.append('designation', dataToSend?.designation || null);
+      data.append('agency_name', dataToSend?.agency_name);
+      data?.append('name', dataToSend?.name);
+      data?.append('designation', dataToSend?.designation || '');
       data?.append('phone', dataToSend?.phone);
       data?.append('society', dataToSend?.society);
-      data?.append('address', dataToSend?.address || null);
-      data?.append('ceo_name', dataToSend?.ceoName || null);
-      data?.append('ceo_mobile1', dataToSend?.ceoNum1 || null);
-      data?.append('ceo_mobile2', dataToSend?.ceoNum2 || null);
-      data?.append('landline', dataToSend?.landline || null);
-      data?.append('whatapp_no', dataToSend?.whatsapp || null);
-      data?.append('email', dataToSend?.email || null);
-      data?.append('fax', dataToSend?.fax || null);
-      data?.append('facebook', dataToSend?.facebookLink || null);
-      data?.append('youtube', dataToSend?.youTubeLink || null);
-      data?.append('twitter', dataToSend?.twitterLink || null);
-      data?.append('instagram', dataToSend?.instagramLink || null);
-      data?.append('message', dataToSend?.message || null);
-      data?.append('website', dataToSend?.website || null);
-      data?.append('about', dataToSend?.about || null);
-      data?.append('password', dataToSend?.password);
-
-      data.append('agency_photo[]', {
-        uri: logoUri.uri,
-        name: logoUri.fileName,
-        type: logoUri.type,
-      });
-      Auth.registerAgency(data)
-        .then(function (response) {
-          console.log('Success REgistering', response);
-          props.navigation.navigate('Login');
+      data?.append('address', dataToSend?.address || '');
+      data?.append('ceo_name', dataToSend?.ceo_name || '');
+      data?.append(
+        'ceo_mobile1',
+        dataToSend?.ceo_mobile1 && dataToSend?.ceo_mobile1 != 'null'
+          ? dataToSend.ceo_mobile1
+          : '',
+      );
+      data?.append(
+        'ceo_mobile2',
+        dataToSend?.ceo_mobile2 && dataToSend?.ceo_mobile2 != 'null'
+          ? dataToSend.ceo_mobile2
+          : '',
+      );
+      data?.append(
+        'landline',
+        dataToSend?.landline && dataToSend?.landline != 'null'
+          ? dataToSend.landline
+          : '',
+      );
+      data?.append(
+        'whatapp_no',
+        dataToSend?.whatapp_no && dataToSend?.whatapp_no != 'null'
+          ? dataToSend.whatapp_no
+          : '',
+      );
+      data?.append(
+        'email',
+        dataToSend?.email && dataToSend?.email != 'null'
+          ? dataToSend.email
+          : '',
+      );
+      data?.append(
+        'fax',
+        dataToSend?.fax && dataToSend?.fax != 'null' ? dataToSend.fax : '',
+      );
+      data?.append(
+        'facebook',
+        dataToSend?.facebook && dataToSend?.facebook != 'null'
+          ? dataToSend.facebook
+          : '',
+      );
+      data?.append(
+        'youtube',
+        dataToSend?.youtube && dataToSend?.youtube != 'null'
+          ? dataToSend.youtube
+          : '',
+      );
+      data?.append(
+        'twitter',
+        dataToSend?.twitter && dataToSend?.twitter != 'null'
+          ? dataToSend.twitter
+          : '',
+      );
+      data?.append(
+        'instagram',
+        dataToSend?.instagram && dataToSend?.instagram != 'null'
+          ? dataToSend.instagram
+          : '',
+      );
+      data?.append(
+        'message',
+        dataToSend?.message && dataToSend?.message != 'null'
+          ? dataToSend.message
+          : '',
+      );
+      data?.append(
+        'website',
+        dataToSend?.website && dataToSend?.website != 'null'
+          ? dataToSend.website
+          : '',
+      );
+      data?.append(
+        'about',
+        dataToSend?.about && dataToSend?.about != 'null'
+          ? dataToSend.about
+          : '',
+      );
+      if (logoUri?.uri && logoUri?.uri != '') {
+        console.log(logoUri);
+        const typeOfImage = logoUri?.uri?.split('.');
+        data.append('agency_photo[]', {
+          uri: logoUri?.uri,
+          name: new Date().toISOString(),
+          type: 'image/' + typeOfImage[typeOfImage.length - 1],
+        });
+      }
+      Auth.editAgencyData(data)
+        .then(async function (response) {
+          console.log(
+            'Success updating',
+            // JSON.stringify(response.data, null, 2),
+            response,
+          );
+          const data = {
+            ...response?.data?.data,
+            ...response?.data?.data?.agency,
+          };
+          await AsyncStorage.setItem('AuthUser', JSON.stringify(data));
+          props.navigation.navigate('BottomNavigator');
         })
         .catch(function (error) {
           console.log(
             'error registering agency',
-            // JSON.stringify(error, null, 2),
-            error,
+            JSON.stringify(error, null, 2),
+            // error,
           );
           Toast.show(
             error?.response?.data?.message || 'Error Occured Creating',
@@ -143,7 +223,7 @@ export default function UpdateProfile(props) {
         });
     }
   };
-  console.log(JSON.stringify(dataToSend, null, 2));
+  console.log(JSON.stringify('fiel nae', typeof logoFileName, null, 2));
 
   return (
     <View style={styles.container}>
@@ -201,10 +281,14 @@ export default function UpdateProfile(props) {
                 iconType="material-community"
                 topText="Agency Name"
                 placeholder="Enter Agency Name"
-                value={dataToSend.name || ''}
+                value={
+                  dataToSend?.agency_name != 'null'
+                    ? dataToSend.agency_name
+                    : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
-                    return {...prev, name: t};
+                    return {...prev, agency_name: t};
                   })
                 }
                 textInputContainer={{marginVertical: hp(2)}}
@@ -215,7 +299,11 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Designation"
                 placeholder="Enter Designation"
-                value={dataToSend.designation || ''}
+                value={
+                  dataToSend?.designation != 'null'
+                    ? dataToSend.designation
+                    : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, designation: t};
@@ -229,7 +317,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Phone"
                 placeholder="Enter Phone"
-                value={dataToSend.phone || ''}
+                value={dataToSend?.phone != 'null' ? dataToSend.phone : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, phone: t};
@@ -246,7 +334,7 @@ export default function UpdateProfile(props) {
                 iconType="entypo"
                 topText="Address"
                 placeholder="Enter Address"
-                value={dataToSend.address || ''}
+                value={dataToSend?.address != 'null' ? dataToSend.address : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, address: t};
@@ -263,7 +351,9 @@ export default function UpdateProfile(props) {
                 iconType="material-community"
                 topText="CEO Name"
                 placeholder="Enter CEO Name"
-                value={dataToSend.ceo_name || ''}
+                value={
+                  dataToSend?.ceo_name != 'null' ? dataToSend.ceo_name : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, ceo_name: t};
@@ -277,7 +367,11 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="CEO Mobile #1"
                 placeholder="Enter CEO Mobile #1"
-                value={dataToSend.ceo_mobile1 || ''}
+                value={
+                  dataToSend?.ceo_mobile1 != 'null'
+                    ? dataToSend.ceo_mobile1
+                    : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, ceo_mobile1: t};
@@ -292,7 +386,11 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="CEO Mobile #2"
                 placeholder="Enter CEO Mobile #2"
-                value={dataToSend.ceo_mobile2 || ''}
+                value={
+                  dataToSend?.ceo_mobile2 != 'null'
+                    ? dataToSend.ceo_mobile2
+                    : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, ceo_mobile2: t};
@@ -307,7 +405,9 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Landline"
                 placeholder="Enter landline"
-                value={dataToSend.landline || ''}
+                value={
+                  dataToSend?.landline != 'null' ? dataToSend.landline : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, landline: t};
@@ -322,7 +422,9 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Whatsapp"
                 placeholder="Enter Whatsapp"
-                value={dataToSend.whatapp_no || ''}
+                value={
+                  dataToSend?.whatapp_no != 'null' ? dataToSend.whatapp_no : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, whatapp_no: t};
@@ -337,7 +439,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome-5"
                 topText="Email"
                 placeholder="Enter Email"
-                value={dataToSend.email || ''}
+                value={dataToSend?.email != 'null' ? dataToSend.email : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, email: t};
@@ -353,7 +455,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Fax"
                 placeholder="Enter Fax"
-                value={dataToSend.fax || ''}
+                value={dataToSend?.fax != 'null' ? dataToSend.fax : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, fax: t};
@@ -371,7 +473,9 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Facebook"
                 placeholder="Enter Facebook"
-                value={dataToSend.facebook || ''}
+                value={
+                  dataToSend?.facebook != 'null' ? dataToSend.facebook : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, facebook: t};
@@ -385,7 +489,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="YouTube"
                 placeholder="Enter YouTube"
-                value={dataToSend.youtube || ''}
+                value={dataToSend?.youtube != 'null' ? dataToSend.youtube : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, youtube: t};
@@ -399,7 +503,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Twitter"
                 placeholder="Enter Twitter"
-                value={dataToSend.twitter || ''}
+                value={dataToSend?.twitter != 'null' ? dataToSend.twitter : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, twitter: t};
@@ -413,7 +517,9 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="Instagram"
                 placeholder="Enter Instagram"
-                value={dataToSend.instagram || ''}
+                value={
+                  dataToSend?.instagram != 'null' ? dataToSend.instagram : ''
+                }
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, instagram: t};
@@ -428,7 +534,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome-5"
                 topText="Message"
                 placeholder="Enter Message"
-                value={dataToSend.message || ''}
+                value={dataToSend?.message != 'null' ? dataToSend.message : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, message: t};
@@ -447,7 +553,7 @@ export default function UpdateProfile(props) {
                 iconType="material-community"
                 topText="Website"
                 placeholder="Enter Website"
-                value={dataToSend.website || ''}
+                value={dataToSend?.website != 'null' ? dataToSend.website : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, website: t};
@@ -461,7 +567,7 @@ export default function UpdateProfile(props) {
                 iconType="font-awesome"
                 topText="About"
                 placeholder="Enter About"
-                value={dataToSend.about || ''}
+                value={dataToSend?.about != 'null' ? dataToSend.about : ''}
                 onChangeText={t =>
                   setDataToSend(prev => {
                     return {...prev, about: t};
@@ -478,7 +584,7 @@ export default function UpdateProfile(props) {
                 onPress={() => {
                   openLogoGallery();
                 }}>
-                {logoFileName ? (
+                {logoFileName && logoFileName != '' ? (
                   <Image
                     source={{uri: logoFileName}}
                     style={styles.imageStyle}

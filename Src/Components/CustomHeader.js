@@ -10,6 +10,7 @@ import React from 'react';
 import {Icon} from '@rneui/themed';
 import {wp} from '../Constants/Responsive';
 import {colors} from '../Constants/Colors';
+import {fonts} from '../Constants/Fonts';
 
 export default function CustomHeader(props) {
   return (
@@ -32,12 +33,16 @@ export default function CustomHeader(props) {
         </TouchableOpacity>
         <Text style={props.screenTitleStyle}>{props.screenTitle}</Text>
         <TouchableOpacity onPress={props.onRighttIconPress}>
-          <Icon
-            name={props.rightIconName}
-            type={props.rightIconType}
-            color={props.rightIconColor}
-            size={props.rightIconSize}
-          />
+          {!props.loginText ? (
+            <Icon
+              name={props.rightIconName}
+              type={props.rightIconType}
+              color={props.rightIconColor}
+              size={props.rightIconSize}
+            />
+          ) : (
+            <Text style={styles.loginText}>Login</Text>
+          )}
         </TouchableOpacity>
       </View>
       {!props.search ? (
@@ -63,5 +68,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: wp(5),
+  },
+  loginText: {
+    fontFamily: fonts.semiBold,
+    fontSize: 18,
+    color: colors.white,
   },
 });

@@ -124,7 +124,7 @@ export default function AllAgencies(props) {
                     styles.developerName,
                     {color: a == 1 ? colors.black : colors.white},
                   ]}>
-                  Atif Developers{' '}
+                  {item?.ceo_name || ''}
                 </Text>
                 <View style={styles.locationView}>
                   <Icon

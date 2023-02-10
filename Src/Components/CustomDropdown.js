@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: hp(7),
-    width: wp(90),
+    width: wp(90),  
     borderColor: colors.black,
     borderWidth: 1,
     borderRadius: 8,

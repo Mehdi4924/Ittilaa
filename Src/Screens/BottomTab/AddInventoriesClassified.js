@@ -56,10 +56,7 @@ export default function AddInventoriesClassified(props) {
   const [block, setBlock] = useState('');
   const [price, setPrice] = useState('');
   const [bulk, setBulk] = useState(false);
-  const [PUP, setPUP] = useState(false);
-  const [CP, setCP] = useState(false);
-  const [MB, setMB] = useState(false);
-  const [FP, setFP] = useState(false);
+  const [featuredPaid, setFeaturedPaid] = useState('');
   const [clsBeds, setClsBeds] = useState('');
   const [clsBath, setClsBath] = useState('');
   const [clsFloor, setClsFloor] = useState('');
@@ -267,8 +264,6 @@ export default function AddInventoriesClassified(props) {
       Toast.show('Please Add Inventory Price', Toast.SHORT);
     } else if (!priceLac && !priceCr && !priceTh) {
       Toast.show('Please Add Inventory Price Unit', Toast.SHORT);
-    } else if (!PUP && !MB && !CP && !FP) {
-      Toast.show('Please Select Feature', Toast.SHORT);
     } else {
       setIndicator(true);
       axios.defaults.headers['Content-Type'] = 'application/json';
@@ -286,7 +281,7 @@ export default function AddInventoriesClassified(props) {
           block: inventDataToAdd?.block,
           price: inventDataToAdd?.inventPrice,
           price_unit: priceLac ? 'lac' : priceCr ? 'cr' : 'th',
-          feature: PUP ? 'pup' : MB ? 'mb' : CP ? 'cp' : 'fp',
+          feature: featuredPaid,
         },
       ];
       AppFlow.createEnventory(data)
@@ -569,42 +564,72 @@ export default function AddInventoriesClassified(props) {
                     <View style={{flexDirection: 'row', marginTop: hp(1)}}>
                       <TouchableOpacity
                         style={
-                          PUP
+                          featuredPaid == 'PUP'
                             ? styles.priceTypeActice
                             : styles.priceTypeInactice
                         }
-                        onPress={() => setPUP(!PUP)}>
+                        onPress={() => {
+                          featuredPaid != 'PUP'
+                            ? setFeaturedPaid('PUP')
+                            : setFeaturedPaid('');
+                        }}>
                         <Text style={styles.priceTypeTextStyle}>PUP</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={{
-                          ...(MB
+                          ...(featuredPaid == 'MB'
                             ? styles.priceTypeActice
                             : styles.priceTypeInactice),
                           marginLeft: wp(2),
                         }}
-                        onPress={() => setMB(!MB)}>
+                        onPress={() => {
+                          featuredPaid != 'MB'
+                            ? setFeaturedPaid('MB')
+                            : setFeaturedPaid('');
+                        }}>
                         <Text style={styles.priceTypeTextStyle}>MB</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={{
-                          ...(CP
+                          ...(featuredPaid == 'CP'
                             ? styles.priceTypeActice
                             : styles.priceTypeInactice),
                           marginLeft: wp(2),
                         }}
-                        onPress={() => setCP(!CP)}>
+                        onPress={() =>
+                          featuredPaid != 'CP'
+                            ? setFeaturedPaid('CP')
+                            : setFeaturedPaid('')
+                        }>
                         <Text style={styles.priceTypeTextStyle}>CP</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={{
-                          ...(FP
+                          ...(featuredPaid == 'FP'
                             ? styles.priceTypeActice
                             : styles.priceTypeInactice),
                           marginLeft: wp(2),
                         }}
-                        onPress={() => setFP(!FP)}>
+                        onPress={() =>
+                          featuredPaid != 'FP'
+                            ? setFeaturedPaid('FP')
+                            : setFeaturedPaid('')
+                        }>
                         <Text style={styles.priceTypeTextStyle}>FP</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          ...(featuredPaid == 'Open'
+                            ? styles.priceTypeActice
+                            : styles.priceTypeInactice),
+                          marginLeft: wp(2),
+                        }}
+                        onPress={() =>
+                          featuredPaid != 'Open'
+                            ? setFeaturedPaid('Open')
+                            : setFeaturedPaid('')
+                        }>
+                        <Text style={styles.priceTypeTextStyle}>Open</Text>
                       </TouchableOpacity>
                     </View>
                   </View>

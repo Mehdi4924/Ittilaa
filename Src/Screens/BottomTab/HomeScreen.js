@@ -73,8 +73,9 @@ export default function HomeScreen(props) {
         <CustomHeader
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
-          leftImageStyle={{width: wp(42), height: hp(8)}}
-          rightIconName={user ? 'account-circle' : 'login'}
+          leftImageStyle={{width: wp(36), height: hp(8)}}
+          rightIconName={'account-circle'}
+          loginText={user ? null : true}
           rightIconType="material"
           rightIconColor={colors.white}
           rightIconSize={35}
@@ -89,150 +90,152 @@ export default function HomeScreen(props) {
           placeholderTextColor={colors.grey}
           iconContainer={styles.iconContainer}
         />
+        {isLoading ? null : (
+          <>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Titanium Agency</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AppFlow', {screen: 'AllAgencies'})
+                }>
+                <Text style={styles.viewAllText}>View all</Text>
+              </TouchableOpacity>
+            </View>
 
-        <>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Titanium Agency</Text>
-            <TouchableOpacity
-              onPress={() =>
-                props.navigation.navigate('AppFlow', {screen: 'AllAgencies'})
-              }>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-          <TitaniumFlatlist
-            horizontal={true}
-            data={screenData?.agency?.length ? screenData?.agency : []}
-            // data={[]}
-            cardStyle={styles.cardStyle}
-            listContainerstyle={styles.listContainerstyle}
-            flatListStyle={styles.flatListStyle}
-            listTitleStyle={styles.listTitleStyle}
-            onPress={item =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'AgencyProfile',
-                params: {agency: item},
-              })
-            }
-          />
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Top Inventories</Text>
-            <TouchableOpacity
-              onPress={() =>
+            <TitaniumFlatlist
+              horizontal={true}
+              data={screenData?.agency?.length ? screenData?.agency : []}
+              // data={[]}
+              cardStyle={styles.cardStyle}
+              listContainerstyle={styles.listContainerstyle}
+              flatListStyle={styles.flatListStyle}
+              listTitleStyle={styles.listTitleStyle}
+              onPress={item =>
                 props.navigation.navigate('AppFlow', {
-                  screen: 'TopInventories',
+                  screen: 'AgencyProfile',
+                  params: {agency: item},
                 })
-              }>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-          <InventoriesComp
-            data={screenData?.inventory?.length ? screenData.inventory : []}
-            // data={[]}
-            inventoryCard={styles.inventoryCard}
-            horizontal={true}
-            flatListStyle={styles.flatListStyle}
-            profileImgStyle={styles.profileImgStyle}
-            profileImgContainer={styles.profileImgContainer}
-            animation={false}
-            onPress={item =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'InventoryDetails',
-                params: {inventory: item},
-              })
-            }
-          />
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Top Classified</Text>
-            <TouchableOpacity
-              onPress={() =>
+              }
+            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Top Inventories</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AppFlow', {
+                    screen: 'TopInventories',
+                  })
+                }>
+                <Text style={styles.viewAllText}>View all</Text>
+              </TouchableOpacity>
+            </View>
+            <InventoriesComp
+              data={screenData?.inventory?.length ? screenData.inventory : []}
+              // data={[]}
+              inventoryCard={styles.inventoryCard}
+              horizontal={true}
+              flatListStyle={styles.flatListStyle}
+              profileImgStyle={styles.profileImgStyle}
+              profileImgContainer={styles.profileImgContainer}
+              animation={false}
+              onPress={item =>
                 props.navigation.navigate('AppFlow', {
-                  screen: 'TopClassified',
+                  screen: 'InventoryDetails',
+                  params: {inventory: item},
                 })
-              }>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-          <TopClassifiedComp
-            data={screenData?.classified.length ? screenData.classified : []}
-            // data={[]}
-            horizontal={true}
-            classifiedFlatListStyle={styles.flatListStyle}
-            classifiedCardStyle={styles.classifiedCardStyle}
-            classifiedImageStyle={styles.classifiedImageStyle}
-            classifiedTitlePrice={styles.classifiedTitlePrice}
-            classifiedTitleText={styles.classifiedTitleText}
-            classifiedPriceText={styles.classifiedPriceText}
-            classifiedAddressStyle={styles.classifiedAddressStyle}
-            classifiedAmenities={styles.classifiedAmenities}
-            classifiedAmenitiesText={styles.classifiedAmenitiesText}
-            amenitiesIconSize={10}
-            animation={false}
-            onPress={item =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'ClassifiedDetails',
-                params: {classified: item},
-              })
-            }
-            // onPress={item => props.navigation.navigate('FeaturedDetails')}
-          />
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Featured Projects</Text>
-            <TouchableOpacity
-              onPress={() =>
+              }
+            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Top Classified</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AppFlow', {
+                    screen: 'TopClassified',
+                  })
+                }>
+                <Text style={styles.viewAllText}>View all</Text>
+              </TouchableOpacity>
+            </View>
+            <TopClassifiedComp
+              data={screenData?.classified.length ? screenData.classified : []}
+              // data={[]}
+              horizontal={true}
+              classifiedFlatListStyle={styles.flatListStyle}
+              classifiedCardStyle={styles.classifiedCardStyle}
+              classifiedImageStyle={styles.classifiedImageStyle}
+              classifiedTitlePrice={styles.classifiedTitlePrice}
+              classifiedTitleText={styles.classifiedTitleText}
+              classifiedPriceText={styles.classifiedPriceText}
+              classifiedAddressStyle={styles.classifiedAddressStyle}
+              classifiedAmenities={styles.classifiedAmenities}
+              classifiedAmenitiesText={styles.classifiedAmenitiesText}
+              amenitiesIconSize={10}
+              animation={false}
+              onPress={item =>
                 props.navigation.navigate('AppFlow', {
-                  screen: 'FeaturedProjects',
+                  screen: 'ClassifiedDetails',
+                  params: {classified: item},
                 })
-              }>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-          <CustomFlatList
-            animation={false}
-            data={screenData?.featured?.length ? screenData?.featured : []}
-            // data={[]}
-            horizontal={true}
-            featureCard={styles.featureCard}
-            featureImageStyle={styles.featureImageStyle}
-            featureNameText={styles.featureNameText}
-            flatListStyle={styles.flatListStyle}
-            onPress={item =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'FeaturedDetails',
-                params: {data: item},
-              })
-            }
-          />
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>News</Text>
-            <TouchableOpacity
-              onPress={() =>
+              }
+              // onPress={item => props.navigation.navigate('FeaturedDetails')}
+            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Featured Projects</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AppFlow', {
+                    screen: 'FeaturedProjects',
+                  })
+                }>
+                <Text style={styles.viewAllText}>View all</Text>
+              </TouchableOpacity>
+            </View>
+            <CustomFlatList
+              animation={false}
+              data={screenData?.featured?.length ? screenData?.featured : []}
+              // data={[]}
+              horizontal={true}
+              featureCard={styles.featureCard}
+              featureImageStyle={styles.featureImageStyle}
+              featureNameText={styles.featureNameText}
+              flatListStyle={styles.flatListStyle}
+              onPress={item =>
                 props.navigation.navigate('AppFlow', {
-                  screen: 'News',
-                  params: {data: screenData?.news},
+                  screen: 'FeaturedDetails',
+                  params: {data: item},
                 })
-              }>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-          <CustomFlatList
-            data={screenData?.news?.length ? screenData?.news : []}
-            // data={[]}
-            horizontal={true}
-            featureCard={styles.newsCard}
-            featureImageStyle={styles.newsImageStyle}
-            featureNameText={styles.newsNameText}
-            onPress={item =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'NewsDetails',
-                params: {news: item},
-              })
-            }
-            flatListStyle={styles.flatListStyle}
-            news
-          />
-          <View style={{height: hp(4)}}></View>
-        </>
+              }
+            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>News</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AppFlow', {
+                    screen: 'News',
+                    params: {data: screenData?.news},
+                  })
+                }>
+                <Text style={styles.viewAllText}>View all</Text>
+              </TouchableOpacity>
+            </View>
+            <CustomFlatList
+              data={screenData?.news?.length ? screenData?.news : []}
+              // data={[]}
+              horizontal={true}
+              featureCard={styles.newsCard}
+              featureImageStyle={styles.newsImageStyle}
+              featureNameText={styles.newsNameText}
+              onPress={item =>
+                props.navigation.navigate('AppFlow', {
+                  screen: 'NewsDetails',
+                  params: {news: item},
+                })
+              }
+              flatListStyle={styles.flatListStyle}
+              news
+            />
+            <View style={{height: hp(4)}}></View>
+          </>
+        )}
       </ScrollView>
     </View>
   );
