@@ -21,6 +21,7 @@ import CustomDropdown from '../../Components/CustomDropdown';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function UpdateProfile(props) {
   const {data} = props?.route?.params;
@@ -29,6 +30,8 @@ export default function UpdateProfile(props) {
   }, []);
   const [selectedIndex, setselectedIndex] = useState(0);
   const [dataToSend, setDataToSend] = useState({});
+  const [newTeam, setNewTeam] = useState([]);
+  const [deletedTeam, setDeletedTeam] = useState([]);
   const [indicator, setIndicator] = useState(false);
   const [logoUri, setLogoUri] = useState({uri: ''});
   const [logoFileName, setLogoFileName] = useState('');
@@ -36,7 +39,10 @@ export default function UpdateProfile(props) {
   const getAgencyDetail = async () => {
     const a = await AsyncStorage.getItem('AuthUser');
     const b = JSON.parse(a);
-    AppFlow.getAgencyDetail(data?.id)
+    console.log('====================================');
+    console.log(b?.agency);
+    console.log('====================================');
+    AppFlow.getAgencyDetail(b?.agency.id)
       .then(function (response) {
         console.log(
           'Response getting inventory details',
@@ -193,6 +199,28 @@ export default function UpdateProfile(props) {
           type: 'image/' + typeOfImage[typeOfImage.length - 1],
         });
       }
+      if (newTeam.length > 0) {
+        data.append('team_create', JSON.stringify(newTeam));
+      }
+      if (deletedTeam.length > 0) {
+        data.append('teamDelete[]', JSON.stringify(deletedTeam));
+      }
+      var updatedTeam = [];
+      dataToSend.team.length > 0
+        ? dataToSend.team.map(item => {
+            if (item.updated == true) {
+              updatedTeam.push({
+                name: item.name,
+                phone: item.phone,
+                whatapp_no: item.whatapp_no,
+              });
+            }
+          })
+        : 0;
+      if (updatedTeam.length > 0) {
+        data.append('teamUppdaet', JSON.stringify(updatedTeam));
+      }
+      axios.defaults.headers['Content-Type'] = 'multipart/form-data';
       Auth.editAgencyData(data)
         .then(async function (response) {
           console.log(
@@ -200,11 +228,16 @@ export default function UpdateProfile(props) {
             // JSON.stringify(response.data, null, 2),
             response,
           );
+          const userData = await AsyncStorage.getItem('AuthUser');
+          const parsedData = JSON.parse(userData);
           const data = {
+            ...parsedData,
             ...response?.data?.data,
             ...response?.data?.data?.agency,
           };
+          // console.log('new async user', JSON.stringify(data, null, 2));
           await AsyncStorage.setItem('AuthUser', JSON.stringify(data));
+          Toast.show('Profile Updated Successfully', Toast.SHORT);
           props.navigation.navigate('BottomNavigator');
         })
         .catch(function (error) {
@@ -223,8 +256,6 @@ export default function UpdateProfile(props) {
         });
     }
   };
-  console.log(JSON.stringify('fiel nae', typeof logoFileName, null, 2));
-
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -400,6 +431,213 @@ export default function UpdateProfile(props) {
                 iconSize={hp(3.5)}
                 keyboardType="phone-pad"
               />
+              {dataToSend?.team?.map((item, index) => {
+                const even = index % 2;
+                return (
+                  <View
+                    style={{
+                      backgroundColor:
+                        even == 0 ? colors.white : colors.tertiary,
+                      width: wp(100),
+                      alignItems: 'center',
+                    }}
+                    key={index}>
+                    <CustomTextInput
+                      iconName={'user-plus'}
+                      iconType="font-awesome"
+                      topText={`Member ${index + 1} Name`}
+                      placeholder={`Member ${index + 1} Name`}
+                      value={item?.name || ''}
+                      onChangeText={t => {
+                        const newTeam = {
+                          ...dataToSend,
+                        };
+                        newTeam.team[index].name = t;
+                        newTeam.team[index].updated = true;
+                        setDataToSend(newTeam);
+                      }}
+                      textInputContainer={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                        marginVertical: hp(2),
+                      }}
+                      iconSize={hp(3.5)}
+                      inputHeading={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                      }}
+                    />
+                    <CustomTextInput
+                      iconName={'phone'}
+                      iconType="font-awesome"
+                      topText={`Member ${index + 1} Number`}
+                      placeholder={`Member ${index + 1} Number`}
+                      value={item?.phone || ''}
+                      onChangeText={t => {
+                        const newTeam = {
+                          ...dataToSend,
+                        };
+                        newTeam.team[index].phone = t;
+                        newTeam.team[index].updated = true;
+                        setDataToSend(newTeam);
+                      }}
+                      textInputContainer={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                        marginVertical: hp(2),
+                      }}
+                      iconSize={hp(3.5)}
+                      keyboardType="phone-pad"
+                      inputHeading={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                      }}
+                    />
+                    <CustomTextInput
+                      iconName={'whatsapp'}
+                      iconType="font-awesome"
+                      topText={`Member ${index + 1} whatsapp`}
+                      placeholder={`Member ${index + 1} Whatsapp`}
+                      value={item?.whatsapp_no || ''}
+                      onChangeText={t => {
+                        const newTeam = {
+                          ...dataToSend,
+                        };
+                        newTeam.team[index].whatsapp_no = t;
+                        newTeam.team[index].updated = true;
+                        setDataToSend(newTeam);
+                      }}
+                      textInputContainer={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                        marginVertical: hp(2),
+                      }}
+                      iconSize={hp(3.5)}
+                      keyboardType="phone-pad"
+                      inputHeading={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                      }}
+                    />
+                    <TouchableOpacity
+                      onPress={() => {
+                        setDeletedTeam([
+                          ...deletedTeam,
+                          {id: dataToSend?.team[index].id},
+                        ]);
+                        const newTeam = dataToSend?.team?.filter(
+                          (item, indexFilter) => index != indexFilter,
+                        );
+                        setDataToSend({...dataToSend, team: newTeam});
+                      }}>
+                      <Icon
+                        name={'minus'}
+                        type={'font-awesome'}
+                        color={colors.primary}
+                        size={hp(2)}
+                        reverse
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+              {newTeam.map((item, index) => {
+                const even = index % 2;
+                return (
+                  <View
+                    style={{
+                      backgroundColor:
+                        even == 0 ? colors.white : colors.tertiary,
+                      width: wp(100),
+                      alignItems: 'center',
+                    }}
+                    key={index}>
+                    <CustomTextInput
+                      iconName={'user-plus'}
+                      iconType="font-awesome"
+                      topText={`New Member ${index + 1} Name`}
+                      placeholder={`Member ${index + 1} Name`}
+                      value={newTeam[index].name || ''}
+                      onChangeText={t => {
+                        const copyTeam = [...newTeam];
+                        copyTeam[index].name = t;
+                        setNewTeam(copyTeam);
+                      }}
+                      textInputContainer={{marginVertical: hp(2)}}
+                      iconSize={hp(3.5)}
+                      inputHeading={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                      }}
+                    />
+                    <CustomTextInput
+                      iconName={'phone'}
+                      iconType="font-awesome"
+                      topText={`New Member ${index + 1} Number`}
+                      placeholder={`Member ${index + 1} Number`}
+                      value={newTeam[index].phone || ''}
+                      onChangeText={t => {
+                        const copyTeam = [...newTeam];
+                        copyTeam[index].phone = t;
+                        setNewTeam(copyTeam);
+                      }}
+                      textInputContainer={{marginVertical: hp(2)}}
+                      iconSize={hp(3.5)}
+                      keyboardType="phone-pad"
+                      inputHeading={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                      }}
+                    />
+                    <CustomTextInput
+                      iconName={'whatsapp'}
+                      iconType="font-awesome"
+                      topText={`New Member ${index + 1} whatsapp`}
+                      placeholder={`Member ${index + 1} Whatsapp`}
+                      value={newTeam[index].whatsapp_no || ''}
+                      onChangeText={t => {
+                        const copyTeam = [...newTeam];
+                        copyTeam[index].whatsapp_no = t;
+                        setNewTeam(copyTeam);
+                      }}
+                      textInputContainer={{marginVertical: hp(2)}}
+                      iconSize={hp(3.5)}
+                      keyboardType="phone-pad"
+                      inputHeading={{
+                        backgroundColor:
+                          even == 0 ? colors.white : colors.tertiary,
+                      }}
+                    />
+                    <TouchableOpacity
+                      onPress={() => {
+                        const copyTeam = newTeam.filter(
+                          (item, indexFilter) => index != indexFilter,
+                        );
+                        setNewTeam(copyTeam);
+                      }}>
+                      <Icon
+                        name={'minus'}
+                        type={'font-awesome'}
+                        color={colors.primary}
+                        size={hp(2)}
+                        reverse
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+              <TouchableOpacity
+                onPress={() =>
+                  setNewTeam([...newTeam, {name: '', number: '', whatsapp: ''}])
+                }>
+                <Icon
+                  name={'plus'}
+                  type={'font-awesome'}
+                  color={colors.primary}
+                  size={hp(2)}
+                  reverse
+                />
+              </TouchableOpacity>
               <CustomTextInput
                 iconName={'phone'}
                 iconType="font-awesome"
@@ -584,7 +822,7 @@ export default function UpdateProfile(props) {
                 onPress={() => {
                   openLogoGallery();
                 }}>
-                {logoFileName && logoFileName != '' ? (
+                {(logoFileName && logoFileName != '') || null ? (
                   <Image
                     source={{uri: logoFileName}}
                     style={styles.imageStyle}

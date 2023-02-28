@@ -140,7 +140,7 @@ export default function HomeScreen(props) {
               onPress={item =>
                 props.navigation.navigate('AppFlow', {
                   screen: 'InventoryDetails',
-                  params: {inventory: item},
+                  params: {inventory: item.inventory_data},
                 })
               }
             />
@@ -236,6 +236,7 @@ export default function HomeScreen(props) {
             <View style={{height: hp(4)}}></View>
           </>
         )}
+        <View style={{height: hp(8)}}></View>
       </ScrollView>
     </View>
   );
@@ -312,7 +313,6 @@ const styles = StyleSheet.create({
   },
   inventoryCard: {
     width: wp(75),
-    height: hp(30),
     backgroundColor: colors.white,
     // elevation: 1,
     borderRadius: 14,
@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
     marginRight: wp(8),
     borderWidth: 0.5,
     borderColor: 'rgba(0,0,0,0.08)',
+    paddingBottom: hp(2),
   },
   profileImgStyle: {
     width: wp(12),
@@ -344,6 +345,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp(1),
     borderWidth: 0.5,
     borderColor: 'rgba(0,0,0,0.09)',
+    justifyContent: 'space-between',
   },
 
   classifiedImageStyle: {

@@ -14,6 +14,7 @@ import PackageDetails from '../Screens/AppFlow/PackageDetails';
 import AgencyProperties from '../Screens/AppFlow/AgencyProperties';
 import Profile from '../Screens/AppFlow/Profile';
 import UpdateProfile from '../Screens/AppFlow/UpdateProfile';
+import MyFavourites from '../Screens/AppFlow/MyFavourites';
 
 export default function AppFlow() {
   const MainFlow = createNativeStackNavigator();
@@ -33,6 +34,7 @@ export default function AppFlow() {
       <MainFlow.Screen name="AgencyProperties" component={AgencyProperties} />
       <MainFlow.Screen name="Profile" component={Profile} />
       <MainFlow.Screen name="UpdateProfile" component={UpdateProfile} />
+      <MainFlow.Screen name="MyFavourites" component={MyFavourites} />
     </MainFlow.Navigator>
   );
 }

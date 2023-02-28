@@ -12,7 +12,7 @@ export const configureAxiosHeaders = async () => {
   axios.defaults.headers['Accept'] = 'application/json';
   const userData = await AsyncStorage.getItem('AuthUser');
   const parsedData = JSON.parse(userData);
-  console.log('Async User Data', parsedData);
+  console.log('Async User Data', JSON.stringify(parsedData, null, 2));
   axios.defaults.headers['Authorization'] = 'Bearer '.concat(
     parsedData?.accessToken || '',
   );
@@ -51,12 +51,16 @@ export const AppFlow = {
   agencyProperties: id => requests.get(`agency/inventory/${id}`),
   createEnventory: data => requests.post('inventory/store', data),
   createClassiffied: data => requests.post('classified/store', data),
+  classifiedFilter: data => requests.post('classified/filter', data),
+  inventoryFilter: data => requests.post('inventory/filter', data),
   forgot: data => requests.post('auth/forget-password', data),
   getCitySociety: () => requests.get('inventory/create/data'),
   getNewsDetails: id => requests.get(`news/${id}`),
   getAllFeatured: () => requests.get('featured'),
   getSingleFeatured: id => requests.get(`featured/${id}`),
   getPaymentPlan: id => requests.get(`payment-plan/${id}`),
+  addFavourite: id => requests.get(`inventory/add-favourite/${id}`),
+  getFavourites: () => requests.get(`inventory/get-favourite/list`),
 };
 
 export const GetCities = {

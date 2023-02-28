@@ -17,20 +17,29 @@ import {AppFlow} from '../../Api/ApiCalls';
 import {useFocusEffect} from '@react-navigation/native';
 import {URL} from '../../Constants/URL';
 import CustomLoader from '../../Components/CustomLoader';
+import Toast from 'react-native-simple-toast';
 
 export default function InventoryDetails(props) {
   const {inventory} = props.route.params;
-  console.log('data', inventory);
+  console.log('Inventoryyy', inventory);
   const [inventoryData, setInventoryData] = useState();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [favorite, setFavorite] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
-      Inventories();
+      checkInventory();
     }, []),
   );
-
+  async function checkInventory() {
+    if (inventory.length < 2) {
+      setLoading(true);
+      Inventories();
+    } else {
+      setInventoryData(inventory[0]);
+    }
+  }
   const Inventories = () => {
-    AppFlow.InventoryDetails(inventory?.id)
+    AppFlow.InventoryDetails(inventory[0]?.id)
       .then(function (response) {
         console.log('Response getting inventory details', response);
         setInventoryData(response.data.data);
@@ -41,6 +50,23 @@ export default function InventoryDetails(props) {
       .finally(function () {
         setLoading(false);
       });
+  };
+  const AddFavourite = () => {
+    AppFlow.addFavourite(inventory[0]?.id)
+      .then(function (response) {
+        console.log('Response getting Favourite', response);
+        Toast.show(
+          response?.data?.message || 'Added To Fav Successfully',
+          Toast.SHORT,
+        );
+      })
+      .catch(function (error) {
+        console.log('Error getting Favourite', error);
+        setFavorite(!favorite);
+      });
+    // .finally(function () {
+    //   // setLoading(false);
+    // });
   };
   const onShare = async () => {
     try {
@@ -108,43 +134,63 @@ export default function InventoryDetails(props) {
             By {inventoryData?.agency?.ceo_name}
           </Text>
           <View style={styles.detailsView}>
-            <View style={styles.callAgentView}>
+            {inventory.length < 2 ? (
+              <>
+                <View style={styles.callAgentView}>
+                  <Text style={styles.normalText}>
+                    {inventoryData?.block || 'Loading'}
+                  </Text>
+                  <Text style={styles.priceText}>
+                    {inventoryData?.price || 'Loading'}
+                    {''}
+                    {inventoryData?.price_unit}
+                  </Text>
+                </View>
+                <Text style={styles.normalText}>
+                  {inventoryData?.city?.name || ''}
+                </Text>
+                <Text style={styles.normalText}>
+                  {inventoryData?.size || 'Loading'}{' '}
+                  {inventoryData?.size_unit || ''}
+                </Text>
+                <Text style={styles.normalText}>
+                  {inventoryData?.type} {inventoryData?.category}{' '}
+                  {inventoryData?.plot_no}
+                </Text>
+                <Text style={styles.textHighlited}>
+                  {' '}
+                  {inventoryData?.type} {inventoryData?.category} For{' '}
+                  {inventoryData?.purpose || ''}{' '}
+                </Text>
+
+                <View style={styles.locationTextView}>
+                  <Icon
+                    name={'location'}
+                    type={'ionicon'}
+                    color={colors.primary}
+                    size={hp(3)}
+                    style={{marginRight: wp(2)}}
+                  />
+                  <Text style={styles.normalText}>
+                    {inventoryData?.block}, {inventoryData?.society?.name},{' '}
+                    {inventoryData?.city?.name}
+                  </Text>
+                </View>
+              </>
+            ) : (
               <Text style={styles.normalText}>
-                {inventoryData?.block || 'Loading'}
+                {inventory.map(invent => {
+                  return (
+                    <Text style={styles.text2}>
+                      {invent?.category} {invent?.plot_no} is available in{' '}
+                      {invent?.block}, {invent?.society?.name},{' '}
+                      {invent?.city?.name} at {invent?.price}{' '}
+                      {invent?.price_unit} Rupees{'\n'}
+                    </Text>
+                  );
+                })}
               </Text>
-              <Text style={styles.priceText}>
-                {inventoryData?.price || 'Loading'}
-                {''}
-                {inventoryData?.price_unit}
-              </Text>
-            </View>
-            <Text style={styles.normalText}>Bahria Town</Text>
-            <Text style={styles.normalText}>
-              {inventoryData?.size || 'Loading'}{' '}
-              {inventoryData?.size_unit || ''}
-            </Text>
-            <Text style={styles.normalText}>
-              {inventoryData?.type} {inventoryData?.category}{' '}
-              {inventoryData?.plot_no}
-            </Text>
-            <Text style={styles.textHighlited}>
-              {' '}
-              {inventoryData?.type} {inventoryData?.category} For{' '}
-              {inventoryData?.purpose || ''}{' '}
-            </Text>
-            <View style={styles.locationTextView}>
-              <Icon
-                name={'location'}
-                type={'ionicon'}
-                color={colors.primary}
-                size={hp(3)}
-                style={{marginRight: wp(2)}}
-              />
-              <Text style={styles.normalText}>
-                {inventoryData?.block}, {inventoryData?.society?.name},{' '}
-                {inventoryData?.city?.name}
-              </Text>
-            </View>
+            )}
           </View>
           <TouchableOpacity style={styles.bottomIconView}>
             <Icon
@@ -186,6 +232,20 @@ export default function InventoryDetails(props) {
               style={{marginRight: wp(3)}}
             />
             <Text style={styles.normalText}>Agency Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bottomIconView}
+            onPress={() => {
+              setFavorite(!favorite), AddFavourite();
+            }}>
+            <Icon
+              name={favorite ? 'favorite' : 'favorite-border'}
+              type={'material'}
+              color={colors.primary}
+              size={hp(3)}
+              style={{marginRight: wp(3)}}
+            />
+            <Text style={styles.normalText}>Favorite</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity style={styles.bottomIconView}>
             <Icon

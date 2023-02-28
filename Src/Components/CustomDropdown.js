@@ -29,7 +29,11 @@ const CustomDropdown = props => {
     <View style={[styles.container, props.container]}>
       {renderLabel()}
       <Dropdown
-        style={[props.dropdown?props.dropdown:styles.dropdown, isFocus && {borderColor: colors.primary}]}
+        style={[
+          styles.dropdown,
+          props.dropdown,
+          isFocus && {borderColor: colors.primary},
+        ]}
         placeholderStyle={[styles.placeholderStyle, props.placeholderStyle]}
         selectedTextStyle={[styles.selectedTextStyle, props.selectedTextStyle]}
         inputSearchStyle={[styles.inputSearchStyle, props.inputSearchStyle]}
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: hp(7),
-    width: wp(90),  
+    width: wp(90),
     borderColor: colors.black,
     borderWidth: 1,
     borderRadius: 8,

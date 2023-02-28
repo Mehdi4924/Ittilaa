@@ -27,12 +27,12 @@ export default function TopInventories(props) {
     await AppFlow.allInventories()
       .then(function (response) {
         console.log(
-          'Response data',
+          'Response data getting top',
           JSON.stringify(response.data, null, 2),
           // response,
         );
         setData(response?.data?.data?.inventory);
-        dataCopy=response?.data?.data?.inventory;
+        dataCopy = response?.data?.data?.inventory;
       })
       .catch(function (error) {
         console.log('Dashboard Error', error.response);
@@ -43,7 +43,7 @@ export default function TopInventories(props) {
   }
   return (
     <View style={styles.mainContainer}>
-    <CustomLoader isLoading={loading}/>
+      <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
@@ -69,7 +69,7 @@ export default function TopInventories(props) {
             setData(dataCopy);
           }
           setSearch(t);
-        }}  
+        }}
         value={search}
       />
       <View style={styles.titleContainer}>
@@ -81,10 +81,11 @@ export default function TopInventories(props) {
         flatListStyle={styles.flatListStyle}
         profileImgStyle={styles.profileImgStyle}
         profileImgContainer={styles.profileImgContainer}
+        animation={false}
         onPress={item =>
           props.navigation.navigate('AppFlow', {
             screen: 'InventoryDetails',
-            params: {inventory: item},
+            params: {inventory: item.inventory_data},
           })
         }
       />

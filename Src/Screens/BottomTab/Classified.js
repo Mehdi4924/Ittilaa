@@ -1,4 +1,12 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
@@ -13,6 +21,8 @@ import {URL} from '../../Constants/URL';
 import {useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 import {AppFlow} from '../../Api/ApiCalls';
+import CustomDropdown from '../../Components/CustomDropdown';
+import FilterComp from '../../Components/FilterComp';
 
 var dataCopy = [];
 
@@ -20,6 +30,7 @@ export default function Classified(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -31,8 +42,7 @@ export default function Classified(props) {
       .then(function (response) {
         console.log('Response data', response);
         setData(response?.data?.data);
-        dataCopy=response?.data?.data
-
+        dataCopy = response?.data?.data;
       })
       .catch(function (error) {
         console.log('Dashboard Error', error);
@@ -41,6 +51,34 @@ export default function Classified(props) {
         setLoading(false);
       });
   };
+  function filterArray(filterData) {
+    var data = new FormData();
+    data.append('title', filterData?.title || '');
+    data.append('type', filterData?.type || '');
+    data.append('purpose', filterData?.purpose || '');
+    data.append('category', filterData?.category || '');
+    data.append('bed', filterData?.bed || '');
+    data.append('bath', filterData?.bath || '');
+    data.append('floor', filterData?.floor || '');
+    data.append('min_price', filterData?.low || '0');
+    data.append('max_price', filterData?.high || '');
+    AppFlow.classifiedFilter(data)
+      .then(function (response) {
+        console.log(
+          'responseeee',
+          // JSON.stringify(response?.data?.data, null, 2),
+          JSON.stringify(response, null, 2),
+        );
+        setData(response?.data?.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        setModalVisible(false);
+      });
+  }
+
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={loading} />
@@ -51,6 +89,8 @@ export default function Classified(props) {
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
+        filter={true}
+        onFilterPress={() => setModalVisible(!modalVisible)}
         placeholderTextColor={colors.grey}
         screenTitle="Classified"
         screenTitleStyle={styles.screenTitleStyle}
@@ -61,10 +101,8 @@ export default function Classified(props) {
               item?.title?.toLowerCase()?.includes(t.toLowerCase()),
             );
             setData(a);
-            
           } else {
             setData(dataCopy);
-            
           }
           setSearch(t);
         }}
@@ -160,6 +198,15 @@ export default function Classified(props) {
           </TouchableOpacity>
         )}
       />
+      {console.log('modal chekc', modalVisible)}
+      <FilterComp
+        filterModal={modalVisible}
+        onCloseModal={() => setModalVisible(!modalVisible)}
+        onValueChanged={(low, high) => console.log(low, high)}
+        onSubmit={data => {
+          filterArray(data);
+        }}
+      />
     </View>
   );
 }
@@ -179,9 +226,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(2),
+    width: wp(70),
   },
   textInputStyle: {
-    width: wp(75),
+    width: wp(58),
     fontFamily: fonts.regular,
   },
   iconContainer: {
@@ -230,7 +278,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     color: colors.black,
     fontSize: hp(2),
-    width:wp(35)
+    width: wp(35),
   },
   itemTypeText: {
     fontFamily: fonts.regular,
@@ -277,5 +325,25 @@ const styles = StyleSheet.create({
     width: 2,
     borderRadius: 1,
     backgroundColor: colors.white,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });

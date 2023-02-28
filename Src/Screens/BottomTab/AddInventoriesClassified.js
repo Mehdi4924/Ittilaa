@@ -42,7 +42,6 @@ export default function AddInventoriesClassified(props) {
   const [adType, setAdType] = useState(true);
   const [imageUri, setImageUri] = useState([]);
   const [bulkDetails, setBulkDetails] = useState('');
-  const [fileName, setFileName] = useState('');
   const [socValue, setSocValue] = useState('');
   const [typeValue, setTypeValue] = useState('');
   const [clsTypeValue, setClsTypeValue] = useState();
@@ -90,7 +89,6 @@ export default function AddInventoriesClassified(props) {
         if (response.assets.length > 3) {
           Toast.show('You Can Select Upto 3 Images', Toast.SHORT);
         } else {
-          setFileName(response.assets[0].uri);
           setImageUri(response.assets);
         }
       }
@@ -204,7 +202,7 @@ export default function AddInventoriesClassified(props) {
             break;
           } else {
             const priceData = itemDetails[4].split('@')[1];
-            data.push({
+            const dtaaa = {
               plot_no: itemDetails[0],
               size: itemDetails[1],
               size_unit: itemDetails[2].toLowerCase(),
@@ -218,7 +216,9 @@ export default function AddInventoriesClassified(props) {
               type: typeValue.toLowerCase(),
               purpose: propPurpose.toLowerCase(),
               category: category.toLowerCase(),
-            });
+            };
+            console.log('responseeee', JSON.stringify(dtaaa, null, 2));
+            data.push(dtaaa);
           }
         }
       }
@@ -228,13 +228,14 @@ export default function AddInventoriesClassified(props) {
         .then(function (response) {
           console.log('responseeee', JSON.stringify(response, null, 2));
           Toast.show('Inventory Submited Successfuly', Toast.SHORT);
-          axios.defaults.headers['Content-Type'] = 'multipart/form-data';
           props.navigation.navigate('HomeScreen');
         })
         .catch(function (error) {
+          console.log('responseeee', JSON.stringify(error, null, 2));
           console.log(error);
         })
         .finally(function () {
+          axios.defaults.headers['Content-Type'] = 'multipart/form-data';
           setIndicator(false);
         });
     }
@@ -292,7 +293,8 @@ export default function AddInventoriesClassified(props) {
           props.navigation.navigate('HomeScreen');
         })
         .catch(function (error) {
-          console.log(error);
+          console.log('responseeee', JSON.stringify(error, null, 2));
+          // console.log(error);
         })
         .finally(function () {
           setIndicator(false);
@@ -662,25 +664,43 @@ export default function AddInventoriesClassified(props) {
         ) : (
           <View>
             <View style={styles.photoContainer}>
-              {fileName ? (
-                <ImageBackground
-                  source={{uri: fileName}}
-                  style={{width: wp(85), height: hp(18), borderRadius: 8}}
-                  imageStyle={{borderRadius: 8}}
-                  resizeMode="contain">
-                  <TouchableOpacity
-                    style={styles.delIconContainer}
-                    onPress={() => {
-                      setFileName('');
-                    }}>
-                    <Icon
-                      type="material"
-                      name="delete"
-                      size={25}
-                      color={colors.primary}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
+              {imageUri.length > 0 ? (
+                <View
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: wp(4),
+                  }}>
+                  {imageUri.map((item, index) => {
+                    return (
+                      <ImageBackground
+                        source={{
+                          uri: item.uri,
+                        }}
+                        style={{width: wp(25), height: hp(18), borderRadius: 8}}
+                        imageStyle={{borderRadius: 8}}
+                        resizeMode="contain">
+                        <TouchableOpacity
+                          style={styles.delIconContainer}
+                          onPress={() => {
+                            const imagesCopy = [...imageUri];
+                            imagesCopy.splice(index, 1);
+                            setImageUri(imagesCopy)
+                          }}>
+                          <Icon
+                            type="material"
+                            name="delete"
+                            size={25}
+                            color={colors.primary}
+                          />
+                        </TouchableOpacity>
+                      </ImageBackground>
+                    );
+                  })}
+                </View>
               ) : (
                 <>
                   <TouchableOpacity

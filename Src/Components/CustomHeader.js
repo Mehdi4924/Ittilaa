@@ -1,5 +1,6 @@
 import {
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -8,9 +9,10 @@ import {
 } from 'react-native';
 import React from 'react';
 import {Icon} from '@rneui/themed';
-import {wp} from '../Constants/Responsive';
+import {hp, wp} from '../Constants/Responsive';
 import {colors} from '../Constants/Colors';
 import {fonts} from '../Constants/Fonts';
+import FilterComp from './FilterComp';
 
 export default function CustomHeader(props) {
   return (
@@ -46,16 +48,30 @@ export default function CustomHeader(props) {
         </TouchableOpacity>
       </View>
       {!props.search ? (
-        <View style={props.inputViewStyle}>
-          <Icon name="search" type="material" color={colors.grey} size={30} />
-          <TextInput
-            style={props.textInputStyle}
-            numberOfLine={1}
-            placeholder={props.placeholder}
-            placeholderTextColor={props.placeholderTextColor}
-            onChangeText={t => props.onChangeText(t)}
-            value={props.value}
-          />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={props.inputViewStyle}>
+            <Icon name="search" type="material" color={colors.grey} size={30} />
+            <TextInput
+              style={props.textInputStyle}
+              numberOfLine={1}
+              placeholder={props.placeholder}
+              placeholderTextColor={props.placeholderTextColor}
+              onChangeText={t => props.onChangeText(t)}
+              value={props.value}
+            />
+          </View>
+          {props.filter ? (
+            <TouchableOpacity
+              style={styles.filterContainer}
+              onPress={props.onFilterPress}>
+              <Icon
+                type="material"
+                name="tune"
+                size={25}
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+          ) : null}
         </View>
       ) : null}
     </View>
@@ -73,5 +89,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.semiBold,
     fontSize: 18,
     color: colors.white,
+  },
+  filterContainer: {
+    width: wp(13),
+    height: hp(6.5),
+    borderRadius: hp(1),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    marginTop: hp(2),
   },
 });

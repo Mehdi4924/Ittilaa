@@ -148,10 +148,10 @@ export default function TopClassifiedComp(props) {
                 </Text>
               </View>
               <View></View>
-              <Text style={props.classifiedAddressStyle}>
+              <Text style={props.classifiedAddressStyle} numberOfLines={3}>
                 {item?.description || 'Loading'}
               </Text>
-              <View style={styles.classifiedAmenitiesContainer}>
+              <View style={styles.classifiedAmenitiesContainer} >
                 <View style={props.classifiedAmenities}>
                   <Icon
                     type="font-awesome"
@@ -160,7 +160,7 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bed || '0'}
+                    {item?.bed || ''}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>
@@ -171,7 +171,7 @@ export default function TopClassifiedComp(props) {
                     color={colors.white}
                   />
                   <Text style={props.classifiedAmenitiesText}>
-                    {item?.bath || '0'}
+                    {item?.bath || ''}
                   </Text>
                 </View>
                 <View style={props.classifiedAmenities}>

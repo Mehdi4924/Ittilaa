@@ -22,21 +22,29 @@ import {useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 import EmptyComponent from '../../Components/EmptyComponent';
 import CustomLoader from '../../Components/CustomLoader';
+import FilterComp from '../../Components/FilterComp';
+import InventoriesFilter from '../../Components/InventoriesFilter';
 
 var dataCopy = [];
 export default function Inventories(props) {
   const [listData, setListData] = useState([]);
   const [hotData, setHotData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       Inventories();
+      return () => {
+        setListData([]);
+        setHotData([]);
+      };
     }, []),
   );
 
   const Inventories = () => {
+    setLoading(true);
     AppFlow.allInventories()
       .then(function (response) {
         console.log(
@@ -44,8 +52,13 @@ export default function Inventories(props) {
           JSON.stringify(response.data, null, 2),
           // response,
         );
+        if (response?.data?.data?.hot_inventory.length) {
+          const filteredData = response?.data?.data?.hot_inventory.filter(
+            item => item.inventory_data.length > 0,
+          );
+          setHotData(filteredData);
+        }
         setListData(response?.data?.data?.inventory);
-        setHotData(response?.data?.data?.hot_inventory);
         dataCopy = response?.data?.data?.inventory;
       })
       .catch(function (error) {
@@ -55,7 +68,33 @@ export default function Inventories(props) {
         setLoading(false);
       });
   };
-  console.log('Copieeeee', dataCopy);
+  function filterArray(filterData) {
+    var data = new FormData();
+    data.append('agency_id', filterData?.agency_id || '');
+    data.append('city_id', filterData?.city_id || '');
+    data.append('society_id', filterData?.society_id || '');
+    data.append('type', filterData?.type || '');
+    data.append('purpose', filterData?.purpose || '');
+    data.append('category', filterData?.category || '');
+    data.append('size', filterData?.size || '');
+    data.append('size_unit', filterData?.size_unit || '');
+    data.append('block', filterData?.block || '');
+    data.append('plot_no', filterData?.plot_no || '');
+    data.append('feature', filterData?.feature || '');
+    data.append('hot', filterData?.hot || '');
+    data.append('price_unit', filterData?.price_unit || '');
+    AppFlow.inventoryFilter(data)
+      .then(function (response) {
+        console.log('responseeee filtering data', JSON.stringify(response?.data, null, 2));
+        setListData(response?.data?.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        setModalVisible(false);
+      });
+  }
   const headerComponent = () => {
     return (
       <View style={styles.container}>
@@ -83,14 +122,12 @@ export default function Inventories(props) {
       <CustomHeader
         headerStyle={styles.headerStyle}
         iconContainer={styles.iconContainer}
-        leftIconName="arrow-back"
-        leftIconType="material"
-        leftIconColor={colors.white}
-        leftIconSize={30}
         onLeftIconPress={() => props.navigation.goBack()}
         inputViewStyle={styles.inputViewStyle}
         textInputStyle={styles.textInputStyle}
         placeholder="Search"
+        filter={true}
+        onFilterPress={() => setModalVisible(!modalVisible)}
         placeholderTextColor={colors.grey}
         screenTitle="Inventories"
         screenTitleStyle={styles.screenTitleStyle}
@@ -113,7 +150,7 @@ export default function Inventories(props) {
       <>
         <FlatList
           data={listData}
-          ListHeaderComponent={headerComponent}
+          ListHeaderComponent={hotData.length ? headerComponent : null}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
           }
@@ -121,36 +158,47 @@ export default function Inventories(props) {
           contentContainerStyle={{
             paddingHorizontal: wp(2.5),
             paddingBottom: hp(5),
+            paddingTop: hotData.length ? 0 : hp(3),
           }}
           renderItem={({item, index}) => {
+            const inventories = item.inventory_data;
             return (
               <View style={styles.listContainer}>
                 <View style={styles.listLeftView}>
                   <Image
                     source={
-                      item?.agency?.file?.file
-                        ? {uri: URL.imageURL + item?.agency?.file?.file}
+                      inventories[0]?.agency?.file?.file
+                        ? {
+                            uri:
+                              URL.imageURL + inventories[0]?.agency?.file?.file,
+                          }
                         : allImages.logo1
                     }
                     style={styles.listImage}
                     resizeMode="contain"
                   />
                   <Text style={styles.listImageText}>
-                    {item?.agency?.ceo_name || 'N/A'}
+                    {inventories[0]?.agency?.ceo_name || 'N/A'}
                   </Text>
                 </View>
                 <View style={styles.listRightView}>
                   <Text style={styles.listHeading}>
-                    {item?.agency?.name || 'N/A'}
+                    {inventories[0]?.agency?.name || 'N/A'}
                   </Text>
-                  <Text style={[styles.listText, {marginVertical: hp(1)}]}>
-                    {item?.category || ''} {item?.plot_no || ''},{' '}
-                    {item?.block || ''}{' '}
-                    {item?.block?.toLowerCase().includes('block')
-                      ? ''
-                      : 'Block'}{' '}
-                    @{item?.price} {item?.price_unit} {item?.feature}{' '}
-                    {item?.size} {item?.size_unit}
+                  <Text style={{marginVertical: hp(1)}} numberOfLines={4}>
+                    {inventories.map(val => {
+                      return (
+                        <Text style={styles.listText}>
+                          {val?.category || ''} {val?.plot_no || ''},{' '}
+                          {val?.block || ''}{' '}
+                          {val?.block?.toLowerCase().includes('block')
+                            ? ''
+                            : 'Block'}{' '}
+                          @{val?.price} {val?.price_unit} {val?.feature}{' '}
+                          {val?.size} {val?.size_unit}
+                        </Text>
+                      );
+                    })}
                   </Text>
                   <View style={styles.listBtnView}>
                     <Text style={styles.listPersonName}>
@@ -165,7 +213,7 @@ export default function Inventories(props) {
                         props.navigation.navigate('AppFlow', {
                           screen: 'InventoryDetails',
                           params: {
-                            inventory: item,
+                            inventory: inventories,
                           },
                         })
                       }
@@ -179,6 +227,13 @@ export default function Inventories(props) {
           }}
         />
       </>
+      <InventoriesFilter
+        filterModal={modalVisible}
+        onCloseModal={() => setModalVisible(!modalVisible)}
+        onSubmit={data => {
+          filterArray(data);
+        }}
+      />
     </View>
   );
 }
@@ -204,9 +259,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(2),
+    width: wp(70),
   },
   textInputStyle: {
-    width: wp(75),
+    width: wp(58),
     fontFamily: fonts.regular,
   },
   iconContainer: {

@@ -18,6 +18,9 @@ export default function Profile(props) {
     let userData = await AsyncStorage.getItem('AuthUser');
     setParseUser(JSON.parse(userData));
   };
+  // console.log('====================================');
+  // console.log('Parse User', parseUser);
+  // console.log('====================================');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -73,6 +76,22 @@ export default function Profile(props) {
       <View style={styles.itemContainer}>
         <TouchableOpacity
           onPress={() => {
+            props.navigation.navigate('MyFavourites');
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon
+              name={'favorite'}
+              type={'meterial'}
+              color={colors.primary}
+              size={hp(3)}
+            />
+            <Text style={styles.text}>My Favourites</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{...styles.itemContainer, marginTop:hp(30),}}>
+        <TouchableOpacity
+          onPress={() => {
             AsyncStorage.clear(),
               props.navigation.navigate('AuthStack', {screen: 'Login'});
           }}>
@@ -113,6 +132,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.grey,
     paddingVertical: hp(1),
     marginTop: hp(2),
+    backgroundColor: color.white,
   },
   text: {
     fontFamily: fonts.medium,

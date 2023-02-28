@@ -38,6 +38,9 @@ export default function Login(props) {
             'AuthUser',
             JSON.stringify(response.data.data),
           );
+          axios.defaults.headers['Authorization'] = 'Bearer '.concat(
+            response?.data?.data?.accessToken || '',
+          );
           props.navigation.navigate('BottomNavigator');
         })
         .catch(function (error) {
@@ -83,7 +86,9 @@ export default function Login(props) {
           rightIconType="entypo"
           rightIconPress={() => setConfPasswordSecure(!confPasswordSecure)}
         />
-        <TouchableOpacity style={{width: wp(90), alignItems: 'flex-end'}} onPress={()=>props.navigation.navigate('ForgotPass')}>
+        <TouchableOpacity
+          style={{width: wp(90), alignItems: 'flex-end'}}
+          onPress={() => props.navigation.navigate('ForgotPass')}>
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>

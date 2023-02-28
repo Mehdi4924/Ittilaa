@@ -20,6 +20,7 @@ import Toast from 'react-native-simple-toast';
 import CustomDropdown from '../../Components/CustomDropdown';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
+import axios from 'axios';
 
 export default function RegisterAgency(props) {
   const [selectedIndex, setselectedIndex] = useState(0);
@@ -139,6 +140,7 @@ export default function RegisterAgency(props) {
         name: imageUri.fileName,
         type: imageUri.type,
       });
+      axios.defaults.headers['Content-Type'] = 'multipart/form-data';
       Auth.registerAgency(data)
         .then(function (response) {
           console.log('Success REgistering', response);
