@@ -235,7 +235,11 @@ export default function InventoriesFilter(props) {
                 }}
               />
               <View style={{marginTop: hp(2)}}>
+              <View style={{flexDirection:'row', alignItems:'center'}}>
                 <Text style={styles.rangeText}>Price Range</Text>
+                <Text style={styles.priceText}>{low} - {high}</Text>
+                </View>
+                <Text>{low}</Text>
                 <Slider
                   style={styles.slider}
                   min={0}
@@ -359,4 +363,11 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: hp(3),
   },
+  priceText:{
+    fontFamily:fonts.medium,
+    fontSize:16,
+    color:colors.secondary,
+    marginLeft:wp(4),
+    marginBottom:hp(2.5)
+  }
 });

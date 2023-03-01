@@ -51,6 +51,7 @@ export default function Classified(props) {
         setLoading(false);
       });
   };
+
   function filterArray(filterData) {
     var data = new FormData();
     data.append('title', filterData?.title || '');
@@ -111,92 +112,96 @@ export default function Classified(props) {
       <CustomLoader isLoading={false} />
       <FlatList
         data={data}
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            style={styles.listContainer}
-            onPress={() =>
-              props.navigation.navigate('AppFlow', {
-                screen: 'ClassifiedDetails',
-                params: {
-                  classified: item,
-                },
-              })
-            }>
-            <ImageBackground
-              style={styles.listImage}
-              imageStyle={{
-                borderRadius: 15,
-              }}
-              source={{
-                uri: item?.file?.file
-                  ? URL.imageURL + item.file.file
-                  : allImages.classifiedImages,
-              }}>
-              <Text style={styles.listTimeText}>
-                {item?.created_at ? moment(item?.created_at).fromNow() : 'N/A'}
-              </Text>
-            </ImageBackground>
-            <View style={styles.listSubView}>
-              <View style={styles.listItemDetailsView}>
-                <Text style={styles.itemDescriptionText} numberOfLines={1}>
-                  {item?.category || 'N/A'} for {item?.purpose}
+        renderItem={({item, index}) => {
+          return (
+            <TouchableOpacity
+              style={styles.listContainer}
+              onPress={() =>
+                props.navigation.navigate('AppFlow', {
+                  screen: 'ClassifiedDetails',
+                  params: {
+                    classified: item,
+                  },
+                })
+              }>
+              <ImageBackground
+                style={styles.listImage}
+                imageStyle={{
+                  borderRadius: 15,
+                }}
+                source={{
+                  uri: item?.file[0]?.file
+                    ? URL.imageURL + item.file[0].file
+                    : allImages.classifiedImages,
+                }}>
+                <Text style={styles.listTimeText}>
+                  {item?.created_at
+                    ? moment(item?.created_at).fromNow()
+                    : 'N/A'}
                 </Text>
-                <Text style={styles.itemTypeText}>
-                  {item?.type || 'N/A'} {item?.category || 'N/A'}
-                </Text>
-              </View>
-              <View style={styles.listItemDetailsView}>
-                <Text style={styles.itemDimensionsText}>
-                  {item?.size} {item?.size_unit}
-                </Text>
-                <Icon
-                  name={'expand'}
-                  type={'font-awesome-5'}
-                  color={colors.primary}
-                  size={hp(2)}
-                />
-              </View>
-            </View>
-            <View style={styles.listItemDetailsView2}>
-              <View style={styles.listItemDetailsView}>
-                <Icon
-                  name={'location'}
-                  type={'ionicon'}
-                  color={colors.primary}
-                  size={hp(2)}
-                />
-                <Text style={styles.listAddressText}>
-                  {item?.location || 'N/A'}{' '}
-                </Text>
-              </View>
-              <View style={styles.listBottomIconsView}>
+              </ImageBackground>
+              <View style={styles.listSubView}>
                 <View style={styles.listItemDetailsView}>
+                  <Text style={styles.itemDescriptionText} numberOfLines={1}>
+                    {item?.category || 'N/A'} for {item?.purpose}
+                  </Text>
+                  <Text style={styles.itemTypeText}>
+                    {item?.type || 'N/A'} {item?.category || 'N/A'}
+                  </Text>
+                </View>
+                <View style={styles.listItemDetailsView}>
+                  <Text style={styles.itemDimensionsText}>
+                    {item?.size} {item?.size_unit}
+                  </Text>
                   <Icon
-                    name={'bed-outline'}
-                    type={'ionicon'}
-                    color={colors.white}
+                    name={'expand'}
+                    type={'font-awesome-5'}
+                    color={colors.primary}
                     size={hp(2)}
                   />
-                  <Text style={styles.listBottomIconsText}>
-                    {item?.bath || '0'}
-                  </Text>
-                </View>
-                <View style={styles.listBottomViewDivider}></View>
-                <View style={styles.listItemDetailsView}>
-                  <Icon
-                    name={'shower'}
-                    type={'font-awesome'}
-                    color={colors.white}
-                    size={hp(1.7)}
-                  />
-                  <Text style={styles.listBottomIconsText}>
-                    {item?.bed || '0'}
-                  </Text>
                 </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
+              <View style={styles.listItemDetailsView2}>
+                <View style={styles.listItemDetailsView}>
+                  <Icon
+                    name={'location'}
+                    type={'ionicon'}
+                    color={colors.primary}
+                    size={hp(2)}
+                  />
+                  <Text style={styles.listAddressText}>
+                    {item?.location || 'N/A'}{' '}
+                  </Text>
+                </View>
+                <View style={styles.listBottomIconsView}>
+                  <View style={styles.listItemDetailsView}>
+                    <Icon
+                      name={'bed-outline'}
+                      type={'ionicon'}
+                      color={colors.white}
+                      size={hp(2)}
+                    />
+                    <Text style={styles.listBottomIconsText}>
+                      {item?.bath || '0'}
+                    </Text>
+                  </View>
+                  <View style={styles.listBottomViewDivider}></View>
+                  <View style={styles.listItemDetailsView}>
+                    <Icon
+                      name={'shower'}
+                      type={'font-awesome'}
+                      color={colors.white}
+                      size={hp(1.7)}
+                    />
+                    <Text style={styles.listBottomIconsText}>
+                      {item?.bed || '0'}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
       />
       {console.log('modal chekc', modalVisible)}
       <FilterComp

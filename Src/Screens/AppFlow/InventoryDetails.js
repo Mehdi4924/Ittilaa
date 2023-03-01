@@ -18,11 +18,15 @@ import {useFocusEffect} from '@react-navigation/native';
 import {URL} from '../../Constants/URL';
 import CustomLoader from '../../Components/CustomLoader';
 import Toast from 'react-native-simple-toast';
+import {Linking} from 'react-native';
 
 export default function InventoryDetails(props) {
   const {inventory} = props.route.params;
-  console.log('Inventoryyy', inventory);
   const [inventoryData, setInventoryData] = useState();
+  console.log(
+    'Inventoryyy',
+    JSON.stringify(inventory[0]?.agency?.whatapp_no, null, 2),
+  );
   const [loading, setLoading] = useState(false);
   const [favorite, setFavorite] = useState(false);
   useFocusEffect(
@@ -121,17 +125,17 @@ export default function InventoryDetails(props) {
           </View>
           <Image
             source={
-              inventoryData?.agency?.file?.file
-                ? {uri: URL.imageURL + inventoryData?.agency?.file?.file}
+              inventory[0]?.agency?.file?.file
+                ? {uri: URL.imageURL + inventory[0]?.agency?.file?.file}
                 : allImages.agencydummy
             }
             style={styles.agencyProfileImage}
           />
           <Text style={styles.agencyNameText}>
-            {inventoryData?.agency?.name}
+            {inventory[0]?.agency?.name}
           </Text>
           <Text style={styles.postByText}>
-            By {inventoryData?.agency?.ceo_name}
+            By {inventory[0]?.agency?.ceo_name}
           </Text>
           <View style={styles.detailsView}>
             {inventory.length < 2 ? (
@@ -182,17 +186,27 @@ export default function InventoryDetails(props) {
                 {inventory.map(invent => {
                   return (
                     <Text style={styles.text2}>
-                      {invent?.category} {invent?.plot_no} is available in{' '}
+                      {/* {invent?.category}  */}
+                      {invent?.plot_no}
+                      {/* is available in */}
+                      {', '}
                       {invent?.block}, {invent?.society?.name},{' '}
-                      {invent?.city?.name} at {invent?.price}{' '}
-                      {invent?.price_unit} Rupees{'\n'}
+                      {/* {invent?.city?.name} at  */}
+                      {invent?.price} {invent?.price_unit}
+                      {'\n'}
                     </Text>
                   );
                 })}
               </Text>
             )}
           </View>
-          <TouchableOpacity style={styles.bottomIconView}>
+          <TouchableOpacity
+            style={styles.bottomIconView}
+            onPress={() =>
+              Linking.openURL(
+                `tel:${inventory[0]?.agency?.ceo_mobile1 || '00000000'}`,
+              )
+            }>
             <Icon
               name={'mobile-alt'}
               type={'font-awesome-5'}
@@ -203,11 +217,17 @@ export default function InventoryDetails(props) {
             <View>
               <Text style={styles.normalText}>Call the agent</Text>
               <Text style={styles.phoneNumberText}>
-                {inventoryData?.agency?.landline}
+                {inventory[0]?.agency?.ceo_mobile1}
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomIconView}>
+          <TouchableOpacity
+            style={styles.bottomIconView}
+            onPress={() =>
+              Linking.openURL(
+                `whatsapp://send?text=Hi&phone=${inventory[0]?.agency?.whatapp_no}`,
+              )
+            }>
             <Icon
               name={'whatsapp'}
               type={'font-awesome-5'}

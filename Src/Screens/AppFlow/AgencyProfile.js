@@ -28,6 +28,7 @@ export default function AgencyProfile(props) {
     getAgencyDetails();
   }, []);
   async function getAgencyDetails() {
+    console.log(agency);
     setIsLoading(true);
     AppFlow.getAgencyDetail(agency?.id)
       .then(res => {
@@ -92,7 +93,11 @@ export default function AgencyProfile(props) {
             </View>
             <View style={styles.topTextView}>
               <TouchableOpacity
-                onPress={() => Linking.openURL(`tel:${agencyData?.landline}`)}>
+                onPress={() =>
+                  Linking.openURL(
+                    `tel:${agencyData?.ceo_mobile1 || '00000000'}`,
+                  )
+                }>
                 <Image
                   source={allImages.call}
                   style={{width: hp(4), height: hp(4)}}
@@ -101,7 +106,7 @@ export default function AgencyProfile(props) {
               <TouchableOpacity
                 onPress={() =>
                   Linking.openURL(
-                    `whatsapp://send?phone=${agencyData?.whatapp_no}`,
+                    `whatsapp://send?text=Hi&phone=${agencyData?.whatapp_no}`,
                   )
                 }>
                 <Image

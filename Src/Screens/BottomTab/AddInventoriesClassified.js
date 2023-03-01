@@ -39,7 +39,6 @@ export default function AddInventoriesClassified(props) {
   const [priceLac, setPriceLac] = useState(false);
   const [priceCr, setPriceCr] = useState(false);
   const [priceTh, setPriceTh] = useState(true);
-  const [adType, setAdType] = useState(true);
   const [imageUri, setImageUri] = useState([]);
   const [bulkDetails, setBulkDetails] = useState('');
   const [socValue, setSocValue] = useState('');
@@ -52,8 +51,6 @@ export default function AddInventoriesClassified(props) {
   const [sizeUnit, setSizeUnit] = useState('Marla');
   const [clsPlotSize, setclsPlotSize] = useState('');
   const [city, setCity] = useState('');
-  const [block, setBlock] = useState('');
-  const [price, setPrice] = useState('');
   const [bulk, setBulk] = useState(false);
   const [featuredPaid, setFeaturedPaid] = useState('');
   const [clsBeds, setClsBeds] = useState('');
@@ -157,11 +154,19 @@ export default function AddInventoriesClassified(props) {
   const getCities = async () => {
     setCities([]);
     setSocietyItem([]);
-    await AppFlow.getCitySociety()
+    await AppFlow.getCity()
       .then(res => {
         console.log(res.data);
-        setCities(res?.data?.data?.city);
-        setSocietyItem([...res?.data?.data?.society, {id: -1, name: 'Other'}]);
+        setCities(res?.data?.data);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+  };
+  const getSocieties = async city => {
+    await AppFlow.getSociety(city.id)
+      .then(res => {
+        console.log(res.data);
+        setSocietyItem(res?.data?.data);
       })
       .catch(error => console.log('error', error))
       .finally(() => {});
@@ -352,7 +357,9 @@ export default function AddInventoriesClassified(props) {
                 iconName="place"
                 placeholder={'Select City'}
                 value={city}
-                onChange={item => setCity(item.id)}
+                onChange={item => {
+                  getSocieties(item), setCity(item.id), setSocValue('');
+                }}
               />
               <CustomDropdown
                 data={societyItem}
@@ -688,7 +695,7 @@ export default function AddInventoriesClassified(props) {
                           onPress={() => {
                             const imagesCopy = [...imageUri];
                             imagesCopy.splice(index, 1);
-                            setImageUri(imagesCopy)
+                            setImageUri(imagesCopy);
                           }}>
                           <Icon
                             type="material"

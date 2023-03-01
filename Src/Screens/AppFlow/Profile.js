@@ -6,21 +6,46 @@ import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import {fonts} from '../../Constants/Fonts';
 import {color} from '@rneui/base';
+import {AppFlow} from '../../Api/ApiCalls';
 
 const dummUri =
   'https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic-300x300.jpg';
 export default function Profile(props) {
   const [parseUser, setParseUser] = useState();
   useEffect(() => {
-    navigateToConfirmation();
-  });
-  const navigateToConfirmation = async () => {
-    let userData = await AsyncStorage.getItem('AuthUser');
-    setParseUser(JSON.parse(userData));
+    getAgencyDetail();
+  }, []);
+  const [logoFileName, setLogoFileName] = useState('');
+  const getAgencyDetail = async () => {
+    const a = await AsyncStorage.getItem('AuthUser');
+    const b = JSON.parse(a);
+    AppFlow.getAgencyDetail(b?.agency.id)
+      .then(function (response) {
+        console.log(
+          'Response getting inventory details',
+          JSON.stringify(response, null, 2),
+        );
+        setParseUser({
+          ...b,
+          ...response.data.data,
+          agency_name: response?.data?.data?.name,
+        });
+        if (response?.data?.data?.file?.file) {
+          setLogoFileName(
+            'https://ittelaapp.com/' + response?.data?.data?.file?.file,
+          );
+        }
+      })
+      .catch(function (error) {
+        console.log('Error getting inventory details', error);
+      })
+      .finally(function () {
+        null;
+      });
   };
-  // console.log('====================================');
-  // console.log('Parse User', parseUser);
-  // console.log('====================================');
+  console.log('====================================');
+  console.log('Parse User', JSON.stringify(logoFileName, null, 2));
+  console.log('====================================');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -44,7 +69,7 @@ export default function Profile(props) {
       <View style={{alignItems: 'center'}}>
         <Image
           source={{
-            uri: parseUser?.photo ? parseUser.photo : dummUri,
+            uri: logoFileName != '' ? logoFileName : dummUri,
           }}
           style={styles.imgStyle}
           resizeMode="contain"
@@ -89,11 +114,14 @@ export default function Profile(props) {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={{...styles.itemContainer, marginTop:hp(30),}}>
+      <View style={{...styles.itemContainer, marginTop: hp(30)}}>
         <TouchableOpacity
           onPress={() => {
             AsyncStorage.clear(),
-              props.navigation.navigate('AuthStack', {screen: 'Login'});
+              props.navigation.navigate('AuthStack', {
+                screen: 'Login',
+                params: {data: {...parseUser, agencyImage: logoFileName}},
+              });
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon

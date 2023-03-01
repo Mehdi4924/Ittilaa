@@ -24,44 +24,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 export default function UpdateProfile(props) {
-  const {data} = props?.route?.params;
+  const {data, agencyImage} = props?.route?.params;
   useEffect(() => {
-    getAgencyDetail();
+    // getAgencyDetail();
   }, []);
   const [selectedIndex, setselectedIndex] = useState(0);
-  const [dataToSend, setDataToSend] = useState({});
   const [newTeam, setNewTeam] = useState([]);
   const [deletedTeam, setDeletedTeam] = useState([]);
   const [indicator, setIndicator] = useState(false);
   const [logoUri, setLogoUri] = useState({uri: ''});
-  const [logoFileName, setLogoFileName] = useState('');
-
-  const getAgencyDetail = async () => {
-    const a = await AsyncStorage.getItem('AuthUser');
-    const b = JSON.parse(a);
-    console.log('====================================');
-    console.log(b?.agency);
-    console.log('====================================');
-    AppFlow.getAgencyDetail(b?.agency.id)
-      .then(function (response) {
-        console.log(
-          'Response getting inventory details',
-          JSON.stringify(response, null, 2),
-        );
-        setDataToSend({
-          ...b,
-          ...response.data.data,
-          agency_name: response?.data?.data?.name,
-        });
-        setLogoFileName(response?.data?.data?.file?.file || null);
-      })
-      .catch(function (error) {
-        console.log('Error getting inventory details', error);
-      })
-      .finally(function () {
-        null;
-      });
-  };
+  const [dataToSend, setDataToSend] = useState(data || {});
+  const [logoFileName, setLogoFileName] = useState(
+    data?.file?.file ? 'https://ittelaapp.com/' + data.file.file : '',
+  );
   const openLogoGallery = () => {
     let options = {
       storageOption: {
@@ -822,7 +797,7 @@ export default function UpdateProfile(props) {
                 onPress={() => {
                   openLogoGallery();
                 }}>
-                {(logoFileName && logoFileName != '') || null ? (
+                {logoFileName && logoFileName != '' ? (
                   <Image
                     source={{uri: logoFileName}}
                     style={styles.imageStyle}

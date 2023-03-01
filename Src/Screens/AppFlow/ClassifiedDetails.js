@@ -110,8 +110,11 @@ export default function ClassifiedDetails(props) {
               color={colors.primary}
               size={hp(3)}
             />
+            <Text style={styles.locationText}>{data?.address || 'N/A'}</Text>
           </View>
-          <Text style={styles.locationText}>{data?.address || 'N/A'}</Text>
+          <Text style={styles.locationText}>
+            {data?.type || 'N/A'} {data?.category || 'N/A'} for {data?.purpose}
+          </Text>
           <View style={styles.amenitiesMainView}>
             <View style={styles.amenitiesSubView}>
               <Icon

@@ -227,12 +227,18 @@ export default function InventoriesComp(props) {
                   <Text style={styles.detailsContainer} numberOfLines={5}>
                     {item?.inventory_data.map(invent => {
                       return (
+                       
                         <Text style={styles.text2}>
-                          {invent?.category} {invent?.plot_no} is available in{' '}
-                          {invent?.block}, {invent?.society?.name},{' '}
-                          {invent?.city?.name} at {invent?.price}{' '}
-                          {invent?.price_unit} Rupees{'\n'}
-                        </Text>
+                      {/* {invent?.category}  */}
+                      {invent?.plot_no} 
+                      {/* is available in */}
+                      {', '}
+                      {invent?.block}, {invent?.society?.name},{' '}
+                      {/* {invent?.city?.name} at  */}
+                      {invent?.price}{' '}
+                      {invent?.price_unit} {'\n'}
+                    </Text>
+                       
                       );
                     })}
                   </Text>
