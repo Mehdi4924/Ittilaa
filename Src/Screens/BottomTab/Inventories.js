@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   View,
@@ -32,6 +33,7 @@ export default function Inventories(props) {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterBtnIndicator, setFilterBtnIndicator] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -69,23 +71,27 @@ export default function Inventories(props) {
       });
   };
   function filterArray(filterData) {
+    setFilterBtnIndicator(true);
     var data = new FormData();
     data.append('agency_id', filterData?.agency_id || '');
-    data.append('city_id', filterData?.city_id || '');
-    data.append('society_id', filterData?.society_id || '');
+    data.append('city_id', filterData?.city || '');
+    data.append('society_id', filterData?.society || '');
     data.append('type', filterData?.type || '');
     data.append('purpose', filterData?.purpose || '');
-    data.append('category', filterData?.category || '');
-    data.append('size', filterData?.size || '');
-    data.append('size_unit', filterData?.size_unit || '');
+    data.append('category', filterData?.clsCategory || '');
+    data.append('size', filterData?.plotSize || '');
+    data.append('size_unit', filterData?.sizeUnit || '');
     data.append('block', filterData?.block || '');
-    data.append('plot_no', filterData?.plot_no || '');
+    data.append('plot_no', filterData?.propNo || '');
     data.append('feature', filterData?.feature || '');
     data.append('hot', filterData?.hot || '');
-    data.append('price_unit', filterData?.price_unit || '');
+    data.append('price_unit', filterData?.priceUnit || '');
     AppFlow.inventoryFilter(data)
       .then(function (response) {
-        console.log('responseeee filtering data', JSON.stringify(response?.data, null, 2));
+        console.log(
+          'responseeee filtering data',
+          JSON.stringify(response?.data, null, 2),
+        );
         setListData(response?.data?.data);
       })
       .catch(function (error) {
@@ -93,6 +99,7 @@ export default function Inventories(props) {
       })
       .finally(function () {
         setModalVisible(false);
+        setFilterBtnIndicator(false);
       });
   }
   const headerComponent = () => {
@@ -195,7 +202,7 @@ export default function Inventories(props) {
                             ? ''
                             : 'Block'}{' '}
                           @{val?.price} {val?.price_unit} {val?.feature}{' '}
-                          {val?.size} {val?.size_unit}
+                          {val?.size} {val?.size_unit} {'\n'}
                         </Text>
                       );
                     })}
@@ -233,6 +240,7 @@ export default function Inventories(props) {
         onSubmit={data => {
           filterArray(data);
         }}
+        filterBtnIndicator={filterBtnIndicator}
       />
     </View>
   );

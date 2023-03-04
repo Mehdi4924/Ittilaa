@@ -19,6 +19,7 @@ import {URL} from '../../Constants/URL';
 import CustomLoader from '../../Components/CustomLoader';
 import Toast from 'react-native-simple-toast';
 import {Linking} from 'react-native';
+import Check from '../../Components/Check';
 
 export default function InventoryDetails(props) {
   const {inventory} = props.route.params;
@@ -45,7 +46,11 @@ export default function InventoryDetails(props) {
   const Inventories = () => {
     AppFlow.InventoryDetails(inventory[0]?.id)
       .then(function (response) {
-        console.log('Response getting inventory details', response);
+        console.log(
+          'Response getting inventory details',
+          JSON.stringify(response.data.data, null, 2),
+          // response,
+        );
         setInventoryData(response.data.data);
       })
       .catch(function (error) {
@@ -113,7 +118,7 @@ export default function InventoryDetails(props) {
               />
             </TouchableOpacity>
             <Text style={styles.headingText}>Inventory Details</Text>
-            <TouchableOpacity onPress={() => onShare()}>
+            <Check>
               <Icon
                 name={'md-share-social'}
                 reverse
@@ -121,7 +126,7 @@ export default function InventoryDetails(props) {
                 color={colors.primary}
                 size={hp(2)}
               />
-            </TouchableOpacity>
+            </Check>
           </View>
           <Image
             source={
@@ -221,6 +226,7 @@ export default function InventoryDetails(props) {
               </Text>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.bottomIconView}
             onPress={() =>

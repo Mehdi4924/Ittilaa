@@ -31,11 +31,14 @@ import Toast from 'react-native-simple-toast';
 import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
 import axios from 'axios';
+import {FlatList} from 'react-native';
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
   const [classify, setClassify] = useState(false);
   const [clsTitle, setClsTitle] = useState('');
+  const [location, setLocation] = useState('');
+  const [contactNo, setContactNo] = useState('');
   const [priceLac, setPriceLac] = useState(false);
   const [priceCr, setPriceCr] = useState(false);
   const [priceTh, setPriceTh] = useState(true);
@@ -65,32 +68,6 @@ export default function AddInventoriesClassified(props) {
   const [cities, setCities] = useState([]);
   const [societyItem, setSocietyItem] = useState([]);
 
-  const openGallery = () => {
-    let options = {
-      // storageOption: {
-      //   path: 'images',
-      //   mediaType: 'photo',
-      // },
-      selectionLimit: 3,
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response =', response);
-      if (response.didCancel) {
-        console.log('User Cancelled image picker');
-      } else if (response.error) {
-        console.log('Image picker error', response.error);
-      } else if (response.btnClick) {
-        console.log('User Click button', response.btnClick);
-      } else {
-        console.log('This is URI', response.assets);
-        if (response.assets.length > 3) {
-          Toast.show('You Can Select Upto 3 Images', Toast.SHORT);
-        } else {
-          setImageUri(response.assets);
-        }
-      }
-    });
-  };
   const submitClassified = () => {
     if (typeValue == null) {
       Toast.show('Please select type', Toast.SHORT);
@@ -110,6 +87,10 @@ export default function AddInventoriesClassified(props) {
       Toast.show('Please enter Price', Toast.SHORT);
     } else if (clsDetails == null) {
       Toast.show('Please Enter details', Toast.SHORT);
+    } else if (contactNo == '') {
+      Toast.show('Please Enter Contact Number', Toast.SHORT);
+    } else if (location) {
+      Toast.show('Please Enter Location', Toast.SHORT);
     } else {
       setClsIndicator(true);
       var clsData = new FormData();
@@ -306,6 +287,36 @@ export default function AddInventoriesClassified(props) {
         });
     }
   }
+  const openGallery = addSingle => {
+    let options = {
+      // storageOption: {
+      //   path: 'images',
+      //   mediaType: 'photo',
+      // },
+      selectionLimit: addSingle ? 1 : 3,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response =', response);
+      if (response.didCancel) {
+        console.log('User Cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error', response.error);
+      } else if (response.btnClick) {
+        console.log('User Click button', response.btnClick);
+      } else {
+        if (addSingle) {
+          const imagesCopy = [...imageUri, response.assets[0]];
+          setImageUri(imagesCopy);
+        } else {
+          if (response.assets.length > 3) {
+            Toast.show('You Can Select Upto 3 Images', Toast.SHORT);
+          } else {
+            setImageUri(response.assets);
+          }
+        }
+      }
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <ScrollView
@@ -362,7 +373,7 @@ export default function AddInventoriesClassified(props) {
                 }}
               />
               <CustomDropdown
-                data={societyItem}
+                data={[...societyItem, {name: 'Other', value: -1}]}
                 topLabelText={'Society'}
                 labelFieldName={'name'}
                 valueFieldName={'id'}
@@ -681,32 +692,65 @@ export default function AddInventoriesClassified(props) {
                     justifyContent: 'space-between',
                     paddingHorizontal: wp(4),
                   }}>
-                  {imageUri.map((item, index) => {
-                    return (
-                      <ImageBackground
-                        source={{
-                          uri: item.uri,
-                        }}
-                        style={{width: wp(25), height: hp(18), borderRadius: 8}}
-                        imageStyle={{borderRadius: 8}}
-                        resizeMode="contain">
-                        <TouchableOpacity
-                          style={styles.delIconContainer}
-                          onPress={() => {
-                            const imagesCopy = [...imageUri];
-                            imagesCopy.splice(index, 1);
-                            setImageUri(imagesCopy);
-                          }}>
-                          <Icon
-                            type="material"
-                            name="delete"
-                            size={25}
-                            color={colors.primary}
-                          />
-                        </TouchableOpacity>
-                      </ImageBackground>
-                    );
-                  })}
+                  <FlatList
+                    data={imageUri}
+                    horizontal={true}
+                    contentContainerStyle={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    ListFooterComponent={() => {
+                      if (imageUri.length < 3) {
+                        return (
+                          <TouchableOpacity
+                            style={{alignSelf: 'center'}}
+                            onPress={() => {
+                              openGallery(true);
+                            }}>
+                            <Icon
+                              name="add"
+                              type="material"
+                              reverse
+                              size={15}
+                              color={colors.primary}
+                            />
+                          </TouchableOpacity>
+                        );
+                      } else {
+                        return null;
+                      }
+                    }}
+                    renderItem={({item, index}) => {
+                      return (
+                        <ImageBackground
+                          source={{
+                            uri: item.uri,
+                          }}
+                          style={{
+                            width: wp(25),
+                            height: hp(18),
+                            borderRadius: 8,
+                          }}
+                          imageStyle={{borderRadius: 8}}
+                          resizeMode="contain">
+                          <TouchableOpacity
+                            style={styles.delIconContainer}
+                            onPress={() => {
+                              const imagesCopy = [...imageUri];
+                              imagesCopy.splice(index, 1);
+                              setImageUri(imagesCopy);
+                            }}>
+                            <Icon
+                              type="material"
+                              name="delete"
+                              size={25}
+                              color={colors.primary}
+                            />
+                          </TouchableOpacity>
+                        </ImageBackground>
+                      );
+                    }}
+                  />
                 </View>
               ) : (
                 <>
@@ -749,6 +793,34 @@ export default function AddInventoriesClassified(props) {
               placeholder="Enter plot title"
               value={clsTitle}
               onChangeText={item => setClsTitle(item)}
+            />
+            <CustomTextInput
+              textInputContainer={{
+                marginTop: hp(4),
+                height: hp(7),
+                borderRadius: 8,
+              }}
+              topText="Location"
+              iconType="material"
+              iconName="location-pin"
+              iconSize={26}
+              placeholder="Enter Location"
+              value={location}
+              onChangeText={item => setLocation(item)}
+            />
+            <CustomTextInput
+              textInputContainer={{
+                marginTop: hp(4),
+                height: hp(7),
+                borderRadius: 8,
+              }}
+              topText="Contact"
+              iconType="material"
+              iconName="phone"
+              iconSize={26}
+              placeholder="Enter Contact Number"
+              value={contactNo}
+              onChangeText={item => setContactNo(item)}
             />
             <CustomDropdown
               container={{marginTop: hp(4)}}

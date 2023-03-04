@@ -191,7 +191,7 @@ export default function FilterComp(props) {
                       value={filterItems?.clsBath || ''}
                       onChangeText={t =>
                         setFilterItems(previous => {
-                          return {...previous, clsBeds: t};
+                          return {...previous, clsBath: t};
                         })
                       }
                       textInputContainer={{
@@ -221,12 +221,17 @@ export default function FilterComp(props) {
                 ) : null}
               </View>
               <View style={{marginTop: hp(2)}}>
-                <Text style={styles.rangeText}>Price Range</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={styles.rangeText}>Price Range</Text>
+                  <Text style={styles.priceText}>
+                    {low} - {high}
+                  </Text>
+                </View>
                 <Slider
                   style={styles.slider}
                   min={0}
-                  max={1000000}
-                  step={10}
+                  max={10000000000}
+                  step={1000}
                   floatingLabel
                   renderThumb={renderThumb}
                   renderRail={renderRail}
@@ -244,7 +249,6 @@ export default function FilterComp(props) {
                     marginTop: hp(3),
                   }}
                   btnText="Submit"
-                  indicator={false}
                   onPress={() => {
                     props.onSubmit({
                       ...filterItems,
@@ -252,6 +256,7 @@ export default function FilterComp(props) {
                       high: high,
                     });
                   }}
+                  indicator={props?.filterBtnIndicator}
                   disabled={false}
                 />
               </View>
@@ -322,5 +327,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: colors.white,
     marginBottom: hp(3),
+  },
+  priceText: {
+    fontFamily: fonts.medium,
+    fontSize: 16,
+    color: colors.secondary,
+    marginLeft: wp(4),
+    marginBottom: hp(2.5),
   },
 });

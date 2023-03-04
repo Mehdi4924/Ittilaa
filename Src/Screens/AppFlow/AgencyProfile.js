@@ -40,19 +40,27 @@ export default function AgencyProfile(props) {
         setAgencyData(res?.data?.data);
       })
       .catch(err => {
-        console.log('error getting agency details', err);
+        console.log(
+          'error getting agency details',
+          JSON.stringify(err, null, 2),
+        );
       })
       .finally(() => {
         setIsLoading(false);
       });
   }
   const handleClickSocial = url => {
-    Linking.canOpenURL(url).then(supported => {
+    const check = url.includes('https://');
+    Linking.canOpenURL(check ? url : `https://${url}`).then(supported => {
       if (supported) {
-        Linking.openURL(url);
+        if (check) {
+          Linking.openURL(url);
+        } else {
+          Linking.openURL('https://' + url);
+        }
       } else {
         Toast.show('Cannot Open' + url, Toast.SHORT);
-        console.log("Don't know how to open URI: " + this.props.url);
+        console.log("Don't know how to open URI: " + url);
       }
     });
   };
@@ -219,7 +227,7 @@ export default function AgencyProfile(props) {
                           ? {uri: URL.imageURL + agencyData?.file?.file}
                           : allImages.agencydummy
                       }
-                      style={styles.agencyProfileImage}
+                      style={styles.agencyTeamImage}
                     />
                     <View style={styles.listNameView}>
                       <View style={{justifyContent: 'space-around'}}>
@@ -230,12 +238,12 @@ export default function AgencyProfile(props) {
                           {item?.phone || 'Loading'}
                         </Text>
                       </View>
-                      <View style={styles.topTextView}>
+                      <View style={styles.teamContIcons}>
                         <TouchableOpacity
                           onPress={() => Linking.openURL(`tel:${item?.phone}`)}>
                           <Image
                             source={allImages.call}
-                            style={{width: hp(7), height: hp(7)}}
+                            style={{width: hp(6), height: hp(6)}}
                           />
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -246,7 +254,7 @@ export default function AgencyProfile(props) {
                           }>
                           <Image
                             source={allImages.whatsapp}
-                            style={{width: hp(7), height: hp(7)}}
+                            style={{width: hp(6), height: hp(6)}}
                           />
                         </TouchableOpacity>
                       </View>
@@ -291,9 +299,22 @@ const styles = StyleSheet.create({
     right: wp(5),
     bottom: hp(1),
   },
+  teamContIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   agencyProfileImage: {
     width: hp(10),
     height: hp(10),
+    backgroundColor: colors.white,
+    borderRadius: hp(7),
+    borderWidth: 1,
+    borderColor: colors.black,
+  },
+  agencyTeamImage: {
+    width: hp(8),
+    height: hp(8),
     backgroundColor: colors.white,
     borderRadius: hp(7),
     borderWidth: 1,
@@ -351,6 +372,7 @@ const styles = StyleSheet.create({
     width: wp(90),
     flexDirection: 'row',
     marginVertical: hp(1),
+    alignItems: 'center',
   },
   listNameView: {
     width: wp(75),
@@ -359,6 +381,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(2),
     borderBottomWidth: 0.8,
     borderBottomColor: colors.grey,
+    justifyContent: 'space-between',
   },
   agentNameText: {
     fontFamily: fonts.bold,

@@ -30,6 +30,7 @@ import {AppFlow} from '../../Api/ApiCalls';
 import TopClassified from '../AppFlow/TopClassified';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomLoader from '../../Components/CustomLoader';
+import AutoScrollFlatList from '../../Components/AutoScroll';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
@@ -128,6 +129,7 @@ export default function HomeScreen(props) {
                 <Text style={styles.viewAllText}>View all</Text>
               </TouchableOpacity>
             </View>
+            {/* <AutoScrollFlatList/> */}
             <InventoriesComp
               data={screenData?.inventory?.length ? screenData.inventory : []}
               // data={[]}

@@ -26,6 +26,7 @@ import RailSelected from './RangeSliderComponents/RailSelected';
 import Label from './RangeSliderComponents/Label';
 import Notch from './RangeSliderComponents/Notch';
 import CustomButton from './CustomButton';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export default function InventoriesFilter(props) {
   console.log(props, 'filter modal');
@@ -52,11 +53,19 @@ export default function InventoriesFilter(props) {
   const getCities = async () => {
     setCities([]);
     setSocietyItem([]);
-    await AppFlow.getCitySociety()
+    await AppFlow.getCity()
       .then(res => {
         console.log(res.data);
-        setCities(res?.data?.data?.city);
-        setSocietyItem([...res?.data?.data?.society, {id: -1, name: 'Other'}]);
+        setCities(res?.data?.data);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+  };
+  const getSocieties = async city => {
+    await AppFlow.getSociety(city.id)
+      .then(res => {
+        console.log(res.data);
+        setSocietyItem(res?.data?.data);
       })
       .catch(error => console.log('error', error))
       .finally(() => {});
@@ -90,9 +99,10 @@ export default function InventoriesFilter(props) {
                 placeholder={'Select City'}
                 value={filterItems.city || ''}
                 onChange={item => {
-                  setFilterItems(previous => {
-                    return {...previous, city: item.id};
-                  });
+                  getSocieties(item),
+                    setFilterItems(previous => {
+                      return {...previous, city: item.id, society: ''};
+                    });
                 }}
               />
               <CustomDropdown
@@ -235,11 +245,12 @@ export default function InventoriesFilter(props) {
                 }}
               />
               <View style={{marginTop: hp(2)}}>
-              <View style={{flexDirection:'row', alignItems:'center'}}>
-                <Text style={styles.rangeText}>Price Range</Text>
-                <Text style={styles.priceText}>{low} - {high}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={styles.rangeText}>Price Range</Text>
+                  <Text style={styles.priceText}>
+                    {low} - {high}
+                  </Text>
                 </View>
-                <Text>{low}</Text>
                 <Slider
                   style={styles.slider}
                   min={0}
@@ -255,6 +266,53 @@ export default function InventoriesFilter(props) {
                     handleValueChange(low, high);
                   }}
                 />
+                <Text
+                  style={{fontFamily: 'Poppins-Regular', color: colors.black}}>
+                  Price Unit
+                </Text>
+                <View style={[styles.featureView, {width: wp(40)}]}>
+                  {['lac', 'cr', 'th'].map(item => {
+                    return (
+                      <TouchableOpacity
+                        style={
+                          item == filterItems?.priceUnit
+                            ? styles.priceTypeActice
+                            : styles.priceTypeInactice
+                        }
+                        onPress={() => {
+                          setFilterItems(prev => {
+                            return {...prev, priceUnit: item};
+                          });
+                        }}>
+                        <Text style={styles.priceTypeTextStyle}>{item}</Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+                <Text
+                  style={{fontFamily: 'Poppins-Regular', color: colors.black}}>
+                  Feature/Paid
+                </Text>
+                <View style={styles.featureView}>
+                  {['PUP', 'MB', 'CP', 'FP', 'Open'].map(item => {
+                    return (
+                      <TouchableOpacity
+                        style={
+                          item == filterItems?.feature
+                            ? styles.priceTypeActice
+                            : styles.priceTypeInactice
+                        }
+                        onPress={() => {
+                          setFilterItems(prev => {
+                            return {...prev, feature: item};
+                          });
+                        }}>
+                        <Text style={styles.priceTypeTextStyle}>{item}</Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
                 <CustomButton
                   btnContainer={{
                     ...styles.submitBtnContainer,
@@ -262,7 +320,7 @@ export default function InventoriesFilter(props) {
                     marginTop: hp(3),
                   }}
                   btnText="Submit"
-                  indicator={false}
+                  indicator={props?.filterBtnIndicator}
                   onPress={() => {
                     props.onSubmit({...filterItems, high, low});
                   }}
@@ -363,11 +421,40 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: hp(3),
   },
-  priceText:{
-    fontFamily:fonts.medium,
-    fontSize:16,
-    color:colors.secondary,
-    marginLeft:wp(4),
-    marginBottom:hp(2.5)
-  }
+  priceText: {
+    fontFamily: fonts.medium,
+    fontSize: 16,
+    color: colors.secondary,
+    marginLeft: wp(4),
+    marginBottom: hp(2.5),
+  },
+  featureView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    width: wp(60),
+    marginVertical: hp(1),
+  },
+  priceTypeActice: {
+    width: wp(9),
+    height: wp(9),
+    borderRadius: hp(3),
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  priceTypeInactice: {
+    width: wp(9),
+    height: wp(9),
+    borderRadius: hp(3),
+    backgroundColor: colors.grey,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  priceTypeTextStyle: {
+    fontFamily: fonts.semiBold,
+    fontSize: hp(1.5),
+    color: colors.white,
+  },
 });

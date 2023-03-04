@@ -23,6 +23,7 @@ import moment from 'moment';
 import {AppFlow} from '../../Api/ApiCalls';
 import CustomDropdown from '../../Components/CustomDropdown';
 import FilterComp from '../../Components/FilterComp';
+import EmptyComponent from '../../Components/EmptyComponent';
 
 var dataCopy = [];
 
@@ -31,6 +32,7 @@ export default function Classified(props) {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterBtnIndicator, setFilterBtnIndicator] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -53,16 +55,20 @@ export default function Classified(props) {
   };
 
   function filterArray(filterData) {
+    setFilterBtnIndicator(true);
     var data = new FormData();
     data.append('title', filterData?.title || '');
     data.append('type', filterData?.type || '');
     data.append('purpose', filterData?.purpose || '');
-    data.append('category', filterData?.category || '');
-    data.append('bed', filterData?.bed || '');
-    data.append('bath', filterData?.bath || '');
-    data.append('floor', filterData?.floor || '');
+    data.append('category', filterData?.clsCategory || '');
+    data.append('bed', filterData?.clsBeds || '');
+    data.append('bath', filterData?.clsBath || '');
+    data.append('floor', filterData?.clsFloor || '');
     data.append('min_price', filterData?.low || '0');
     data.append('max_price', filterData?.high || '');
+    data.append('size', filterData?.clsPlotArea || '');
+    data.append('size_unit', filterData?.sizeUnit || '');
+    console.log('responseeee', JSON.stringify(filterData, null, 2));
     AppFlow.classifiedFilter(data)
       .then(function (response) {
         console.log(
@@ -77,6 +83,7 @@ export default function Classified(props) {
       })
       .finally(function () {
         setModalVisible(false);
+        setFilterBtnIndicator(false);
       });
   }
 
@@ -112,6 +119,7 @@ export default function Classified(props) {
       <CustomLoader isLoading={false} />
       <FlatList
         data={data}
+        ListEmptyComponent={<EmptyComponent />}
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
@@ -130,9 +138,10 @@ export default function Classified(props) {
                   borderRadius: 15,
                 }}
                 source={{
-                  uri: item?.file[0]?.file
-                    ? URL.imageURL + item.file[0].file
-                    : allImages.classifiedImages,
+                  uri:
+                    item?.file && item?.file?.length > 0
+                      ? URL.imageURL + item?.file[0].file
+                      : allImages.classifiedImages,
                 }}>
                 <Text style={styles.listTimeText}>
                   {item?.created_at
@@ -203,7 +212,6 @@ export default function Classified(props) {
           );
         }}
       />
-      {console.log('modal chekc', modalVisible)}
       <FilterComp
         filterModal={modalVisible}
         onCloseModal={() => setModalVisible(!modalVisible)}
@@ -211,6 +219,7 @@ export default function Classified(props) {
         onSubmit={data => {
           filterArray(data);
         }}
+        filterBtnIndicator={filterBtnIndicator}
       />
     </View>
   );

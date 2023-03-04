@@ -69,12 +69,6 @@ export default function UpdateProfile(props) {
       Toast.show('Please Enter phone number', Toast.SHORT);
     } else if (dataToSend?.society == '') {
       Toast.show('Please select society', Toast.SHORT);
-    } else if (dataToSend?.password == '') {
-      Toast.show('Please Enter [assword]', Toast.SHORT);
-    } else if (dataToSend?.confPassword == '') {
-      Toast.show('Please confirm password', Toast.SHORT);
-    } else if (dataToSend?.password != dataToSend?.confPassword) {
-      Toast.show('Passwords dont match', Toast.SHORT);
     } else if (dataToSend?.email == '') {
       Toast.show('Please Enter Email', Toast.SHORT);
     } else if (logoFileName == '') {
@@ -200,8 +194,8 @@ export default function UpdateProfile(props) {
         .then(async function (response) {
           console.log(
             'Success updating',
-            // JSON.stringify(response.data, null, 2),
-            response,
+            JSON.stringify(response, null, 2),
+            // response,
           );
           const userData = await AsyncStorage.getItem('AuthUser');
           const parsedData = JSON.parse(userData);

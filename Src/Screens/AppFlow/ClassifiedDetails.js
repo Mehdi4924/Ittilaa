@@ -89,9 +89,9 @@ export default function ClassifiedDetails(props) {
               />
             </TouchableOpacity>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity>
+              <View>
                 <Text style={styles.headingText}>Classified Details</Text>
-              </TouchableOpacity>
+              </View>
               {/* <TouchableOpacity style={styles.shareIconStyles}>
                 <Icon
                   name={'md-share-social'}

@@ -22,7 +22,7 @@ export default function Profile(props) {
     AppFlow.getAgencyDetail(b?.agency.id)
       .then(function (response) {
         console.log(
-          'Response getting inventory details',
+          'Response getting agency details',
           JSON.stringify(response, null, 2),
         );
         setParseUser({

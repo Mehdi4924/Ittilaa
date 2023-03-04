@@ -14,10 +14,10 @@ import {useFocusEffect} from '@react-navigation/native';
 import {URL} from '../../Constants/URL';
 import CustomLoader from '../../Components/CustomLoader';
 import EmptyComponent from '../../Components/EmptyComponent';
+import moment from 'moment';
 
 export default function AgencyProperties(props) {
   const {id} = props.route.params;
-  const [screenData, setScreenData] = useState();
   const [inventData, setInventData] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -30,8 +30,10 @@ export default function AgencyProperties(props) {
   const getData = () => {
     AppFlow.agencyProperties(id)
       .then(function (response) {
-        console.log('success getting agency data', response);
-        setScreenData(response.data.data);
+        console.log(
+          'success getting agency data',
+          JSON.stringify(response.data, null, 2),
+        );
         setInventData(response.data.data.inventory);
       })
       .catch(function (error) {
@@ -61,63 +63,83 @@ export default function AgencyProperties(props) {
       />
       <Text style={styles.titleText}>Agency Properties</Text>
       <FlatList
-        contentContainerStyle={{paddingBottom: hp(10)}}
         data={inventData}
-        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <EmptyComponent emptyContainer={{height: hp(60)}} />
+          <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
         }
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: wp(2.5),
+          paddingBottom: hp(5),
+          paddingTop: hp(3),
+        }}
         renderItem={({item, index}) => {
-          return (
-            <View style={styles.listContainer} key={index}>
-              <View style={styles.listLeftView}>
-                <Image
-                  source={
-                    item.agency?.file?.file
-                      ? {uri: URL.imageURL + item.agency?.file?.file}
-                      : allImages.agencydummy
-                  }
-                  style={styles.listImage}
-                  resizeMode="contain"
-                />
-                <Text style={styles.listImageText}>
-                  {item.agency.name || 'N/A'}
-                </Text>
-              </View>
-              <View style={styles.listRightView}>
-                <Text style={styles.listHeading}>
-                  {item.agency.name || 'N/A'}
-                </Text>
-                <Text style={styles.listPersonName}>
-                  {item.agency.ceo_name || 'N/A'}
-                </Text>
-                <Text style={[styles.listText, {marginTop: hp(1)}]}>
-                  {item.city.name || 'N/A'}
-                </Text>
-                <Text style={styles.listText}>
-                  {item.society.name || 'N/A'}
-                </Text>
-                <Text style={styles.listText}>
-                  {item.size} {item.size_unit}
-                </Text>
-                {/* <Text style={styles.listText}>{item.description || 'N/A'}</Text> */}
-                <View style={styles.listBtnView}>
-                  <Text style={styles.listPersonName}>1 day ago</Text>
-                  <CustomButton
-                    btnText="See Details"
-                    indicator={false}
-                    onPress={() =>
-                      props.navigation.navigate('InventoryDetails', {
-                        inventory: item,
-                      })
+          const inventories = item.inventory_data;
+          if (inventories.length > 0) {
+            return (
+              <View style={styles.listContainer}>
+                <View style={styles.listLeftView}>
+                  <Image
+                    source={
+                      inventories[0]?.agency?.file?.file
+                        ? {
+                            uri:
+                              URL.imageURL + inventories[0]?.agency?.file?.file,
+                          }
+                        : allImages.logo1
                     }
-                    btnContainer={styles.btnContainer}
-                    btnTextStyles={styles.btnTextStyles}
+                    style={styles.listImage}
+                    resizeMode="contain"
                   />
+                  <Text style={styles.listImageText}>
+                    {inventories[0]?.agency?.ceo_name || 'N/A'}
+                  </Text>
+                </View>
+                <View style={styles.listRightView}>
+                  <Text style={styles.listHeading}>
+                    {inventories[0]?.agency?.name || 'N/A'}
+                  </Text>
+                  <Text style={{marginVertical: hp(1)}} numberOfLines={4}>
+                    {inventories.map(val => {
+                      return (
+                        <Text style={styles.listText}>
+                          {val?.category || ''} {val?.plot_no || ''},{' '}
+                          {val?.block || ''}{' '}
+                          {val?.block?.toLowerCase().includes('block')
+                            ? ''
+                            : 'Block'}{' '}
+                          @{val?.price} {val?.price_unit} {val?.feature}{' '}
+                          {val?.size} {val?.size_unit}
+                          {'\n'}
+                        </Text>
+                      );
+                    })}
+                  </Text>
+                  <View style={styles.listBtnView}>
+                    <Text style={styles.listPersonName}>
+                      {item?.created_at
+                        ? moment(item.created_at).fromNow()
+                        : 'N/A'}
+                    </Text>
+                    <CustomButton
+                      btnText="See Details"
+                      indicator={false}
+                      onPress={() =>
+                        props.navigation.navigate('AppFlow', {
+                          screen: 'InventoryDetails',
+                          params: {
+                            inventory: inventories,
+                          },
+                        })
+                      }
+                      btnContainer={styles.btnContainer}
+                      btnTextStyles={styles.btnTextStyles}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          );
+            );
+          }
         }}
       />
     </View>
@@ -182,6 +204,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     backgroundColor: colors.white,
+    minHeight: hp(15),
     width: wp(95),
     elevation: 5,
     marginVertical: hp(1),
@@ -229,7 +252,7 @@ const styles = StyleSheet.create({
     fontSize: hp(1.6),
   },
   listText: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.regular,
     color: colors.grey,
     fontSize: hp(1.6),
   },
@@ -238,33 +261,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  //hot properties
-  flatListStyle: {
-    marginBottom: hp(2),
-  },
-  inventoryCard: {
-    width: wp(75),
-    height: hp(30),
-    backgroundColor: colors.white,
-    elevation: 5,
-    borderRadius: 14,
-    marginRight: wp(5),
-    borderWidth: 0.5,
-    borderColor: 'rgba(0,0,0,0.08)',
-  },
-  profileImgStyle: {
-    width: wp(12),
-    height: hp(6),
-    borderRadius: wp(8),
-  },
-  profileImgContainer: {
-    width: wp(14),
-    height: hp(7),
-    borderRadius: wp(7),
-    backgroundColor: colors.white,
-    elevation: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
