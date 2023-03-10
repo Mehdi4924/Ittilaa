@@ -26,11 +26,7 @@ export default function TopInventories(props) {
   async function GetInventories() {
     await AppFlow.allInventories()
       .then(function (response) {
-        console.log(
-          'Response data getting top',
-          JSON.stringify(response.data, null, 2),
-          // response,
-        );
+        console.log('Response data getting top', response.data);
         setData(response?.data?.data?.inventory);
         dataCopy = response?.data?.data?.inventory;
       })
@@ -78,6 +74,7 @@ export default function TopInventories(props) {
       <InventoriesComp
         data={data}
         inventoryCard={styles.inventoryCard}
+        horizontal={false}
         flatListStyle={styles.flatListStyle}
         profileImgStyle={styles.profileImgStyle}
         profileImgContainer={styles.profileImgContainer}

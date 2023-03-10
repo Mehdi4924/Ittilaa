@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,7 +14,7 @@ import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
 import {fonts} from '../../Constants/Fonts';
 import {societyItem} from '../../Constants/dummyData';
-import {Auth} from '../../Api/ApiCalls';
+import {AppFlow, Auth} from '../../Api/ApiCalls';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import CustomDropdown from '../../Components/CustomDropdown';
@@ -34,6 +34,12 @@ export default function RegisterAgency(props) {
   const [passwordSecure, setPasswordSecure] = useState(true);
   const [confPasswordSecure, setConfPasswordSecure] = useState(true);
   const [teamMembers, setTeamMembers] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [societyItem, setSocietyItem] = useState([]);
+  const [city, setCity] = useState('');
+  const [socValue, setSocValue] = useState('');
+
+
 
   const openPhotoGallery = () => {
     let options = {
@@ -90,9 +96,8 @@ export default function RegisterAgency(props) {
       Toast.show('Please Enter your name', Toast.SHORT);
     } else if (dataToSend.phone == null) {
       Toast.show('Please Enter phone number', Toast.SHORT);
-    } else if (dataToSend.society == null) {
-      Toast.show('Please select society', Toast.SHORT);
-    } else if (dataToSend.password == null) {
+    } 
+    else if (dataToSend.password == null) {
       Toast.show('Please Enter [assword]', Toast.SHORT);
     } else if (dataToSend.confPassword == null) {
       Toast.show('Please confirm password', Toast.SHORT);
@@ -112,7 +117,7 @@ export default function RegisterAgency(props) {
       data?.append('name', dataToSend?.userName);
       data?.append('designation', dataToSend?.designation || null);
       data?.append('phone', dataToSend?.phone);
-      data?.append('society', dataToSend?.society);
+      data?.append('society', socValue!='Other'?socValue:dataToSend.other);
       data?.append('address', dataToSend?.address || null);
       data?.append('ceo_name', dataToSend?.ceoName || null);
       data?.append('ceo_mobile1', dataToSend?.ceoNum1 || null);
@@ -162,7 +167,29 @@ export default function RegisterAgency(props) {
         });
     }
   };
-
+  useEffect(() => {
+    getCities();
+  }, []);
+  const getCities = async () => {
+    setCities([]);
+    setSocietyItem([]);
+    await AppFlow.getCity()
+      .then(res => {
+        console.log(res.data);
+        setCities(res?.data?.data);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+  };
+  const getSocieties = async city => {
+    await AppFlow.getSociety(city.id)
+      .then(res => {
+        console.log(res.data);
+        setSocietyItem(res?.data?.data);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+  };
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -287,20 +314,48 @@ export default function RegisterAgency(props) {
                 keyboardType="phone-pad"
               />
               <CustomDropdown
-                data={socItems}
-                topLabelText={'Society'}
-                labelFieldName={'label'}
-                valueFieldName={'value'}
-                placeholder={'Select Society'}
-                value={dataToSend.society}
-                iconName={'users'}
-                iconType="font-awesome"
+                data={cities}
+                topLabelText={'City'}
+                labelFieldName={'name'}
+                valueFieldName={'id'}
+                iconType="material"
+                iconName="place"
+                placeholder={'Select City'}
+                value={city}
                 onChange={item => {
-                  setDataToSend(prev => {
-                    return {...prev, society: item.label};
-                  });
+                  getSocieties(item), setCity(item.id), setSocValue('');
                 }}
               />
+              <CustomDropdown
+                data={[...societyItem, {name: 'Other', id: -1}]}
+                topLabelText={'Society'}
+                labelFieldName={'name'}
+                valueFieldName={'id'}
+                placeholder={'Select Society'}
+                iconName={'users'}
+                iconType="font-awesome"
+                value={socValue}
+                onChange={item => setSocValue(item.name)}
+              />
+              {socValue == 'Other' ? (
+                <CustomTextInput
+                  textInputContainer={{
+                    marginVertical: hp(2),
+                    borderRadius: 8,
+                  }}
+                  topText="Socciety Name"
+                  iconType="font-awesome"
+                  iconName="users"
+                  iconSize={26}
+                  placeholder="Enter Society Name"
+                  value={dataToSend.other || ''}
+                  onChangeText={e => {
+                    setDataToSend(prev => {
+                      return {...prev, other: e};
+                    });
+                  }}
+                />
+              ) : null}
               <CustomTextInput
                 iconName={'location-pin'}
                 iconType="entypo"
@@ -695,7 +750,7 @@ export default function RegisterAgency(props) {
                   </>
                 )}
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.imageContainerView}
                 onPress={() => {
                   openLogoGallery();
@@ -718,7 +773,7 @@ export default function RegisterAgency(props) {
                     <Text style={styles.imageText}>Agency Logo</Text>
                   </>
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           )}
         </View>

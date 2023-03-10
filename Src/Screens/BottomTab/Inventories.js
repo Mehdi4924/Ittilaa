@@ -157,6 +157,7 @@ export default function Inventories(props) {
       <>
         <FlatList
           data={listData}
+          
           ListHeaderComponent={hotData.length ? headerComponent : null}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />

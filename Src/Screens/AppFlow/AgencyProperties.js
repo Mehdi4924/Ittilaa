@@ -64,6 +64,7 @@ export default function AgencyProperties(props) {
       <Text style={styles.titleText}>Agency Properties</Text>
       <FlatList
         data={inventData}
+          
         ListEmptyComponent={
           <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
         }

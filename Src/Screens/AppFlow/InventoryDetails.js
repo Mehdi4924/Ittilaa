@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {Icon} from '@rneui/themed';
 import {hp, wp} from '../../Constants/Responsive';
@@ -20,16 +20,15 @@ import CustomLoader from '../../Components/CustomLoader';
 import Toast from 'react-native-simple-toast';
 import {Linking} from 'react-native';
 import Check from '../../Components/Check';
+import ViewShot from 'react-native-view-shot';
+import * as NewShare from 'react-native-share';
 
 export default function InventoryDetails(props) {
   const {inventory} = props.route.params;
   const [inventoryData, setInventoryData] = useState();
-  console.log(
-    'Inventoryyy',
-    JSON.stringify(inventory[0]?.agency?.whatapp_no, null, 2),
-  );
   const [loading, setLoading] = useState(false);
   const [favorite, setFavorite] = useState(false);
+  const [compLogo, setCompLogo] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
       checkInventory();
@@ -52,6 +51,13 @@ export default function InventoryDetails(props) {
           // response,
         );
         setInventoryData(response.data.data);
+        if (
+          inventory[0]?.agency?.id == null ||
+          inventory[0]?.agency?.id == undefined
+        ) {
+          inventory[0].agency = response?.data?.data?.agency;
+          console.log('Inventoryyy', JSON.stringify(inventory[0], null, 2));
+        }
       })
       .catch(function (error) {
         console.log('Error getting inventory details', error);
@@ -61,6 +67,7 @@ export default function InventoryDetails(props) {
       });
   };
   const AddFavourite = () => {
+    console.log('Fav Iddddd', inventory[0]?.id);
     AppFlow.addFavourite(inventory[0]?.id)
       .then(function (response) {
         console.log('Response getting Favourite', response);
@@ -103,6 +110,29 @@ export default function InventoryDetails(props) {
       Alert.alert(error.message);
     }
   };
+  const ref = useRef();
+  const onCapture = useCallback(async uri => {
+    await ref.current
+      .capture()
+      .then(uri => {
+        console.log('do something with ', uri);
+        NewShare.default
+          .open({
+            message:
+              'Install The Application To Get Latest Updates \n https://play.google.com/store/apps/details?id=com.ittilaa&hl=en_US&gl=US',
+            url: uri,
+          })
+          .then(res => {
+            console.log(res);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(function () {
+        setCompLogo(false);
+      });
+  }, []);
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={loading} />
@@ -118,7 +148,13 @@ export default function InventoryDetails(props) {
               />
             </TouchableOpacity>
             <Text style={styles.headingText}>Inventory Details</Text>
-            <Check>
+            <TouchableOpacity
+              onPress={() => {
+                setCompLogo(true);
+                setTimeout(function () {
+                  onCapture();
+                }, 2000);
+              }}>
               <Icon
                 name={'md-share-social'}
                 reverse
@@ -126,12 +162,12 @@ export default function InventoryDetails(props) {
                 color={colors.primary}
                 size={hp(2)}
               />
-            </Check>
+            </TouchableOpacity>
           </View>
           <Image
             source={
-              inventory[0]?.agency?.file?.file
-                ? {uri: URL.imageURL + inventory[0]?.agency?.file?.file}
+              inventory[0]?.agency?.file.length
+                ? {uri: URL.imageURL + inventory[0]?.agency?.file[0]?.file}
                 : allImages.agencydummy
             }
             style={styles.agencyProfileImage}
@@ -142,69 +178,88 @@ export default function InventoryDetails(props) {
           <Text style={styles.postByText}>
             By {inventory[0]?.agency?.ceo_name}
           </Text>
-          <View style={styles.detailsView}>
-            {inventory.length < 2 ? (
-              <>
-                <View style={styles.callAgentView}>
-                  <Text style={styles.normalText}>
-                    {inventoryData?.block || 'Loading'}
-                  </Text>
-                  <Text style={styles.priceText}>
-                    {inventoryData?.price || 'Loading'}
-                    {''}
-                    {inventoryData?.price_unit}
-                  </Text>
-                </View>
-                <Text style={styles.normalText}>
-                  {inventoryData?.city?.name || ''}
-                </Text>
-                <Text style={styles.normalText}>
-                  {inventoryData?.size || 'Loading'}{' '}
-                  {inventoryData?.size_unit || ''}
-                </Text>
-                <Text style={styles.normalText}>
-                  {inventoryData?.type} {inventoryData?.category}{' '}
-                  {inventoryData?.plot_no}
-                </Text>
-                <Text style={styles.textHighlited}>
-                  {' '}
-                  {inventoryData?.type} {inventoryData?.category} For{' '}
-                  {inventoryData?.purpose || ''}{' '}
-                </Text>
-
-                <View style={styles.locationTextView}>
-                  <Icon
-                    name={'location'}
-                    type={'ionicon'}
-                    color={colors.primary}
-                    size={hp(3)}
-                    style={{marginRight: wp(2)}}
-                  />
-                  <Text style={styles.normalText}>
-                    {inventoryData?.block}, {inventoryData?.society?.name},{' '}
-                    {inventoryData?.city?.name}
-                  </Text>
-                </View>
-              </>
-            ) : (
-              <Text style={styles.normalText}>
-                {inventory.map(invent => {
-                  return (
-                    <Text style={styles.text2}>
-                      {/* {invent?.category}  */}
-                      {invent?.plot_no}
-                      {/* is available in */}
-                      {', '}
-                      {invent?.block}, {invent?.society?.name},{' '}
-                      {/* {invent?.city?.name} at  */}
-                      {invent?.price} {invent?.price_unit}
-                      {'\n'}
+          <ViewShot
+            ref={ref}
+            style={{backgroundColor: colors.tertiary}}
+            options={{
+              fileName: 'Captured',
+              format: 'jpg',
+              quality: 0.9,
+            }}>
+            <View style={styles.detailsView}>
+              {inventory.length < 2 ? (
+                <>
+                  <View style={styles.callAgentView}>
+                    <Text style={styles.normalText}>
+                      {inventoryData?.block || 'Loading'}{' '}
+                      {inventoryData?.block.toLowerCase().includes('block')
+                        ? ''
+                        : 'Block'}
                     </Text>
-                  );
-                })}
-              </Text>
-            )}
-          </View>
+                    <Text style={styles.priceText}>
+                      {inventoryData?.price || 'Loading'}
+                      {''}
+                      {inventoryData?.price_unit}
+                    </Text>
+                  </View>
+                  <Text style={styles.normalText}>
+                    {inventoryData?.city?.name || ''}
+                  </Text>
+                  <Text style={styles.normalText}>
+                    {inventoryData?.size || 'Loading'}{' '}
+                    {inventoryData?.size_unit || ''}
+                  </Text>
+                  <Text style={styles.normalText}>
+                    {inventoryData?.type} {inventoryData?.category}{' '}
+                    {inventoryData?.plot_no}
+                  </Text>
+                  <Text style={styles.textHighlited}>
+                    {' '}
+                    {inventoryData?.type} {inventoryData?.category} For{' '}
+                    {inventoryData?.purpose || ''}{' '}
+                  </Text>
+
+                  <View style={styles.locationTextView}>
+                    <Icon
+                      name={'location'}
+                      type={'ionicon'}
+                      color={colors.primary}
+                      size={hp(3)}
+                      style={{marginRight: wp(2)}}
+                    />
+                    <Text style={styles.normalText}>
+                      {inventoryData?.block}, {inventoryData?.society?.name},{' '}
+                      {inventoryData?.city?.name}
+                    </Text>
+                  </View>
+                  {compLogo ? (
+                    <Image
+                      source={require('../../Assets/Images/logo.png')}
+                      style={styles.compLogoStyle}
+                      resizeMode="contain"
+                    />
+                  ) : null}
+                </>
+              ) : (
+                <Text style={styles.normalText}>
+                  {inventory.map(invent => {
+                    return (
+                      <Text style={styles.text2}>
+                        {/* {invent?.category}  */}
+                        {invent?.plot_no}
+                        {/* is available in */}
+                        {', '}
+                        {invent?.block}, {invent?.society?.name},{' '}
+                        {/* {invent?.city?.name} at  */}
+                        {invent?.price} {invent?.price_unit}
+                        {'\n'}
+                      </Text>
+                    );
+                  })}
+                </Text>
+              )}
+            </View>
+          </ViewShot>
           <TouchableOpacity
             style={styles.bottomIconView}
             onPress={() =>
@@ -370,4 +425,5 @@ const styles = StyleSheet.create({
     width: wp(80),
     marginVertical: hp(1),
   },
+  compLogoStyle: {width: wp(28), height: hp(14), alignSelf: 'flex-end'},
 });

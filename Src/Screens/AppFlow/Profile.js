@@ -7,11 +7,13 @@ import {colors} from '../../Constants/Colors';
 import {fonts} from '../../Constants/Fonts';
 import {color} from '@rneui/base';
 import {AppFlow} from '../../Api/ApiCalls';
+import CustomLoader from '../../Components/CustomLoader';
 
 const dummUri =
   'https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic-300x300.jpg';
 export default function Profile(props) {
   const [parseUser, setParseUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     getAgencyDetail();
   }, []);
@@ -22,32 +24,30 @@ export default function Profile(props) {
     AppFlow.getAgencyDetail(b?.agency.id)
       .then(function (response) {
         console.log(
-          'Response getting agency details',
-          JSON.stringify(response, null, 2),
-        );
+          'Response getting agency details',JSON.stringify( response, null, 2))
         setParseUser({
           ...b,
           ...response.data.data,
           agency_name: response?.data?.data?.name,
         });
-        if (response?.data?.data?.file?.file) {
+        if (response?.data?.data?.file.length) {
           setLogoFileName(
-            'https://ittelaapp.com/' + response?.data?.data?.file?.file,
+            'https://ittelaapp.com/' + response?.data?.data?.file[0]?.file,
           );
+
         }
       })
       .catch(function (error) {
         console.log('Error getting inventory details', error);
       })
       .finally(function () {
-        null;
+        setIsLoading(false);
       });
   };
-  console.log('====================================');
-  console.log('Parse User', JSON.stringify(logoFileName, null, 2));
-  console.log('====================================');
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={isLoading} />
+
       <View style={styles.header}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon
@@ -66,74 +66,78 @@ export default function Profile(props) {
           <Text style={styles.editText}>Edit</Text>
         </TouchableOpacity>
       </View>
-      <View style={{alignItems: 'center'}}>
-        <Image
-          source={{
-            uri: logoFileName != '' ? logoFileName : dummUri,
-          }}
-          style={styles.imgStyle}
-          resizeMode="contain"
-        />
-        <Text style={styles.profileName}>{parseUser?.name}</Text>
-      </View>
-      <View style={styles.itemContainer}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon
-            name={'mail'}
-            type={'meterial'}
-            color={colors.primary}
-            size={hp(3)}
-          />
-          <Text style={styles.text}>{parseUser?.email}</Text>
-        </View>
-      </View>
-      <View style={styles.itemContainer}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon
-            name={'phone'}
-            type={'meterial'}
-            color={colors.primary}
-            size={hp(3)}
-          />
-          <Text style={styles.text}>{parseUser?.phone}</Text>
-        </View>
-      </View>
-      <View style={styles.itemContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate('MyFavourites');
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon
-              name={'favorite'}
-              type={'meterial'}
-              color={colors.primary}
-              size={hp(3)}
+      {isLoading ? null : (
+        <>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              source={{
+                uri: logoFileName != '' ? logoFileName : dummUri,
+              }}
+              style={styles.imgStyle}
+              resizeMode="contain"
             />
-            <Text style={styles.text}>My Favourites</Text>
+            <Text style={styles.profileName}>{parseUser?.name}</Text>
           </View>
-        </TouchableOpacity>
-      </View>
-      <View style={{...styles.itemContainer, marginTop: hp(30)}}>
-        <TouchableOpacity
-          onPress={() => {
-            AsyncStorage.clear(),
-              props.navigation.navigate('AuthStack', {
-                screen: 'Login',
-                params: {data: {...parseUser, agencyImage: logoFileName}},
-              });
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon
-              name={'logout'}
-              type={'meterial'}
-              color={colors.primary}
-              size={hp(3)}
-            />
-            <Text style={styles.text}>Logout</Text>
+          <View style={styles.itemContainer}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Icon
+                name={'mail'}
+                type={'meterial'}
+                color={colors.primary}
+                size={hp(3)}
+              />
+              <Text style={styles.text}>{parseUser?.email}</Text>
+            </View>
           </View>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.itemContainer}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Icon
+                name={'phone'}
+                type={'meterial'}
+                color={colors.primary}
+                size={hp(3)}
+              />
+              <Text style={styles.text}>{parseUser?.phone}</Text>
+            </View>
+          </View>
+          <View style={styles.itemContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('MyFavourites');
+              }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
+                  name={'favorite'}
+                  type={'meterial'}
+                  color={colors.primary}
+                  size={hp(3)}
+                />
+                <Text style={styles.text}>My Favourites</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={{...styles.itemContainer, marginTop: hp(30)}}>
+            <TouchableOpacity
+              onPress={() => {
+                AsyncStorage.clear(),
+                  props.navigation.navigate('AuthStack', {
+                    screen: 'Login',
+                    params: {data: {...parseUser, agencyImage: logoFileName}},
+                  });
+              }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
+                  name={'logout'}
+                  type={'meterial'}
+                  color={colors.primary}
+                  size={hp(3)}
+                />
+                <Text style={styles.text}>Logout</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 }

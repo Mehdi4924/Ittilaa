@@ -35,7 +35,7 @@ export default function UpdateProfile(props) {
   const [logoUri, setLogoUri] = useState({uri: ''});
   const [dataToSend, setDataToSend] = useState(data || {});
   const [logoFileName, setLogoFileName] = useState(
-    data?.file?.file ? 'https://ittelaapp.com/' + data.file.file : '',
+    data?.file?.length ? 'https://ittelaapp.com/' + data.file[0].file : '',
   );
   const openLogoGallery = () => {
     let options = {
@@ -60,6 +60,8 @@ export default function UpdateProfile(props) {
       }
     });
   };
+  console.log('Logo uri===>>', logoUri);
+
   const Register = () => {
     if (dataToSend?.agencyName == '') {
       Toast.show('Please Enter agency name', Toast.SHORT);
@@ -160,34 +162,33 @@ export default function UpdateProfile(props) {
           : '',
       );
       if (logoUri?.uri && logoUri?.uri != '') {
-        console.log(logoUri);
-        const typeOfImage = logoUri?.uri?.split('.');
         data.append('agency_photo[]', {
           uri: logoUri?.uri,
-          name: new Date().toISOString(),
-          type: 'image/' + typeOfImage[typeOfImage.length - 1],
+          name: logoUri?.fileName,
+          type: logoUri?.type,
         });
       }
       if (newTeam.length > 0) {
         data.append('team_create', JSON.stringify(newTeam));
       }
       if (deletedTeam.length > 0) {
-        data.append('teamDelete[]', JSON.stringify(deletedTeam));
+        data.append('team_delete', JSON.stringify(deletedTeam));
       }
       var updatedTeam = [];
       dataToSend.team.length > 0
         ? dataToSend.team.map(item => {
             if (item.updated == true) {
               updatedTeam.push({
+                id: item.id,
                 name: item.name,
                 phone: item.phone,
-                whatapp_no: item.whatapp_no,
+                whatsapp_no: item.whatsapp_no,
               });
             }
           })
         : 0;
       if (updatedTeam.length > 0) {
-        data.append('teamUppdaet', JSON.stringify(updatedTeam));
+        data.append('team_update', JSON.stringify(updatedTeam));
       }
       axios.defaults.headers['Content-Type'] = 'multipart/form-data';
       Auth.editAgencyData(data)
@@ -225,6 +226,7 @@ export default function UpdateProfile(props) {
         });
     }
   };
+  console.log(JSON.stringify(dataToSend, null, 2));
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

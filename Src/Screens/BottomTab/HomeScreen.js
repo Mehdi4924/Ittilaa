@@ -54,8 +54,8 @@ export default function HomeScreen(props) {
       .then(function (response) {
         console.log(
           'Response data',
-          // JSON.stringify(response.data, null, 2),
-          response,
+          response?.data,
+          // response.data.data,
         );
         setScreenData(response.data.data);
       })
@@ -90,11 +90,12 @@ export default function HomeScreen(props) {
           placeholder="Search"
           placeholderTextColor={colors.grey}
           iconContainer={styles.iconContainer}
+          onChangeText={t => {}}
         />
         {isLoading ? null : (
           <>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Titanium Agency</Text>
+              <Text style={styles.titleText}>Premium Agency</Text>
               <TouchableOpacity
                 onPress={() =>
                   props.navigation.navigate('AppFlow', {screen: 'AllAgencies'})
@@ -131,8 +132,11 @@ export default function HomeScreen(props) {
             </View>
             {/* <AutoScrollFlatList/> */}
             <InventoriesComp
-              data={screenData?.inventory?.length ? screenData.inventory : []}
-              // data={[]}
+              data={
+                screenData?.inventory?.length
+                  ? screenData?.inventory.reverse()
+                  : []
+              }
               inventoryCard={styles.inventoryCard}
               horizontal={true}
               flatListStyle={styles.flatListStyle}

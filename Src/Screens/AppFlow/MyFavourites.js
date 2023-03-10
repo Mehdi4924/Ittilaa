@@ -7,7 +7,8 @@ import {Icon} from '@rneui/themed';
 import {FlatList} from 'react-native';
 import {AppFlow} from '../../Api/ApiCalls';
 import EmptyComponent from '../../Components/EmptyComponent';
-import {Pressable} from 'react-native';
+import Toast from 'react-native-simple-toast';
+import CustomLoader from '../../Components/CustomLoader';
 
 export default function MyFavourites(props) {
   const [myFavs, setMyFavs] = useState([]);
@@ -19,8 +20,10 @@ export default function MyFavourites(props) {
   async function GetMyFav() {
     AppFlow.getFavourites()
       .then(res => {
-        console.log('Response getting my favs', res);
-        setMyFavs(res?.data?.data);
+        console.log(
+          'Response getting my favs',res.data)
+          
+        setMyFavs(res?.data?.data?.inventory);
       })
       .catch(err => {
         console.log('Error getting my favs', err);
@@ -29,8 +32,21 @@ export default function MyFavourites(props) {
         setLoading(false);
       });
   }
+  const AddFavourite = id => {
+    AppFlow.addFavourite(id)
+      .then(function (response) {
+        console.log('Response getting Favourite', response);
+        Toast.show('Removed From Fav Successfully', Toast.SHORT);
+        const favDataCopy = [...myFavs].filter(item => item.inventory_id != id);
+        setMyFavs(favDataCopy);
+      })
+      .catch(function (error) {
+        console.log('Error getting Favourite', error);
+      });
+  };
   return (
     <View style={styles.container}>
+      <CustomLoader isLoading={loading} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon
@@ -43,38 +59,43 @@ export default function MyFavourites(props) {
         <Text style={styles.headingText}>My Favourites</Text>
         <View style={{width: hp(5)}}></View>
       </View>
-      <FlatList
-        data={myFavs}
-        ListEmptyComponent={<EmptyComponent />}
-        renderItem={({item, index}) => {
-          return (
-            <Pressable
-              key={index}
-              style={styles.favCard}
-              onPress={() => {
-                // console.log([item.inventory]);
-                props.navigation.navigate('AppFlow', {
-                  screen: 'InventoryDetails',
-                  params: {inventory: [item.inventory]},
-                });
-              }}>
-              <Icon
-                type="material"
-                name="favorite"
-                size={35}
-                color={colors.primary}
-              />
-              <Text style={styles.favText}>
-                {item?.inventory?.type || ''} {item?.inventory?.category || ''}{' '}
-                No.
-                {item?.inventory?.plot_no || ''} of{' '}
-                {item?.inventory?.size || ''} {item?.inventory?.size_unit || ''}{' '}
-                availabel for {item?.inventory?.purpose || ''}
-              </Text>
-            </Pressable>
-          );
-        }}
-      />
+      {loading ? null : (
+        <FlatList
+          data={myFavs}
+          ListEmptyComponent={<EmptyComponent />}
+          renderItem={({item, index}) => {
+            return (
+              <View key={index} style={styles.favCard}>
+                <TouchableOpacity
+                  onPress={() => AddFavourite(item.inventory_id)}>
+                  <Icon
+                    type="material"
+                    name="favorite"
+                    size={35}
+                    color={colors.primary}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'InventoryDetails',
+                      params: {inventory: [item.inventory]},
+                    });
+                  }}>
+                  <Text style={styles.favText}>
+                    {item?.inventory?.type || ''}{' '}
+                    {item?.inventory?.category || ''} No.
+                    {item?.inventory?.plot_no || ''} of{' '}
+                    {item?.inventory?.size || ''}{' '}
+                    {item?.inventory?.size_unit || ''} availabel for{' '}
+                    {item?.inventory?.purpose || ''}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
+      )}
     </View>
   );
 }
@@ -92,12 +113,12 @@ const styles = StyleSheet.create({
   favCard: {
     width: wp(90),
     flexDirection: 'row',
-    // justifyContent: 'space-between',
     paddingHorizontal: wp(5),
     backgroundColor: colors.white,
     paddingVertical: hp(2),
     alignItems: 'center',
     borderRadius: hp(1),
+    marginBottom: hp(1),
   },
   favText: {
     fontFamily: fonts.regular,

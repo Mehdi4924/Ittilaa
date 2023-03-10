@@ -90,6 +90,7 @@ export default function AllAgencies(props) {
 
       <FlatList
         data={agencies}
+          
         contentContainerStyle={{
           paddingHorizontal: wp(5),
           marginVertical: hp(2),
@@ -107,8 +108,10 @@ export default function AllAgencies(props) {
               ]}>
               <Image
                 source={
-                  item?.file
-                    ? {uri: URL.imageURL + item.file.file}
+                  item?.file?.length
+                      ? {uri: URL.imageURL + item.file[0].file}
+                  // item?.file
+                  //   ? {uri: URL.imageURL + item.file.file}
                     : allImages.agencydummy
                 }
                 style={
@@ -218,11 +221,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontSize: hp(1.8),
   },
-  locationView: {flexDirection: 'row', alignItems: 'center'},
+  locationView: {flexDirection: 'row', alignItems: 'flex-start', marginTop:hp(1)},
   locationText: {
     fontFamily: fonts.regular,
     color: colors.grey,
     fontSize: hp(1.8),
+    maxWidth:wp(55)
   },
   indicator: {
     width: wp(100),

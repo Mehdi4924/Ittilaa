@@ -154,6 +154,7 @@ export default function FeaturedDetails(props) {
           <Text style={styles.plansText}>Plan</Text>
           <FlatList
             data={screenData?.data?.payment_plan}
+          
             contentContainerStyle={{
               paddingHorizontal: wp(5),
               marginVertical: hp(0.5),

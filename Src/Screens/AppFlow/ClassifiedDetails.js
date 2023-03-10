@@ -16,6 +16,7 @@ import Carousel from 'react-native-snap-carousel';
 import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
 import {URL} from '../../Constants/URL';
+import {Linking} from 'react-native';
 
 export default function ClassifiedDetails(props) {
   const {classified} = props.route.params;
@@ -89,9 +90,18 @@ export default function ClassifiedDetails(props) {
               />
             </TouchableOpacity>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View>
-                <Text style={styles.headingText}>Classified Details</Text>
-              </View>
+              <TouchableOpacity
+                style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={() => Linking.openURL(`tel:${data?.number}`)}>
+                <Icon
+                  name={'phone'}
+                  type={'material'}
+                  color={colors.primary}
+                  reverse
+                  size={hp(1.5)}
+                />
+                <Text style={styles.headingText}>Call For Details</Text>
+              </TouchableOpacity>
               {/* <TouchableOpacity style={styles.shareIconStyles}>
                 <Icon
                   name={'md-share-social'}
@@ -110,9 +120,9 @@ export default function ClassifiedDetails(props) {
               color={colors.primary}
               size={hp(3)}
             />
-            <Text style={styles.locationText}>{data?.address || 'N/A'}</Text>
           </View>
-          <Text style={styles.locationText}>
+          <Text style={styles.locationText}>{data?.location || 'N/A'}</Text>
+          <Text style={[styles.titleText]}>
             {data?.type || 'N/A'} {data?.category || 'N/A'} for {data?.purpose}
           </Text>
           <View style={styles.amenitiesMainView}>
@@ -214,7 +224,7 @@ const styles = StyleSheet.create({
     borderRadius: hp(8),
     position: 'absolute',
     bottom: hp(-30),
-    right: wp(32),
+    right: wp(30),
     zIndex: 100,
   },
   locationPinView: {
@@ -235,6 +245,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     marginVertical: hp(1),
     fontSize: hp(1.8),
+  },
+  titleText: {
+    fontFamily: 'Poppins-Bold',
+    color: colors.primary,
+    fontSize: hp(2.2),
+    marginVertical: hp(1),
   },
   amenitiesMainView: {
     backgroundColor: colors.black,

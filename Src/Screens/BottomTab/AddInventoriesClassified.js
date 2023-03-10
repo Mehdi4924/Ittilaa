@@ -89,7 +89,7 @@ export default function AddInventoriesClassified(props) {
       Toast.show('Please Enter details', Toast.SHORT);
     } else if (contactNo == '') {
       Toast.show('Please Enter Contact Number', Toast.SHORT);
-    } else if (location) {
+    } else if (location == '') {
       Toast.show('Please Enter Location', Toast.SHORT);
     } else {
       setClsIndicator(true);
@@ -105,6 +105,8 @@ export default function AddInventoriesClassified(props) {
       clsData.append('size_unit', clsAreaType);
       clsData.append('price', clsPrice);
       clsData.append('description', clsDetails);
+      clsData.append('location', location);
+      clsData.append('number', contactNo);
       if (imageUri.length) {
         imageUri.map(item => {
           clsData?.append('file[]', {
@@ -172,6 +174,7 @@ export default function AddInventoriesClassified(props) {
     } else {
       setIndicator(true);
       let data = [];
+     let errCheck = false
       const bulkNewDetails = bulkDetails.trim();
       const a = bulkNewDetails.split('\n');
       console.log('bulk data length', a);
@@ -182,9 +185,13 @@ export default function AddInventoriesClassified(props) {
           console.log('item details', itemDetails);
           if (itemDetails.length != 7) {
             Toast.show('Invalid Format', Toast.SHORT);
+            errCheck=true
+            setIndicator(false)
             break;
           } else if (itemDetails[4].includes('@') == false) {
             Toast.show('Please Include @ Before Price', Toast.SHORT);
+            errCheck=true
+            setIndicator(false)
             break;
           } else {
             const priceData = itemDetails[4].split('@')[1];
@@ -209,6 +216,7 @@ export default function AddInventoriesClassified(props) {
         }
       }
       console.log(data);
+      if(errCheck==false){
       axios.defaults.headers['Content-Type'] = 'application/json';
       AppFlow.createEnventory(data)
         .then(function (response) {
@@ -223,7 +231,7 @@ export default function AddInventoriesClassified(props) {
         .finally(function () {
           axios.defaults.headers['Content-Type'] = 'multipart/form-data';
           setIndicator(false);
-        });
+        });}
     }
   }
   async function submitSingleInventory() {
@@ -373,7 +381,7 @@ export default function AddInventoriesClassified(props) {
                 }}
               />
               <CustomDropdown
-                data={[...societyItem, {name: 'Other', value: -1}]}
+                data={[...societyItem, {name: 'Other', id: -1}]}
                 topLabelText={'Society'}
                 labelFieldName={'name'}
                 valueFieldName={'id'}
@@ -437,6 +445,10 @@ export default function AddInventoriesClassified(props) {
               />
               {bulk ? (
                 <>
+                <View>
+                <Text style={{...styles.bulkText, color:colors.secondary}}>Format example:</Text>
+                <Text style={styles.bulkText}>187 5 Marla B @100 Lac PUP</Text>
+                </View>
                   <CustomTextInput
                     topText="Bulk Details"
                     iconType="material"
@@ -695,6 +707,7 @@ export default function AddInventoriesClassified(props) {
                   <FlatList
                     data={imageUri}
                     horizontal={true}
+          
                     contentContainerStyle={{
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1202,4 +1215,9 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.grey,
   },
+  bulkText:{
+    fontFamily:fonts.medium,
+    fontSize:12,
+    color:colors.grey
+  }
 });

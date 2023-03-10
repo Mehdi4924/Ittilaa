@@ -85,8 +85,8 @@ export default function AgencyProfile(props) {
           <View style={styles.topMainView}>
             <Image
               source={
-                agencyData?.file
-                  ? {uri: URL.imageURL + agencyData?.file.file}
+                agencyData?.file?.length
+                  ? {uri: URL.imageURL + agencyData.file[0].file}
                   : allImages.agencydummy
               }
               style={styles.agencyProfileImage}
@@ -152,7 +152,7 @@ export default function AgencyProfile(props) {
             }}>
             <TouchableOpacity
               onPress={() => {
-                agencyData?.facebook != 'null'
+                agencyData?.facebook != '' || null
                   ? handleClickSocial(agencyData?.facebook)
                   : null;
               }}>
@@ -164,7 +164,7 @@ export default function AgencyProfile(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                agencyData?.youtube != 'null'
+                agencyData?.youtube != '' || null
                   ? handleClickSocial(agencyData?.youtube)
                   : null;
               }}>
@@ -176,7 +176,7 @@ export default function AgencyProfile(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                agencyData?.instagram != 'null'
+                agencyData?.instagram != '' || null
                   ? handleClickSocial(agencyData?.instagram)
                   : null;
               }}>
@@ -188,7 +188,7 @@ export default function AgencyProfile(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                agencyData?.twitter != 'null'
+                agencyData?.twitter != '' || null
                   ? handleClickSocial(agencyData?.twitter)
                   : null;
               }}>
@@ -200,7 +200,7 @@ export default function AgencyProfile(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                agencyData?.website != 'null'
+                agencyData?.website != '' || null
                   ? handleClickSocial(agencyData?.website)
                   : null;
               }}>
@@ -223,8 +223,8 @@ export default function AgencyProfile(props) {
                   <View style={styles.listMainView} key={index}>
                     <Image
                       source={
-                        agencyData?.file
-                          ? {uri: URL.imageURL + agencyData?.file?.file}
+                        agencyData?.file?.length
+                      ? {uri: URL.imageURL + agencyData.file[0].file}
                           : allImages.agencydummy
                       }
                       style={styles.agencyTeamImage}

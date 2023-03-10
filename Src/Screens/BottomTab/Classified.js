@@ -42,7 +42,7 @@ export default function Classified(props) {
   const getData = () => {
     AppFlow.getAllClassifieds()
       .then(function (response) {
-        console.log('Response data', response);
+        console.log('Response data', JSON.stringify(response.data, null, 2));
         setData(response?.data?.data);
         dataCopy = response?.data?.data;
       })
@@ -119,6 +119,8 @@ export default function Classified(props) {
       <CustomLoader isLoading={false} />
       <FlatList
         data={data}
+          
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={<EmptyComponent />}
         renderItem={({item, index}) => {
           return (
