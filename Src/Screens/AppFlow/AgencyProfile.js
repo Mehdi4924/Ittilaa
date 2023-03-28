@@ -136,7 +136,7 @@ export default function AgencyProfile(props) {
             </View>
           </View>
           <Text style={styles.descText}>Location</Text>
-          <Text style={styles.descDetailsText}>
+          <Text style={{...styles.descDetailsText, marginBottom:hp(2)}}>
             {agencyData?.address || 'Loading'}{' '}
           </Text>
           {/* <Image
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     width: wp(85),
     fontSize: hp(2),
-    marginVertical: hp(2),
+    marginTop: hp(2),
   },
   descDetailsText: {
     color: colors.black,

@@ -118,8 +118,8 @@ export default function Classified(props) {
       />
       <CustomLoader isLoading={false} />
       <FlatList
-        data={data}
-          
+        data={data?.reverse()}
+        // inverted={data?.length?true:false}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<EmptyComponent />}
         renderItem={({item, index}) => {

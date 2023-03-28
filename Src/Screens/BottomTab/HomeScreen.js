@@ -49,6 +49,7 @@ export default function HomeScreen(props) {
     let userData = await AsyncStorage.getItem('AuthUser');
     setUser(JSON.parse(userData));
   };
+ 
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
@@ -94,8 +95,16 @@ export default function HomeScreen(props) {
         />
         {isLoading ? null : (
           <>
+            {screenData?.app_update?.update == '1' ? (
+              <View style={styles.updateAppBanner}>
+                <Text style={styles.updateAppText}>
+                  Have you install the new version of the app? if no, then
+                  install it from playstore.
+                </Text>
+              </View>
+            ) : null}
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Premium Agency</Text>
+              <Text style={styles.titleText}>Agencies</Text>
               <TouchableOpacity
                 onPress={() =>
                   props.navigation.navigate('AppFlow', {screen: 'AllAgencies'})
@@ -450,5 +459,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginHorizontal: wp(1),
     marginTop: hp(0.5),
+  },
+  updateAppBanner: {
+    width: wp(90),
+    borderRadius:hp(.5),
+    padding: 5,
+    backgroundColor: colors.secondary,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: hp(2),
+  },
+  updateAppText: {
+    fontFamily: fonts.medium,
+    fontSize: 12,
+    color: colors.white,
   },
 });

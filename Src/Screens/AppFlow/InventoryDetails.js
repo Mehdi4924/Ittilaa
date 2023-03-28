@@ -241,22 +241,31 @@ export default function InventoryDetails(props) {
                   ) : null}
                 </>
               ) : (
-                <Text style={styles.normalText}>
-                  {inventory.map(invent => {
-                    return (
-                      <Text style={styles.text2}>
-                        {/* {invent?.category}  */}
-                        {invent?.plot_no}
-                        {/* is available in */}
-                        {', '}
-                        {invent?.block}, {invent?.society?.name},{' '}
-                        {/* {invent?.city?.name} at  */}
-                        {invent?.price} {invent?.price_unit}
-                        {'\n'}
-                      </Text>
-                    );
-                  })}
-                </Text>
+                <>
+                  <Text style={styles.normalText}>
+                    {inventory.map(invent => {
+                      return (
+                        <Text style={styles.text2}>
+                          {/* {invent?.category}  */}
+                          {invent?.plot_no}
+                          {/* is available in */}
+                          {', '}
+                          {invent?.block}, {invent?.society?.name},{' '}
+                          {/* {invent?.city?.name} at  */}
+                          {invent?.price} {invent?.price_unit}
+                          {'\n'}
+                        </Text>
+                      );
+                    })}
+                  </Text>
+                  {compLogo ? (
+                    <Image
+                      source={require('../../Assets/Images/logo.png')}
+                      style={styles.compLogoStyle}
+                      resizeMode="contain"
+                    />
+                  ) : null}
+                </>
               )}
             </View>
           </ViewShot>
@@ -277,7 +286,7 @@ export default function InventoryDetails(props) {
             <View>
               <Text style={styles.normalText}>Call the agent</Text>
               <Text style={styles.phoneNumberText}>
-                {inventory[0]?.agency?.ceo_mobile1}
+                {inventory[0]?.agency?.user?.phone}
               </Text>
             </View>
           </TouchableOpacity>

@@ -60,7 +60,7 @@ export default function Inventories(props) {
           );
           setHotData(filteredData);
         }
-        setListData(response?.data?.data?.inventory);
+        setListData(response?.data?.data?.inventory?.reverse());
         dataCopy = response?.data?.data?.inventory;
       })
       .catch(function (error) {
@@ -157,7 +157,7 @@ export default function Inventories(props) {
       <>
         <FlatList
           data={listData}
-          
+          // inverted={listData?.length?true:false}
           ListHeaderComponent={hotData.length ? headerComponent : null}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
@@ -175,12 +175,16 @@ export default function Inventories(props) {
                 <View style={styles.listLeftView}>
                   <Image
                     source={
-                      inventories[0]?.agency?.file?.file
+                      inventories[0]?.agency?.file.length
                         ? {
                             uri:
-                              URL.imageURL + inventories[0]?.agency?.file?.file,
+                              URL.imageURL + inventories[0]?.agency?.file[0]?.file,
                           }
-                        : allImages.logo1
+                        : {
+                            uri:
+                              URL.imageURL + inventories[0]?.agency?.file[0]?.file,
+                          }
+                        // allImages.logo1
                     }
                     style={styles.listImage}
                     resizeMode="contain"

@@ -158,6 +158,7 @@ export default function ClassifiedDetails(props) {
               <Text style={styles.amenitiesText}>{data?.bath}</Text>
             </View>
           </View>
+          <Text style={styles.addTitle}>{data?.title}</Text>
           <Text style={styles.descText}>Description</Text>
           <Text style={styles.descDetailsText}>{data?.description}</Text>
           {/* <Text style={styles.descText}>Location</Text>
@@ -277,7 +278,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     width: wp(85),
     fontSize: hp(2),
-    marginVertical: hp(2),
+    marginTop: hp(1),
+  },
+  addTitle: {
+    color: colors.black,
+    fontFamily: fonts.bold,
+    width: wp(85),
+    fontSize: 20,
+    marginTop: hp(2),
   },
   descDetailsText: {
     color: colors.black,

@@ -90,7 +90,7 @@ export default function AllAgencies(props) {
 
       <FlatList
         data={agencies}
-          
+          inverted={agencies?.length?true:false}
         contentContainerStyle={{
           paddingHorizontal: wp(5),
           marginVertical: hp(2),
