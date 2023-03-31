@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -69,7 +70,7 @@ export default function HomeScreen(props) {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       <CustomLoader isLoading={isLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <CustomHeader
@@ -253,7 +254,7 @@ export default function HomeScreen(props) {
         )}
         <View style={{height: hp(8)}}></View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
