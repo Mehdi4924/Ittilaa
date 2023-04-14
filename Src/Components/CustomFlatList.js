@@ -6,26 +6,28 @@ import {hp, wp} from '../Constants/Responsive';
 import Carousel from 'react-native-snap-carousel';
 
 export default function CustomFlatList(props) {
-  const renderItem = ({item, index}) => (
-    <Pressable key={index} onPress={() => props.onPress(item)}>
-      <View style={props.featureCard}>
-        <Image
-          source={
-            item?.file
-              ? {uri: URL.imageURL + item.file.file}
-              : require('../Assets/Images/feature1.jpg')
-          }
-          style={props.featureImageStyle}
-          resizeMode="contain"
-        />
-        <Text style={props.featureNameText} numberOfLines={3}>
-          {props?.news
-            ? `${item.description}`
-            : `${item?.title} working with ${item.developer_name}`}
-        </Text>
-      </View>
-    </Pressable>
-  );
+  const renderItem = ({item, index}) => {
+    return (
+      <Pressable key={index} onPress={() => props.onPress(item)}>
+        <View style={props.featureCard} key={index}>
+          <Image
+            source={
+              item?.file
+                ? {uri: URL.imageURL + item.file.file}
+                : require('../Assets/Images/feature1.jpg')
+            }
+            style={props.featureImageStyle}
+            resizeMode="contain"
+          />
+          <Text style={props.featureNameText} numberOfLines={3}>
+            {props?.news
+              ? `${item.description}`
+              : `${item?.title} working with ${item.developer_name}`}
+          </Text>
+        </View>
+      </Pressable>
+    );
+  };
   return (
     <>
       {props?.horizontal ? (
@@ -35,7 +37,7 @@ export default function CustomFlatList(props) {
           numColumns={props.numColumns}
           showsHorizontalScrollIndicator={false}
           data={props.data}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index || Math.random()}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }
@@ -55,7 +57,7 @@ export default function CustomFlatList(props) {
           numColumns={props.numColumns}
           showsHorizontalScrollIndicator={false}
           data={props.data}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index || Math.random()}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }

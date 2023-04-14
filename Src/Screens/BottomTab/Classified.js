@@ -1,13 +1,11 @@
 import {
   FlatList,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {colors} from '../../Constants/Colors';
 import {hp, wp} from '../../Constants/Responsive';
 import {ImageBackground} from 'react-native';
@@ -16,12 +14,10 @@ import {fonts} from '../../Constants/Fonts';
 import {Icon} from '@rneui/themed';
 import CustomLoader from '../../Components/CustomLoader';
 import CustomHeader from '../../Components/CustomHeader';
-import axios from 'axios';
 import {URL} from '../../Constants/URL';
 import {useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 import {AppFlow} from '../../Api/ApiCalls';
-import CustomDropdown from '../../Components/CustomDropdown';
 import FilterComp from '../../Components/FilterComp';
 import EmptyComponent from '../../Components/EmptyComponent';
 
@@ -53,7 +49,12 @@ export default function Classified(props) {
         setLoading(false);
       });
   };
-
+  function sortArr(arr) {
+    const newArr = arr.sort(function (a, b) {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    return newArr;
+  }
   function filterArray(filterData) {
     setFilterBtnIndicator(true);
     var data = new FormData();
@@ -118,7 +119,8 @@ export default function Classified(props) {
       />
       <CustomLoader isLoading={false} />
       <FlatList
-        data={data?.reverse()}
+        // data={data?.reverse()}
+        data={sortArr(data)}
         // inverted={data?.length?true:false}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<EmptyComponent />}

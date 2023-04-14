@@ -1,8 +1,6 @@
 import {
-  ActivityIndicator,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,18 +11,7 @@ import CustomHeader from '../../Components/CustomHeader';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import {allImages} from '../../Constants/Images';
-import TitaniumFlatlist from '../../Components/TitaniumFlatlist';
-import {
-  Featured,
-  NewsData,
-  titanium,
-  topClassified,
-  topInventories,
-} from '../../Constants/dummyData';
 import {fonts} from '../../Constants/Fonts';
-import InventoriesComp from '../../Components/InventoriesComp';
-import CustomFlatList from '../../Components/CustomFlatList';
-import TopClassifiedComp from '../../Components/TopClassifiedComp';
 import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
 import {URL} from '../../Constants/URL';
@@ -55,6 +42,12 @@ export default function AllAgencies(props) {
       .finally(() => {
         setIsLoading(false);
       });
+  }
+  function sortArr(arr) {
+    const newArr = arr.sort(function (a, b) {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    return newArr;
   }
   return (
     <View style={styles.mainContainer}>
@@ -89,12 +82,14 @@ export default function AllAgencies(props) {
       />
 
       <FlatList
-        data={agencies}
-          inverted={agencies?.length?true:false}
+        data={sortArr(agencies)}
+        // inverted={agencies?.length ? true : false}
         contentContainerStyle={{
           paddingHorizontal: wp(5),
           marginVertical: hp(2),
+          paddingBottom:hp(10)
         }}
+        keyExtractor={({item})=>item?.id || Math.random()}
         renderItem={({item, index}) => {
           const a = index % 2;
           return (
@@ -105,14 +100,15 @@ export default function AllAgencies(props) {
               style={[
                 styles.listContainer,
                 {backgroundColor: a == 1 ? colors.white : colors.black},
-              ]}>
+              ]}
+              key={index}>
               <Image
                 source={
                   item?.file?.length
-                      ? {uri: URL.imageURL + item.file[0].file}
-                  // item?.file
-                  //   ? {uri: URL.imageURL + item.file.file}
-                    : allImages.agencydummy
+                    ? {uri: URL.imageURL + item.file[0].file}
+                    : // item?.file
+                      //   ? {uri: URL.imageURL + item.file.file}
+                      allImages.agencydummy
                 }
                 style={
                   a == 1
@@ -221,12 +217,16 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontSize: hp(1.8),
   },
-  locationView: {flexDirection: 'row', alignItems: 'flex-start', marginTop:hp(1)},
+  locationView: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: hp(1),
+  },
   locationText: {
     fontFamily: fonts.regular,
     color: colors.grey,
     fontSize: hp(1.8),
-    maxWidth:wp(55)
+    maxWidth: wp(55),
   },
   indicator: {
     width: wp(100),

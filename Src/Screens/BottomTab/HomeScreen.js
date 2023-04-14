@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -7,40 +6,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import CustomHeader from '../../Components/CustomHeader';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
 import {allImages} from '../../Constants/Images';
 import TitaniumFlatlist from '../../Components/TitaniumFlatlist';
-import {
-  Featured,
-  NewsData,
-  titanium,
-  topClassified,
-  topInventories,
-} from '../../Constants/dummyData';
 import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
 import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
-import {URL} from '../../Constants/URL';
-import axios from 'axios';
 import {useFocusEffect} from '@react-navigation/native';
 import {AppFlow} from '../../Api/ApiCalls';
-import TopClassified from '../AppFlow/TopClassified';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomLoader from '../../Components/CustomLoader';
-import AutoScrollFlatList from '../../Components/AutoScroll';
+import { Linking } from 'react-native';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [agenciesData, setAgenciesData] = useState([]);
+
   useFocusEffect(
     React.useCallback(() => {
       getData();
       GetUser();
+      getAllAgencies()
     }, []),
   );
   // useEffect(() => {
@@ -50,13 +42,29 @@ export default function HomeScreen(props) {
     let userData = await AsyncStorage.getItem('AuthUser');
     setUser(JSON.parse(userData));
   };
- 
+  async function getAllAgencies() {
+    AppFlow.getAllAgencies()
+      .then(res => {
+        console.log(
+          'response getting all agences',
+          JSON.stringify(res.data, null, 2),
+          // res,
+        );
+        setAgenciesData(res?.data?.data);
+        
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+      });
+  }
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
         console.log(
           'Response data',
-          response?.data,
+          JSON.stringify(response?.data.data.agency, null, 2),
           // response.data.data,
         );
         setScreenData(response.data.data);
@@ -68,7 +76,12 @@ export default function HomeScreen(props) {
         setIsLoading(false);
       });
   };
-
+  function sortArr(arr) {
+    const newArr = arr.sort(function (a, b) {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    return newArr;
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <CustomLoader isLoading={isLoading} />
@@ -99,9 +112,13 @@ export default function HomeScreen(props) {
             {screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
-                  Have you install the new version of the app? if no, then
-                  install it from playstore.
+                  New stable Version of this app has released. To install
                 </Text>
+                <TouchableOpacity  onPress={() =>
+                  Linking.openURL("http://play.google.com/store/apps/details?id=com.ittilaa")
+                }>
+                  <Text style={styles.clickHere}>Click Here</Text>
+                </TouchableOpacity>
               </View>
             ) : null}
             <View style={styles.titleContainer}>
@@ -116,7 +133,9 @@ export default function HomeScreen(props) {
 
             <TitaniumFlatlist
               horizontal={true}
-              data={screenData?.agency?.length ? screenData?.agency : []}
+              data={
+                agenciesData.length ? sortArr(agenciesData) : []
+              }
               // data={[]}
               cardStyle={styles.cardStyle}
               listContainerstyle={styles.listContainerstyle}
@@ -379,13 +398,13 @@ const styles = StyleSheet.create({
   },
   classifiedTitleText: {
     fontFamily: fonts.bold,
-    fontSize: hp(1.4),
+    fontSize: 8,
     color: colors.secondary,
-    maxWidth: wp(25),
+    maxWidth: wp(22),
   },
   classifiedPriceText: {
     fontFamily: fonts.bold,
-    fontSize: hp(1.4),
+    fontSize: 8,
     color: colors.primary,
     textAlign: 'right',
   },
@@ -462,18 +481,26 @@ const styles = StyleSheet.create({
     marginTop: hp(0.5),
   },
   updateAppBanner: {
+    // flexDirection:'row',
     width: wp(90),
-    borderRadius:hp(.5),
+    borderRadius: hp(0.5),
     padding: 5,
     backgroundColor: colors.secondary,
     alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     marginVertical: hp(2),
   },
   updateAppText: {
     fontFamily: fonts.medium,
     fontSize: 12,
     color: colors.white,
+  },
+  clickHere: {
+    fontFamily: fonts.medium,
+    fontSize: 14,
+    color: colors.primary,
+    // alignSelf:'flex-start',
+    // textAlign:'left'
   },
 });

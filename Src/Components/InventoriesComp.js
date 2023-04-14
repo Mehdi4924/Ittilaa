@@ -147,7 +147,7 @@ export default function InventoriesComp(props) {
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }
           data={props.data}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id || Math.random()}
           renderItem={renderItem}
         />
       ) : (
@@ -162,7 +162,7 @@ export default function InventoriesComp(props) {
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item) => item.id || Math.random()}
           renderItem={renderItem}
           sliderWidth={wp(100)}
           sliderHeight={hp(100)}

@@ -92,6 +92,21 @@ export default function ClassifiedDetails(props) {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TouchableOpacity
                 style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={() =>
+                  Linking.openURL(
+                    `whatsapp://send?text=Hi&phone=${data?.number}`,
+                  )
+                }>
+                <Icon
+                  name={'whatsapp'}
+                  type={'fontisto'}
+                  color={'#25D366'}
+                  reverse
+                  size={hp(1.5)}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{flexDirection: 'row', alignItems: 'center'}}
                 onPress={() => Linking.openURL(`tel:${data?.number}`)}>
                 <Icon
                   name={'phone'}
@@ -102,6 +117,7 @@ export default function ClassifiedDetails(props) {
                 />
                 <Text style={styles.headingText}>Call For Details</Text>
               </TouchableOpacity>
+
               {/* <TouchableOpacity style={styles.shareIconStyles}>
                 <Icon
                   name={'md-share-social'}

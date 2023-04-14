@@ -9,60 +9,63 @@ import EmptyComponent from './EmptyComponent';
 import Carousel from 'react-native-snap-carousel';
 
 export default function TopClassifiedComp(props) {
-  const renderItem = ({item, index}) => (
-    <Pressable
-      key={index}
-      style={props.classifiedCardStyle}
-      onPress={() => props.onPress(item)}>
-      <Image
-        source={
-          item?.file?.length
-            ? {uri: URL.imageURL + item?.file[0]?.file}
-            : require('../Assets/Images/classified.jpeg')
-        }
-        style={props.classifiedImageStyle}
-        resizeMode="contain"
-      />
-      <View style={props.classifiedTitlePrice}>
-        <Text style={props.classifiedTitleText}>
-          {item.type == 'pa' ? 'House ' : 'Plot '}
-          For Sale
-        </Text>
-        <Text style={props.classifiedPriceText}>
-          Rs/. {item?.price || 'Loading'}
-        </Text>
-      </View>
-      <View></View>
-      <Text style={props.classifiedAddressStyle} numberOfLines={3}>
-        {item?.description || 'Loading'}
-      </Text>
-      <View style={styles.classifiedAmenitiesContainer}>
-        <View style={props.classifiedAmenities}>
-          <Icon
-            type="font-awesome"
-            name="bed"
-            size={props.amenitiesIconSize}
-            color={colors.white}
-          />
-          <Text style={props.classifiedAmenitiesText}>{item?.bed || ''}</Text>
-        </View>
-        <View style={props.classifiedAmenities}>
-          <Icon
-            type="font-awesome"
-            name="bath"
-            size={props.amenitiesIconSize}
-            color={colors.white}
-          />
-          <Text style={props.classifiedAmenitiesText}>{item?.bath || ''}</Text>
-        </View>
-        <View style={props.classifiedAmenities}>
-          <Text style={props.classifiedAmenitiesText}>
-            {item?.size || 'N/A'} {item?.size_unit || 'N/A'}
+  const renderItem = ({item, index}) => {
+    return (
+      <Pressable
+        key={index}
+        style={props.classifiedCardStyle}
+        onPress={() => props.onPress(item)}>
+        <Image
+          source={
+            item?.file?.length
+              ? {uri: URL.imageURL + item?.file[0]?.file}
+              : require('../Assets/Images/classified.jpeg')
+          }
+          style={props.classifiedImageStyle}
+          resizeMode="contain"
+        />
+        <View style={props.classifiedTitlePrice}>
+          <Text style={props.classifiedTitleText} numberOfLines={1}>
+            {item?.category || ''} For Sale
+          </Text>
+          <Text style={props.classifiedPriceText}>
+            Rs/. {item?.price || 'Loading'}
           </Text>
         </View>
-      </View>
-    </Pressable>
-  );
+        <View></View>
+        <Text style={props.classifiedAddressStyle} numberOfLines={3}>
+          {item?.description || 'Loading'}
+        </Text>
+        <View style={styles.classifiedAmenitiesContainer}>
+          <View style={props.classifiedAmenities}>
+            <Icon
+              type="font-awesome"
+              name="bed"
+              size={props.amenitiesIconSize}
+              color={colors.white}
+            />
+            <Text style={props.classifiedAmenitiesText}>{item?.bed || ''}</Text>
+          </View>
+          <View style={props.classifiedAmenities}>
+            <Icon
+              type="font-awesome"
+              name="bath"
+              size={props.amenitiesIconSize}
+              color={colors.white}
+            />
+            <Text style={props.classifiedAmenitiesText}>
+              {item?.bath || ''}
+            </Text>
+          </View>
+          <View style={props.classifiedAmenities}>
+            <Text style={props.classifiedAmenitiesText}>
+              {item?.size || 'N/A'} {item?.size_unit || 'N/A'}
+            </Text>
+          </View>
+        </View>
+      </Pressable>
+    );
+  };
   return (
     <View>
       {props.horizontal ? (
@@ -73,7 +76,7 @@ export default function TopClassifiedComp(props) {
           showsVerticalScrollIndicator={false}
           data={props.data}
           numColumns={props.numColumns}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index || Math.random()}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }
@@ -93,7 +96,7 @@ export default function TopClassifiedComp(props) {
           showsVerticalScrollIndicator={false}
           data={props.data}
           numColumns={props.numColumns}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index || Math.random()}
           ListEmptyComponent={
             <EmptyComponent emptyContainer={{height: hp(5)}} />
           }

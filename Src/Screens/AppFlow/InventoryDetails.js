@@ -203,7 +203,7 @@ export default function InventoryDetails(props) {
                     </Text>
                   </View>
                   <Text style={styles.normalText}>
-                    {inventoryData?.city?.name || ''}
+                    {inventoryData?.society?.name || ''}
                   </Text>
                   <Text style={styles.normalText}>
                     {inventoryData?.size || 'Loading'}{' '}
@@ -245,19 +245,32 @@ export default function InventoryDetails(props) {
                   <Text style={styles.normalText}>
                     {inventory.map(invent => {
                       return (
-                        <Text style={styles.text2}>
-                          {/* {invent?.category}  */}
-                          {invent?.plot_no}
-                          {/* is available in */}
-                          {', '}
-                          {invent?.block}, {invent?.society?.name},{' '}
-                          {/* {invent?.city?.name} at  */}
-                          {invent?.price} {invent?.price_unit}
+                        <>
+                        <Text style={styles.normalText}>
+                          {invent?.category || ''} {invent?.plot_no || ''},{' '}
+                          {invent?.block || ''}{' '}
+                          {invent?.block?.toLowerCase().includes('block')
+                            ? ''
+                            : 'Block'}{' '}
+                          @{invent?.price} {invent?.price_unit}{' '}
+                          {invent?.feature} {invent?.size} {invent?.size_unit}{' '}
                           {'\n'}
                         </Text>
+                         {/* <Text style={styles.text2}>
+                         
+                          {invent?.plot_no}
+                          
+                          {', '}
+                          {invent?.block}, {invent?.society?.name},{' '}
+                          
+                          {invent?.price} {invent?.price_unit}
+                          {'\n'}
+                        </Text> */}
+                        </>
                       );
                     })}
                   </Text>
+
                   {compLogo ? (
                     <Image
                       source={require('../../Assets/Images/logo.png')}

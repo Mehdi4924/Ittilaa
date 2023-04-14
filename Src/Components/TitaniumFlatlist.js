@@ -41,7 +41,7 @@ export default function TitaniumFlatlist(props) {
         showsVerticalScrollIndicator={false}
         data={props.data}
         numColumns={props.numColumns}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index || Math.random()}
         ListEmptyComponent={<EmptyComponent emptyContainer={{height: hp(5)}} />}
         renderItem={renderItem}
         sliderWidth={wp(100)}
