@@ -25,7 +25,7 @@ export default function TitaniumFlatlist(props) {
               ? {uri: URL.imageURL + item.file[0].file}
               : require('../Assets/Images/agency-icon.png')
           }
-          style={{width: wp(20), height: wp(20), borderRadius: hp(10)}}
+          style={{width: wp(20), height: hp(10), borderRadius: hp(6)}}
           resizeMode="contain"
         />
       </View>

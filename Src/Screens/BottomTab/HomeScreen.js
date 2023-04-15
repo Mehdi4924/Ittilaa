@@ -109,7 +109,8 @@ export default function HomeScreen(props) {
         />
         {isLoading ? null : (
           <>
-            {screenData?.app_update?.update == '1' ? (
+          
+            {Platform.OS=='android' && screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
                   New stable Version of this app has released. To install
