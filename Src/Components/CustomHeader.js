@@ -1,6 +1,8 @@
 import {
   Image,
+  Platform,
   Pressable,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -16,7 +18,7 @@ import FilterComp from './FilterComp';
 
 export default function CustomHeader(props) {
   return (
-    <View style={props.headerStyle}>
+    <SafeAreaView style={[props.headerStyle,]}>
       <View style={props.iconContainer}>
         {props.leftImage ? (
           <Image
@@ -74,7 +76,7 @@ export default function CustomHeader(props) {
           ) : null}
         </View>
       ) : null}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -91,12 +93,12 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   filterContainer: {
-    width: wp(13),
-    height: hp(6.5),
+    width: wp(14),
+    height: hp(7),
     borderRadius: hp(1),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.white,
-    marginTop: hp(2),
+    marginTop: hp(1),
   },
 });

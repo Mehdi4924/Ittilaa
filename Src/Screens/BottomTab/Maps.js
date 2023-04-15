@@ -14,7 +14,7 @@ import {Image} from 'react-native';
 import {Icon} from '@rneui/base';
 import {colors} from '../../Constants/Colors';
 
-MapboxGL.setWellKnownTileServer('Mapbox');
+// MapboxGL.setWellKnownTileServer('Mapbox');
 MapboxGL.setAccessToken(
   'pk.eyJ1IjoiaWZ0aWtoYXJpZmZpIiwiYSI6ImNsYnI0ZjZqODBxdjczbm51MWxneWF6bGkifQ.HkA420rtPufM-amJBQV7bw',
 );

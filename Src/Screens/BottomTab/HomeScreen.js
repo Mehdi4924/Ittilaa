@@ -296,6 +296,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(1),
+    height:hp(7)
   },
   textInputStyle: {
     width: wp(75),
