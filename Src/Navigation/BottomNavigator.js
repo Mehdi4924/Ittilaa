@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Image,
+  Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
@@ -27,7 +28,10 @@ export default function BottomNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {backgroundColor: colors.primary, paddingBottom: 5},
+        tabBarStyle: [
+          styles.bottomStyle,
+          Platform.OS == 'ios' ? {paddingBottom: 15,  height:hp(8)} : null,
+        ],
       }}>
       <Tab.Screen
         name="HomeScreen"
@@ -140,4 +144,5 @@ const styles = StyleSheet.create({
     borderWidth: 6,
     borderColor: colors.primary,
   },
+  bottomStyle: {backgroundColor: colors.primary, paddingBottom: 5},
 });

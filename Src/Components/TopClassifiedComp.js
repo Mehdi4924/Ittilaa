@@ -22,7 +22,7 @@ export default function TopClassifiedComp(props) {
               : require('../Assets/Images/classified.jpeg')
           }
           style={props.classifiedImageStyle}
-          resizeMode="contain"
+          // resizeMode="contain"
         />
         <View style={props.classifiedTitlePrice}>
           <Text style={props.classifiedTitleText} numberOfLines={1}>

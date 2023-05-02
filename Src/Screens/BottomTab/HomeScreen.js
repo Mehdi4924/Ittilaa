@@ -360,14 +360,14 @@ const styles = StyleSheet.create({
     paddingBottom: hp(2),
   },
   profileImgStyle: {
-    width: wp(12),
+    width: hp(6),
     height: hp(6),
     borderRadius: wp(8),
   },
   profileImgContainer: {
-    width: wp(14),
+    width: hp(7),
     height: hp(7),
-    borderRadius: wp(7),
+    borderRadius: hp(7),
     backgroundColor: colors.white,
     elevation: 1,
     alignItems: 'center',
