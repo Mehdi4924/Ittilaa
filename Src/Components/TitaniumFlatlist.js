@@ -25,8 +25,8 @@ export default function TitaniumFlatlist(props) {
               ? {uri: URL.imageURL + item.file[0].file}
               : require('../Assets/Images/agency-icon.png')
           }
-          style={{width: wp(20), height: wp(20), borderRadius: hp(10)}}
-          resizeMode="contain"
+          style={{width: hp(10), height: hp(10), borderRadius: hp(5)}}
+          // resizeMode="contain"
         />
       </View>
       <Text style={props.listTitleStyle}>{item?.name || 'Loading'}</Text>

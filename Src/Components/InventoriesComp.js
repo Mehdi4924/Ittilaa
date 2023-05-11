@@ -35,7 +35,7 @@ export default function InventoriesComp(props) {
                     : require('../Assets/Images/agency-dummy.png')
                 }
                 style={props.profileImgStyle}
-                resizeMode="contain"
+                // resizeMode="contain"
               />
             </View>
             <View style={{marginLeft: wp(4)}}>

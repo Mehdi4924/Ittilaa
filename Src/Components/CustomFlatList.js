@@ -17,7 +17,7 @@ export default function CustomFlatList(props) {
                 : require('../Assets/Images/feature1.jpg')
             }
             style={props.featureImageStyle}
-            resizeMode="contain"
+            // resizeMode="contain"
           />
           <Text style={props.featureNameText} numberOfLines={3}>
             {props?.news

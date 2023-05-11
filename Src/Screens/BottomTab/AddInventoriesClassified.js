@@ -32,6 +32,7 @@ import {Icon} from '@rneui/themed';
 import {AppFlow} from '../../Api/ApiCalls';
 import axios from 'axios';
 import {FlatList} from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
@@ -326,7 +327,7 @@ export default function AddInventoriesClassified(props) {
     });
   };
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{alignItems: 'center'}}>
@@ -992,7 +993,7 @@ export default function AddInventoriesClassified(props) {
 
         <View style={{height: hp(8)}}></View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -1105,7 +1106,8 @@ const styles = StyleSheet.create({
   },
   priceTypeActice: {
     width: wp(10),
-    height: hp(5),
+    // height: hp(5),
+    aspectRatio:1,
     borderRadius: hp(5),
     backgroundColor: colors.primary,
     alignItems: 'center',
@@ -1113,7 +1115,7 @@ const styles = StyleSheet.create({
   },
   priceTypeInactice: {
     width: wp(10),
-    height: hp(5),
+    aspectRatio:1,
     borderRadius: hp(5),
     backgroundColor: colors.grey,
     alignItems: 'center',
@@ -1164,12 +1166,12 @@ const styles = StyleSheet.create({
   amenitiesInputStyles: {
     width: wp(18),
     fontFamily: fonts.regular,
-    textAlignVertical: 'top',
-    paddingTop: hp(2.5),
   },
   amenitiesInputView: {
     flexDirection: 'row',
     alignItems: 'center',
+    width:wp(25),
+
   },
   plNoTxtInpContainer: {
     width: wp(30),

@@ -1,5 +1,6 @@
 import {
   FlatList,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -89,7 +90,7 @@ export default function Classified(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
@@ -225,7 +226,7 @@ export default function Classified(props) {
         }}
         filterBtnIndicator={filterBtnIndicator}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -243,8 +244,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     paddingHorizontal: wp(2),
-    marginTop: hp(2),
-    width: wp(70),
+    marginTop: hp(1),
+    height:hp(7)
   },
   textInputStyle: {
     width: wp(58),

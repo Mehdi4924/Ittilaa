@@ -108,7 +108,8 @@ export default function HomeScreen(props) {
         />
         {isLoading ? null : (
           <>
-            {screenData?.app_update?.update == '1' ? (
+          
+            {Platform.OS=='android' && screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
                   New stable Version of this app has released. To install
@@ -318,6 +319,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(1),
+    height:hp(7)
   },
   textInputStyle: {
     width: wp(75),
@@ -380,14 +382,14 @@ const styles = StyleSheet.create({
     paddingBottom: hp(2),
   },
   profileImgStyle: {
-    width: wp(12),
+    width: hp(6),
     height: hp(6),
     borderRadius: wp(8),
   },
   profileImgContainer: {
-    width: wp(14),
+    width: hp(7),
     height: hp(7),
-    borderRadius: wp(7),
+    borderRadius: hp(7),
     backgroundColor: colors.white,
     elevation: 1,
     alignItems: 'center',

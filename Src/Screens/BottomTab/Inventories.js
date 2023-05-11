@@ -25,6 +25,7 @@ import EmptyComponent from '../../Components/EmptyComponent';
 import CustomLoader from '../../Components/CustomLoader';
 import FilterComp from '../../Components/FilterComp';
 import InventoriesFilter from '../../Components/InventoriesFilter';
+import { SafeAreaView } from 'react-native';
 
 var dataCopy = [];
 export default function Inventories(props) {
@@ -124,7 +125,7 @@ export default function Inventories(props) {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <CustomLoader isLoading={loading} />
       <CustomHeader
         headerStyle={styles.headerStyle}
@@ -247,7 +248,7 @@ export default function Inventories(props) {
         }}
         filterBtnIndicator={filterBtnIndicator}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -271,8 +272,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     paddingHorizontal: wp(2),
-    marginTop: hp(2),
-    width: wp(70),
+    marginTop: hp(1),
+    height:hp(7)
   },
   textInputStyle: {
     width: wp(58),

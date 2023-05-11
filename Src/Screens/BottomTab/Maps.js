@@ -9,11 +9,8 @@ import {
 } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 import {hp, wp} from '../../Constants/Responsive';
-import {allImages} from '../../Constants/Images';
-import {Image} from 'react-native';
-import {Icon} from '@rneui/base';
-import {colors} from '../../Constants/Colors';
 
+// MapboxGL.setWellKnownTileServer('maplibre');
 MapboxGL.setWellKnownTileServer('Mapbox');
 MapboxGL.setAccessToken(
   'pk.eyJ1IjoiaWZ0aWtoYXJpZmZpIiwiYSI6ImNsYnI0ZjZqODBxdjczbm51MWxneWF6bGkifQ.HkA420rtPufM-amJBQV7bw',

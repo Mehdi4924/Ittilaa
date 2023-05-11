@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Icon} from '@rneui/themed';
@@ -48,7 +48,7 @@ export default function Profile(props) {
     <View style={styles.container}>
       <CustomLoader isLoading={isLoading} />
 
-      <View style={styles.header}>
+      <View style={[styles.header, Platform.OS=='ios'?{marginTop:hp(5)}:null]}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon
             name={'arrow-back-circle'}

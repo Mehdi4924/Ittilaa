@@ -78,6 +78,15 @@ PODS:
   - lottie-react-native (5.1.5):
     - lottie-ios (~> 3.4.0)
     - React-Core
+  - MapboxCommon (23.4.0)
+  - MapboxCoreMaps (10.12.2):
+    - MapboxCommon (~> 23.4)
+  - MapboxMaps (10.12.2):
+    - MapboxCommon (= 23.4.0)
+    - MapboxCoreMaps (= 10.12.2)
+    - MapboxMobileEvents (= 1.0.10)
+    - Turf (~> 2.0)
+  - MapboxMobileEvents (1.0.10)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -368,13 +377,17 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - rnmapbox-maps (10.0.0-rc.4):
+  - rnmapbox-maps (10.0.2):
+    - MapboxMaps (~> 10.12.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-rc.4)
-  - rnmapbox-maps/DynamicLibrary (10.0.0-rc.4):
+    - rnmapbox-maps/DynamicLibrary (= 10.0.2)
+    - Turf
+  - rnmapbox-maps/DynamicLibrary (10.0.2):
+    - MapboxMaps (~> 10.12.0)
     - React
     - React-Core
+    - Turf
   - RNScreens (3.20.0):
     - React-Core
     - React-RCTImage
@@ -382,6 +395,7 @@ PODS:
     - React-Core
   - SocketRocket (0.6.0)
   - Toast (4.0.0)
+  - Turf (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -468,9 +482,14 @@ SPEC REPOS:
     - fmt
     - libevent
     - lottie-ios
+    - MapboxCommon
+    - MapboxCoreMaps
+    - MapboxMaps
+    - MapboxMobileEvents
     - OpenSSL-Universal
     - SocketRocket
     - Toast
+    - Turf
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -577,6 +596,10 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
   lottie-react-native: 3e722c63015fdb9c27638b0a77969fc412067c18
+  MapboxCommon: 2945d39158111455f353524f3c2ad356bd8d546a
+  MapboxCoreMaps: 8f355514ac5b573967badd9cf8e482561d6e8e2d
+  MapboxMaps: 9e0873d7f8bddf5751791da7be2560b4157f3c95
+  MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 0f06b6068f530932d10e1a01a5352fad4eaacb74
@@ -609,14 +632,15 @@ SPEC CHECKSUMS:
   ReactCommon: 149e2c0acab9bac61378da0db5b2880a1b5ff59b
   RNCAsyncStorage: a46ee6bf15cf1ba863d0a47287236f9c95d5b213
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  rnmapbox-maps: deda435ed660545cf9ce1b898baaf765f308625a
+  rnmapbox-maps: db661c0b1034d8227ff659e291cca4c188b6c704
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNShare: eaee3dd5a06dad397c7d3b14762007035c5de405
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: c4d61225a466f250c35c1ee78d2d0b3d41fe661c
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f31949181731d4d158a36c61c883bbfdd53a9b35
+PODFILE CHECKSUM: 120e2294ab16864d34a8d73419f08ad391a204b8
 
 COCOAPODS: 1.10.2
