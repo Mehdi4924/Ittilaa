@@ -34,6 +34,7 @@ const CustomDropdown = props => {
           props.dropdown,
           isFocus && {borderColor: colors.primary},
         ]}
+        disable={props?.disable || false}
         placeholderStyle={[styles.placeholderStyle, props.placeholderStyle]}
         selectedTextStyle={[styles.selectedTextStyle, props.selectedTextStyle]}
         inputSearchStyle={[styles.inputSearchStyle, props.inputSearchStyle]}

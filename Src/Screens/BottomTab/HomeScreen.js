@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import CustomHeader from '../../Components/CustomHeader';
 import {hp, wp} from '../../Constants/Responsive';
 import {colors} from '../../Constants/Colors';
@@ -20,7 +20,8 @@ import {useFocusEffect} from '@react-navigation/native';
 import {AppFlow} from '../../Api/ApiCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomLoader from '../../Components/CustomLoader';
-import { Linking } from 'react-native';
+import {Linking} from 'react-native';
+import {Icon} from '@rneui/base';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
@@ -32,7 +33,7 @@ export default function HomeScreen(props) {
     React.useCallback(() => {
       getData();
       GetUser();
-      getAllAgencies()
+      getAllAgencies();
     }, []),
   );
   // useEffect(() => {
@@ -51,13 +52,11 @@ export default function HomeScreen(props) {
           // res,
         );
         setAgenciesData(res?.data?.data);
-        
       })
       .catch(err => {
         console.log(err);
       })
-      .finally(() => {
-      });
+      .finally(() => {});
   }
   const getData = () => {
     AppFlow.dashboard()
@@ -114,13 +113,38 @@ export default function HomeScreen(props) {
                 <Text style={styles.updateAppText}>
                   New stable Version of this app has released. To install
                 </Text>
-                <TouchableOpacity  onPress={() =>
-                  Linking.openURL("http://play.google.com/store/apps/details?id=com.ittilaa")
-                }>
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(
+                      'http://play.google.com/store/apps/details?id=com.ittilaa',
+                    )
+                  }>
                   <Text style={styles.clickHere}>Click Here</Text>
                 </TouchableOpacity>
               </View>
             ) : null}
+            <TouchableOpacity
+              style={{
+                backgroundColor: colors.primary,
+                marginHorizontal: wp(5),
+                paddingVertical: hp(2),
+                paddingHorizontal: wp(5),
+                borderRadius: 5,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+              onPress={() =>
+                props.navigation.navigate('AppFlow', {screen: 'AddInformation'})
+              }>
+              <Text style={styles.updateAppText}>Create Ad</Text>
+              <Icon
+                name={'home-group-plus'}
+                type={'material-community'}
+                color={colors.white}
+                size={hp(3)}
+              />
+            </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Agencies</Text>
               <TouchableOpacity
@@ -133,9 +157,7 @@ export default function HomeScreen(props) {
 
             <TitaniumFlatlist
               horizontal={true}
-              data={
-                agenciesData.length ? sortArr(agenciesData) : []
-              }
+              data={agenciesData.length ? sortArr(agenciesData) : []}
               // data={[]}
               cardStyle={styles.cardStyle}
               listContainerstyle={styles.listContainerstyle}

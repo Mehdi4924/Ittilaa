@@ -15,6 +15,9 @@ import AgencyProperties from '../Screens/AppFlow/AgencyProperties';
 import Profile from '../Screens/AppFlow/Profile';
 import UpdateProfile from '../Screens/AppFlow/UpdateProfile';
 import MyFavourites from '../Screens/AppFlow/MyFavourites';
+import AddInformation from '../Screens/AppFlow/CreateAd/AddInformation';
+import ImageUpload from '../Screens/AppFlow/CreateAd/ImageUpload';
+import AddAgencyDetails from '../Screens/AppFlow/CreateAd/AddAgencyDetails';
 
 export default function AppFlow() {
   const MainFlow = createNativeStackNavigator();
@@ -35,6 +38,9 @@ export default function AppFlow() {
       <MainFlow.Screen name="Profile" component={Profile} />
       <MainFlow.Screen name="UpdateProfile" component={UpdateProfile} />
       <MainFlow.Screen name="MyFavourites" component={MyFavourites} />
+      <MainFlow.Screen name="AddInformation" component={AddInformation} />
+      <MainFlow.Screen name="ImageUpload" component={ImageUpload} />
+      <MainFlow.Screen name="AddAgencyDetails" component={AddAgencyDetails} />
     </MainFlow.Navigator>
   );
 }
