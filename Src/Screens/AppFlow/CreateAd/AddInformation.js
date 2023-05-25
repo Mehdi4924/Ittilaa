@@ -300,4 +300,9 @@ const styles = StyleSheet.create({
     fontSize: hp(2.5),
     color: colors.white,
   },
+  textInputView: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: hp(2),
+  },
 });

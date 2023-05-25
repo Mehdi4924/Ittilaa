@@ -108,8 +108,8 @@ export default function HomeScreen(props) {
         />
         {isLoading ? null : (
           <>
-          
-            {Platform.OS=='android' && screenData?.app_update?.update == '1' ? (
+            {Platform.OS == 'android' &&
+            screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
                   New stable Version of this app has released. To install
@@ -125,16 +125,7 @@ export default function HomeScreen(props) {
               </View>
             ) : null}
             <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                marginHorizontal: wp(5),
-                paddingVertical: hp(2),
-                paddingHorizontal: wp(5),
-                borderRadius: 5,
-                alignItems: 'center',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
+              style={styles.createAdBtn}
               onPress={() =>
                 props.navigation.navigate('AppFlow', {screen: 'AddInformation'})
               }>
@@ -319,7 +310,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(1),
-    height:hp(7)
+    height: hp(7),
   },
   textInputStyle: {
     width: wp(75),
@@ -526,5 +517,16 @@ const styles = StyleSheet.create({
     color: colors.primary,
     // alignSelf:'flex-start',
     // textAlign:'left'
+  },
+  createAdBtn: {
+    backgroundColor: colors.primary,
+    marginHorizontal: wp(5),
+    paddingVertical: hp(2),
+    paddingHorizontal: wp(5),
+    borderRadius: 5,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: hp(2),
   },
 });

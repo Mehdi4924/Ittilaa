@@ -17,13 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MBXAccessToken</key>
+	<string>sk.eyJ1IjoiaWZ0aWtoYXJpZmZpIiwiYSI6ImNsZ2tnNmc1MzBydnMzaWx2cThydTY5azEifQ.5C3wgofGALyU99exTVPUNA</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -72,10 +74,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>MBXAccessToken</key>
-	<string>sk.eyJ1IjoiaWZ0aWtoYXJpZmZpIiwiYSI6ImNsZ2tnNmc1MzBydnMzaWx2cThydTY5azEifQ.5C3wgofGALyU99exTVPUNA</string>
 </dict>
 </plist>
