@@ -16,6 +16,7 @@ import CustomButton from '../../../Components/CustomButton';
 import {hp, wp} from '../../../Constants/Responsive';
 import {colors} from '../../../Constants/Colors';
 import {fonts} from '../../../Constants/Fonts';
+import Toast from 'react-native-simple-toast';
 
 export default function AddInformation(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +46,31 @@ export default function AddInformation(props) {
     {name: 'Buidling', id: 5},
     {name: 'Other', id: 6},
   ];
+  function NavigateToAddLogo() {
+    console.log('==>>', data);
+    if (!data?.title || data?.title == '') {
+      Toast.show('Please Enter Title First', Toast.SHORT);
+    } else if (!data?.type || data?.type?.name == '') {
+      Toast.show('Please Select Type First', Toast.SHORT);
+    } else if (!data?.subType || data?.subType?.name == '') {
+      Toast.show('Please Select Sub Type First', Toast.SHORT);
+    } else if (!data?.landArea || data?.landArea == '') {
+      Toast.show('Please Enter Land Area', Toast.SHORT);
+    } else if (
+      (data?.type?.name == 'Plots' && !data?.areaUnit) ||
+      (data?.type?.name == 'Plots' && data?.areaUnit?.name == '')
+    ) {
+      Toast.show('Please Select Area Unit', Toast.SHORT);
+    } else if (!data?.price || data?.price == '') {
+      Toast.show('Please Enter Price', Toast.SHORT);
+    } else if (!data?.address || data?.address == '') {
+      Toast.show('Please Enter Address', Toast.SHORT);
+    } else if (!data?.description || data?.description == '') {
+      Toast.show('Please Enter Description', Toast.SHORT);
+    } else {
+      props.navigation.navigate('ImageUpload', data);
+    }
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <CustomLoader isLoading={isLoading} />
@@ -64,8 +90,9 @@ export default function AddInformation(props) {
           </View>
           <Text style={styles.stepText}>Property Details: Step 1</Text>
           <CustomTextInput
-            iconName={'mobile-phone'}
-            iconType="font-awesome"
+            iconName={'title'}
+            iconType="material"
+            iconSize={hp(2.5)}
             topText="Property Title"
             placeholder="Please Enter Title"
             value={data?.title || ''}
@@ -86,8 +113,8 @@ export default function AddInformation(props) {
             labelFieldName={'name'}
             valueFieldName={'id'}
             placeholder={'Select Type'}
-            iconName={'users'}
-            iconType="font-awesome"
+            iconName={'merge-type'}
+            iconType="material"
             value={data?.type}
             onChange={item =>
               setData(p => {
@@ -108,8 +135,8 @@ export default function AddInformation(props) {
             labelFieldName={'name'}
             valueFieldName={'id'}
             placeholder={'Select Sub Type'}
-            iconName={'users'}
-            iconType="font-awesome"
+            iconName={'text-format'}
+            iconType="material"
             value={data?.subType}
             onChange={item =>
               setData(p => {
@@ -125,11 +152,13 @@ export default function AddInformation(props) {
               width: wp(90),
             }}>
             <CustomTextInput
-              iconName={'mobile-phone'}
-              iconType="font-awesome"
+              iconName={'crop-square'}
+              iconType="material"
+              iconSize={hp(2.5)}
               topText="Land Area"
               placeholder="Land Area"
               value={data?.landArea || ''}
+              keyboardType={'decimal-pad'}
               onChangeText={t =>
                 setData(p => {
                   return {...p, landArea: t};
@@ -152,9 +181,9 @@ export default function AddInformation(props) {
               topLabelText={'Area Unit'}
               labelFieldName={'name'}
               valueFieldName={'id'}
-              placeholder={'Select Unit'}
-              iconName={'users'}
-              iconType="font-awesome"
+              placeholder={'Unit'}
+              iconName={'straighten'}
+              iconType="material"
               value={data?.areaUnit}
               onChange={item =>
                 setData(p => {
@@ -168,8 +197,9 @@ export default function AddInformation(props) {
             />
           </View>
           <CustomTextInput
-            iconName={'mobile-phone'}
-            iconType="font-awesome"
+            iconName={'place'}
+            iconType="material"
+            iconSize={hp(2.5)}
             topText="Property Address"
             placeholder="Please Enter Address"
             value={data?.address || ''}
@@ -181,9 +211,11 @@ export default function AddInformation(props) {
             textInputContainer={{marginVertical: hp(2)}}
           />
           <CustomTextInput
-            iconName={'mobile-phone'}
-            iconType="font-awesome"
+            iconName={'local-offer'}
+            iconType="material"
+            iconSize={hp(2.5)}
             topText="Property Price"
+            keyboardType={'decimal-pad'}
             placeholder="Please Enter Price"
             value={data?.price || ''}
             onChangeText={t =>
@@ -194,18 +226,18 @@ export default function AddInformation(props) {
             textInputContainer={{marginVertical: hp(2)}}
           />
           <CustomTextInput
-            topText="Bulk Details"
+            topText="Enter Description"
             iconType="material"
             iconName="info"
             iconSize={26}
-            placeholder="Enter Details in bulk"
+            placeholder="Enter Description"
             textInputContainer={styles.textInputContainer}
             textInputStyles={styles.textInputStyles}
             iconStyles={styles.iconStyles}
             multiline={true}
             textInputView={styles.textInputView}
             value={data.description}
-            onChangeText={e =>
+            onChangeText={t =>
               setData(p => {
                 return {...p, description: t};
               })
@@ -216,10 +248,11 @@ export default function AddInformation(props) {
             btnText="Next"
             btnTextStyles={styles.btnTextStyles}
             indicator={false}
-            onPress={() => props.navigation.navigate('ImageUpload')}
+            onPress={() => NavigateToAddLogo()}
             disabled={false}
           />
         </View>
+        <View style={{height:hp(8)}}></View>
       </ScrollView>
     </SafeAreaView>
   );

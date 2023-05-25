@@ -18,6 +18,7 @@ import MyFavourites from '../Screens/AppFlow/MyFavourites';
 import AddInformation from '../Screens/AppFlow/CreateAd/AddInformation';
 import ImageUpload from '../Screens/AppFlow/CreateAd/ImageUpload';
 import AddAgencyDetails from '../Screens/AppFlow/CreateAd/AddAgencyDetails';
+import MyAd from '../Screens/AppFlow/CreateAd/MyAd';
 
 export default function AppFlow() {
   const MainFlow = createNativeStackNavigator();
@@ -41,6 +42,7 @@ export default function AppFlow() {
       <MainFlow.Screen name="AddInformation" component={AddInformation} />
       <MainFlow.Screen name="ImageUpload" component={ImageUpload} />
       <MainFlow.Screen name="AddAgencyDetails" component={AddAgencyDetails} />
+      <MainFlow.Screen name="MyAd" component={MyAd} />
     </MainFlow.Navigator>
   );
 }

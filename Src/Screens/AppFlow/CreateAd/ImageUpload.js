@@ -17,8 +17,10 @@ import {hp, wp} from '../../../Constants/Responsive';
 import {colors} from '../../../Constants/Colors';
 import {fonts} from '../../../Constants/Fonts';
 import CustomButton from '../../../Components/CustomButton';
+import Toast from 'react-native-simple-toast';
 
-export default function ImageUpload() {
+export default function ImageUpload(props) {
+  const data = props.route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageType, setImageType] = useState('');
@@ -167,7 +169,15 @@ export default function ImageUpload() {
             btnText="Next"
             btnTextStyles={styles.btnTextStyles}
             indicator={false}
-            onPress={() => props.navigation.navigate('AddAgencyDetails')}
+            onPress={() => {
+              props.navigation.navigate('AddAgencyDetails', {
+                data: {
+                  ...data,
+                  inventoryImage,
+                  logoImage,
+                },
+              });
+            }}
             disabled={false}
           />
         </View>

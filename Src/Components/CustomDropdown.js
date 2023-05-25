@@ -59,7 +59,7 @@ const CustomDropdown = props => {
             name={props.iconName}
             type={props.iconType}
             color={colors.primary}
-            size={hp(3)}
+            size={props.iconSize?props.iconsSize:hp(3)}
             style={{marginHorizontal: 5}}
           />
         )}
