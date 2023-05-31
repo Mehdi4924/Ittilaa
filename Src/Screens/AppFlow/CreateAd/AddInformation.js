@@ -177,7 +177,7 @@ export default function AddInformation(props) {
                 {name: 'Yards', id: 3},
                 {name: 'Kanal', id: 4},
               ]}
-              disable={data?.type?.name != 'Plots'}
+              // disable={data?.type?.name != 'Plots'}
               topLabelText={'Area Unit'}
               labelFieldName={'name'}
               valueFieldName={'id'}

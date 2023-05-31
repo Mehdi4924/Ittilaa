@@ -16,6 +16,7 @@ import CustomButton from '../../../Components/CustomButton';
 import ViewShot from 'react-native-view-shot';
 import FileDownloader from '../../../Constants/FileDownloader';
 import Toast from 'react-native-simple-toast';
+import ColorPicker from 'react-native-wheel-color-picker';
 
 export default function MyAd(props) {
   const {data} = props.route.params;
@@ -61,84 +62,77 @@ export default function MyAd(props) {
               backgroundColor: BG,
             },
           ]}>
-          <View style={styles.mainImageContainer}>
-            <Image
-              source={
-                data?.inventoryImage?.uri
-                  ? {uri: data?.inventoryImage?.uri}
-                  : require('../../../Assets/Images/news1.jpg')
-              }
-              style={styles.bgImageStyle}
-              resizeMode="cover"
-            />
-            <Image
-              source={
-                data?.logoImage?.uri
-                  ? {uri: data?.logoImage?.uri}
-                  : require('../../../Assets/Images/logo.png')
-              }
-              style={styles.logoImageStyle}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{marginTop: hp(5), alignItems: 'center'}}>
-            <Text style={styles.titleText}>{data?.title}</Text>
-            <Text style={styles.subHeading}>Description</Text>
-            <Text style={styles.description}>{data?.description}</Text>
-            <Text style={{...styles.headingText, marginVertical: hp(1)}}>
-              Project Details
-            </Text>
-            <View style={styles.informationContainer}>
-              <View style={styles.boxContainer}>
-                <View style={styles.box}>
-                  <Icon
-                    type="material"
-                    name="fullscreen"
-                    size={hp(4)}
-                    color={colors.primary}
-                  />
-                  <Text style={styles.itemText}>
-                    {data?.landArea} {data?.areaUnit?.name}
-                  </Text>
-                </View>
-                <View style={styles.box}>
-                  <Icon
-                    type="material"
-                    name="fullscreen-exit"
-                    size={hp(4)}
-                    color={colors.primary}
-                  />
-                  <Text style={styles.itemText}>{data?.type?.name}</Text>
-                </View>
-                <View style={styles.box}>
-                  <Icon
-                    type="material"
-                    name="fit-screen"
-                    size={hp(4)}
-                    color={colors.primary}
-                  />
-                  <Text style={styles.itemText}>{data?.subType?.name}</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.priceMainView}>
-              <View style={styles.innerView1}>
-                <Text style={styles.priceTitle}>Price</Text>
-              </View>
-              <View style={styles.innerView2}>
-                <Text style={styles.priceText}>RS: {data?.price}</Text>
-              </View>
-            </View>
-            <View style={styles.locationCont}>
-              <Icon
-                type="material"
-                name="my-location"
-                size={hp(2.5)}
-                color={colors.primary}
+          <View style={styles.adBorder}>
+            <View style={styles.mainImageContainer}>
+              <Image
+                source={
+                  data?.inventoryImage?.uri
+                    ? {uri: data?.inventoryImage?.uri}
+                    : require('../../../Assets/Images/news1.jpg')
+                }
+                style={styles.bgImageStyle}
+                resizeMode="cover"
               />
-              <Text style={styles.text}>{data?.address}</Text>
+              <Image
+                source={
+                  data?.logoImage?.uri
+                    ? {uri: data?.logoImage?.uri}
+                    : require('../../../Assets/Images/logo.png')
+                }
+                style={styles.logoImageStyle}
+                resizeMode="cover"
+              />
             </View>
-            <View style={styles.locationCont}>
+            <View style={{marginTop: hp(5), alignItems: 'center'}}>
+              <Text style={styles.titleText}>{data?.title}</Text>
+              <Text style={styles.subHeading}>Description</Text>
+              <Text style={styles.description}>{data?.description}</Text>
+              <Text style={{...styles.subHeading, marginBottom: hp(1)}}>
+                Project Details
+              </Text>
+              <View style={styles.informationContainer}>
+                <View style={styles.boxContainer}>
+                  <View style={styles.box}>
+                    <Icon
+                      type="material"
+                      name="fullscreen"
+                      size={hp(3)}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.itemText}>
+                      {data?.landArea} {data?.areaUnit?.name}
+                    </Text>
+                  </View>
+                  <View style={styles.box}>
+                    <Icon
+                      type="material"
+                      name="fullscreen-exit"
+                      size={hp(3)}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.itemText}>{data?.type?.name}</Text>
+                  </View>
+                  <View style={styles.box}>
+                    <Icon
+                      type="material"
+                      name="fit-screen"
+                      size={hp(3)}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.itemText}>{data?.subType?.name}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.priceMainView}>
+                <View style={styles.innerView1}>
+                  <Text style={styles.priceTitle}>Price</Text>
+                </View>
+                <View style={styles.innerView2}>
+                  <Text style={styles.priceText}>RS: {data?.price}</Text>
+                </View>
+              </View>
+
+              {/* <View style={styles.contactCont}>
               <Icon
                 type="material"
                 name="phone"
@@ -146,44 +140,75 @@ export default function MyAd(props) {
                 color={colors.primary}
               />
               <Text style={styles.text}>{data.agentNumber}</Text>
-            </View>
-            <View style={{marginTop: hp(2), alignItems: 'center'}}>
-              <Text style={styles.text}>Powerd By:</Text>
-              <Image
-                source={require('../../../Assets/Images/logo.png')}
-                style={styles.ittilaaLogo}
-                resizeMode="cover"
-              />
+            </View> */}
+              <View style={{marginTop: hp(1), alignItems: 'center'}}>
+                <Text style={styles.agencyName}>{data.agencyName}</Text>
+                <View
+                  style={{
+                    width: wp(90),
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}>
+                  <View style={styles.agentContainer}>
+                    <Icon
+                      type="material"
+                      name="person"
+                      size={hp(2.3)}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.text}>{data?.agentName}</Text>
+                  </View>
+                  <View style={styles.agentContainer}>
+                    <Icon
+                      type="material"
+                      name="phone"
+                      size={hp(2.3)}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.text}>{data?.agentNumber}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.locationCont}>
+                <Icon
+                  type="material"
+                  name="my-location"
+                  size={hp(2.3)}
+                  color={colors.white}
+                />
+                <Text style={{...styles.text, color: colors.white}}>
+                  {data?.address}
+                </Text>
+              </View>
+              <View style={{marginTop: hp(1), alignItems: 'center'}}>
+                <Text style={styles.text}>Powerd By:</Text>
+                <Image
+                  source={require('../../../Assets/Images/logo.png')}
+                  style={styles.ittilaaLogo}
+                  resizeMode="cover"
+                />
+              </View>
             </View>
           </View>
         </ViewShot>
         <Text style={styles.selectBgText}>Select Background</Text>
-        <View style={styles.backgroundSelecterView}>
-          {[
-            colors.tertiary,
-            'green',
-            'yellow',
-            '#f3e5ab',
-            colors.white,
-            '#4f562d',
-            '#fdd017',
-            '#fdd',
-            '#dffe00',
-            '#dffe',
-          ].map(item => {
-            return (
-              <TouchableOpacity
-                onPress={() => setBG(item)}
-                style={[
-                  styles.backgroundSelecter,
-                  {
-                    backgroundColor: item,
-                  },
-                ]}
-              />
-            );
-          })}
+        <View style={{width: wp(80)}}>
+          <ColorPicker
+            color={'#ffffff'}
+            swatchesOnly={false}
+            onColorChange={color => setBG(color)}
+            onColorChangeComplete={color => console.log(color)}
+            thumbSize={40}
+            sliderSize={40}
+            noSnap={true}
+            row={true}
+            swatchesLast={false}
+            swatches={true}
+            discrete={true}
+          />
         </View>
+
         <CustomButton
           btnContainer={{...styles.submitBtnContainer}}
           btnText="Download"
@@ -206,15 +231,22 @@ const styles = StyleSheet.create({
     width: wp(90),
     marginVertical: hp(2),
   },
-  headingText: {color: colors.black, fontFamily: fonts.bold},
+  headingText: {
+    color: colors.white,
+    fontFamily: fonts.bold,
+    backgroundColor: colors.primary,
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(0.2),
+    borderRadius: hp(0.5),
+  },
   viewShotStyles: {
     width: wp(100),
     alignItems: 'center',
-    paddingVertical: hp(1),
+    paddingVertical: hp(2),
   },
   mainImageContainer: {
     width: wp(90),
-    height: hp(30),
+    height: hp(25),
     borderRadius: hp(2),
     backgroundColor: '#DB5265',
   },
@@ -226,28 +258,36 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: hp(-5),
     backgroundColor: colors.white,
+    borderWidth: hp(0.3),
+    borderColor: colors.white,
   },
   bgImageStyle: {
     width: wp(90),
-    height: hp(30),
+    height: hp(25),
     borderRadius: hp(2),
+    borderWidth: hp(0.3),
+    borderColor: colors.primary,
   },
   titleText: {
     color: colors.black,
     fontFamily: fonts.bold,
-    fontSize: 20,
+    fontSize: 16,
   },
   subHeading: {
-    color: colors.black,
+    color: colors.white,
     fontFamily: fonts.semiBold,
     fontSize: 14,
-    width: wp(90),
+    backgroundColor: colors.primary,
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(0.1),
+    borderRadius: hp(0.5),
   },
   description: {
     color: colors.secondary,
     fontFamily: fonts.regular,
     fontSize: 10,
     width: wp(90),
+    textAlign: 'center',
   },
   informationContainer: {
     width: wp(70),
@@ -260,14 +300,14 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   boxContainer: {
-    width: wp(65),
+    width: wp(75),
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
     justifyContent: 'space-around',
   },
   box: {
-    width: wp(16),
-    height: hp(8),
+    width: wp(24),
+    minHeight: hp(6),
     borderRadius: hp(0.5),
     // backgroundColor:colors.primary
     borderWidth: 1.5,
@@ -287,7 +327,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
     alignItems: 'center',
-    marginTop: hp(2),
+    marginTop: hp(1),
   },
   innerView1: {
     width: wp(25),
@@ -318,19 +358,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    marginTop: hp(1),
+    width: wp(70),
+    backgroundColor: colors.secondary,
+    paddingVertical: hp(0.5),
+    paddingHorizontal: wp(1),
+    borderRadius: hp(1),
+  },
+  contactCont: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     marginTop: hp(2),
     width: wp(70),
   },
   text: {
     color: colors.secondary,
-    fontFamily: fonts.medium,
-    fontSize: 12,
+    fontFamily: fonts.regular,
+    fontSize: 10,
     marginLeft: wp(1),
   },
   ittilaaLogo: {
-    width: wp(44),
-    height: hp(6),
-    marginTop: hp(1),
+    width: wp(21),
+    height: hp(3),
   },
   selectBgText: {
     fontFamily: fonts.bold,
@@ -367,5 +417,23 @@ const styles = StyleSheet.create({
     fontFamily: fonts.semiBold,
     fontSize: hp(2.5),
     color: colors.white,
+  },
+  agentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: wp(2),
+  },
+  agencyName: {
+    color: colors.primary,
+    fontFamily: fonts.bold,
+    fontSize: 14,
+  },
+  adBorder: {
+    width: wp(95),
+    borderWidth: 2,
+    borderColor: '#CDC9C9',
+    paddingVertical: hp(1),
+    alignItems: 'center',
+    borderRadius: hp(1),
   },
 });

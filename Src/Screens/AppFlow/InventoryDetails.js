@@ -286,7 +286,7 @@ export default function InventoryDetails(props) {
             style={styles.bottomIconView}
             onPress={() =>
               Linking.openURL(
-                `tel:${inventory[0]?.agency?.ceo_mobile1 || '00000000'}`,
+                `tel:${inventory[0]?.agency?.user?.phone || '00000000'}`,
               )
             }>
             <Icon

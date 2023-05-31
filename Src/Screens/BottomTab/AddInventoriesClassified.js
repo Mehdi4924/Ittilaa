@@ -216,7 +216,7 @@ export default function AddInventoriesClassified(props) {
           }
         }
       }
-      console.log(data);
+      console.log('Bulk data',data);
       if(errCheck==false){
       axios.defaults.headers['Content-Type'] = 'application/json';
       AppFlow.createEnventory(data)

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "317964235638",
+    "project_id": "ittilaa",
+    "storage_bucket": "ittilaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317964235638:android:6176c53dc88fe4c589c057",
+        "android_client_info": {
+          "package_name": "com.ittilaa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKsAuOiCHQOaDbnR3QfVsrY55iiJ-oNzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

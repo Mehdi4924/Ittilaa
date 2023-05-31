@@ -26,7 +26,7 @@ export default function TopInventories(props) {
   async function GetInventories() {
     await AppFlow.allInventories()
       .then(function (response) {
-        console.log('Response data getting top', response.data);
+        console.log('Response data getting top', response);
         setData(response?.data?.data?.inventory);
         dataCopy = response?.data?.data?.inventory;
       })

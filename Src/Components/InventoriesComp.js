@@ -130,6 +130,11 @@ export default function InventoriesComp(props) {
                 {constantData?.category} for {constantData?.purpose || ''}
               </Text>
             </View>
+            <Text  style={{
+                ...styles.text2,
+                marginLeft: wp(2),
+                width: wp(55),
+              }}>{constantData?.society?.name}</Text>
           </View>
         </TouchableOpacity>
       );

@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import CustomDropdown from './CustomDropdown';
@@ -35,8 +36,11 @@ export default function InventoriesFilter(props) {
   const [cities, setCities] = useState([]);
   const [societyItem, setSocietyItem] = useState([]);
 
-  const [low, setLow] = useState();
-  const [high, setHigh] = useState();
+  const [low, setLow] = useState(0);
+  const [high, setHigh] = useState(10000000);
+  const [inputHigh, setInputHigh] = useState(0);
+  const [inputLow, setInputLow] = useState(0);
+
   const handleValueChange = useCallback((low, high) => {
     setLow(low);
     setHigh(high);
@@ -251,10 +255,41 @@ export default function InventoriesFilter(props) {
                     {low} - {high}
                   </Text>
                 </View>
+                <View
+                  style={{
+                    width: wp(90),
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    // marginVertical: hp(3),
+                    marginBottom:hp(8)
+                  }}>
+                  <TextInput
+                    placeholder={'Min Price'}
+                    value={low}
+                    placeholderTextColor={colors.grey}
+                    style={styles.textInputStyles}
+                    onChangeText={e => setLow(e)}
+                    // textStyle={styles.textStyle}
+                    labelStyle={{
+                      fontWeight: 'bold',
+                    }}
+                  />
+                  <TextInput
+                    placeholder={'Max Price'}
+                    value={high}
+                    placeholderTextColor={colors.grey}
+                    style={styles.textInputStyles}
+                    onChangeText={e => setHigh(e)}
+                    // textStyle={styles.textStyle}
+                    labelStyle={{
+                      fontWeight: 'bold',
+                    }}
+                  />
+                </View>
                 <Slider
                   style={styles.slider}
                   min={0}
-                  max={1000000}
+                  max={10000000}
                   step={10}
                   floatingLabel
                   renderThumb={renderThumb}
@@ -380,6 +415,10 @@ const styles = StyleSheet.create({
   textInputStyles: {
     width: wp(28),
     fontFamily: fonts.regular,
+    // height: hp(10),
+    backgroundColor: 'white',
+    paddingVertical: 5,
+    paddingHorizontal: wp(4),
   },
   plNoTxtInpContainer: {
     width: wp(30),

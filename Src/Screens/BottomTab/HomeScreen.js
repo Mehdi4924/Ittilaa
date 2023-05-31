@@ -46,11 +46,11 @@ export default function HomeScreen(props) {
   async function getAllAgencies() {
     AppFlow.getAllAgencies()
       .then(res => {
-        console.log(
-          'response getting all agences',
-          JSON.stringify(res.data, null, 2),
-          // res,
-        );
+        // console.log(
+        //   'response getting all agences',
+        //   JSON.stringify(res.data, null, 2),
+        //   // res,
+        // );
         setAgenciesData(res?.data?.data);
       })
       .catch(err => {
@@ -61,11 +61,11 @@ export default function HomeScreen(props) {
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
-        console.log(
-          'Response data',
-          JSON.stringify(response?.data.data.agency, null, 2),
-          // response.data.data,
-        );
+        // console.log(
+        //   'Response data',
+        //   JSON.stringify(response?.data.data.agency, null, 2),
+        //   // response.data.data,
+        // );
         setScreenData(response.data.data);
       })
       .catch(function (error) {

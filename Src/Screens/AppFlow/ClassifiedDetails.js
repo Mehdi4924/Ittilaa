@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -17,6 +17,9 @@ import CustomButton from '../../Components/CustomButton';
 import {AppFlow} from '../../Api/ApiCalls';
 import {URL} from '../../Constants/URL';
 import {Linking} from 'react-native';
+import ViewShot from 'react-native-view-shot';
+import * as NewShare from 'react-native-share';
+
 
 export default function ClassifiedDetails(props) {
   const {classified} = props.route.params;
@@ -43,82 +46,128 @@ export default function ClassifiedDetails(props) {
       </View>
     );
   };
+
+  const ref = useRef();
+  const onCapture = useCallback(async uri => {
+    await ref.current
+      .capture()
+      .then(uri => {
+        console.log('do something with ', uri);
+        NewShare.default
+          .open({
+            message:
+              'Install The Application To Get Latest Updates \n https://play.google.com/store/apps/details?id=com.ittilaa&hl=en_US&gl=US',
+            url: uri,
+          })
+          .then(res => {
+            console.log(res);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(function () {
+        // setCompLogo(false);
+      });
+  }, []);
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.container, {marginBottom: wp(5)}]}>
-          <Carousel
-            ref={c => {
-              carouselRef.current = c;
-            }}
-            data={data?.file?.length ? data.file : [allImages.homeImage]}
-            renderItem={_renderItem}
-            sliderWidth={wp(100)}
-            itemWidth={wp(100)}
-            autoplay={true}
-            loop={true}
-          />
-          <View style={styles.bothChevronsView}>
-            <TouchableOpacity
-              onPress={() => carouselRef.current.snapToPrev()}
-              style={styles.chevron}>
-              <Icon
-                name={'chevron-back-circle-outline'}
-                type={'ionicon'}
-                color={colors.white}
-                size={hp(2)}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => carouselRef.current.snapToNext()}
-              style={styles.chevron}>
-              <Icon
-                name={'chevron-forward-circle-outline'}
-                type={'ionicon'}
-                color={colors.white}
-                size={hp(2)}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => props.navigation.goBack()}>
-              <Icon
-                name={'arrow-back-circle'}
-                type={'ionicon'}
-                color={colors.primary}
-                size={hp(5)}
-              />
-            </TouchableOpacity>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <ViewShot
+            ref={ref}
+            style={{alignItems: 'center', backgroundColor:colors.tertiary}}
+            options={{
+              fileName: 'Captured',
+              format: 'jpg',
+              quality: 0.9,
+            }}>
+            <Carousel
+              ref={c => {
+                carouselRef.current = c;
+              }}
+              data={data?.file?.length ? data.file : [allImages.homeImage]}
+              renderItem={_renderItem}
+              sliderWidth={wp(100)}
+              itemWidth={wp(100)}
+              autoplay={true}
+              loop={true}
+            />
+            <View style={styles.bothChevronsView}>
               <TouchableOpacity
-                style={{flexDirection: 'row', alignItems: 'center'}}
-                onPress={() =>
-                  Linking.openURL(
-                    `whatsapp://send?text=Hi&phone=${data?.number}`,
-                  )
-                }>
+                onPress={() => carouselRef.current.snapToPrev()}
+                style={styles.chevron}>
                 <Icon
-                  name={'whatsapp'}
-                  type={'fontisto'}
-                  color={'#25D366'}
-                  reverse
-                  size={hp(1.5)}
+                  name={'chevron-back-circle-outline'}
+                  type={'ionicon'}
+                  color={colors.white}
+                  size={hp(2)}
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{flexDirection: 'row', alignItems: 'center'}}
-                onPress={() => Linking.openURL(`tel:${data?.number}`)}>
+                onPress={() => carouselRef.current.snapToNext()}
+                style={styles.chevron}>
                 <Icon
-                  name={'phone'}
-                  type={'material'}
+                  name={'chevron-forward-circle-outline'}
+                  type={'ionicon'}
+                  color={colors.white}
+                  size={hp(2)}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <Icon
+                  name={'arrow-back-circle'}
+                  type={'ionicon'}
                   color={colors.primary}
-                  reverse
-                  size={hp(1.5)}
+                  size={hp(5)}
                 />
-                <Text style={styles.headingText}>Call For Details</Text>
               </TouchableOpacity>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <TouchableOpacity
+                  style={{flexDirection: 'row', alignItems: 'center'}}
+                  onPress={() =>
+                    Linking.openURL(
+                      `whatsapp://send?text=Hi&phone=${data?.number}`,
+                    )
+                  }>
+                  <Icon
+                    name={'whatsapp'}
+                    type={'fontisto'}
+                    color={'#25D366'}
+                    reverse
+                    size={hp(1.5)}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{flexDirection: 'row', alignItems: 'center'}}
+                  onPress={() => Linking.openURL(`tel:${data?.number}`)}>
+                  <Icon
+                    name={'phone'}
+                    type={'material'}
+                    color={colors.primary}
+                    reverse
+                    size={hp(1.5)}
+                  />
+                  {/* <Text style={styles.headingText}>Call For Details</Text> */}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setTimeout(function () {
+                      onCapture();
+                    }, 2000);
+                  }}>
+                  <Icon
+                    name={'md-share-social'}
+                    reverse
+                    type={'ionicon'}
+                    color={colors.primary}
+                    size={hp(2)}
+                  />
+                </TouchableOpacity>
 
-              {/* <TouchableOpacity style={styles.shareIconStyles}>
+                {/* <TouchableOpacity style={styles.shareIconStyles}>
                 <Icon
                   name={'md-share-social'}
                   type={'ionicon'}
@@ -126,58 +175,60 @@ export default function ClassifiedDetails(props) {
                   size={hp(1.5)}
                 />
               </TouchableOpacity> */}
+              </View>
+              <Image source={allImages.user} style={styles.userImage} />
             </View>
-            <Image source={allImages.user} style={styles.userImage} />
-          </View>
-          <View style={styles.locationPinView}>
-            <Icon
-              name={'location'}
-              type={'ionicon'}
-              color={colors.primary}
-              size={hp(3)}
-            />
-          </View>
-          <Text style={styles.locationText}>{data?.location || 'N/A'}</Text>
-          <Text style={[styles.titleText]}>
-            {data?.type || 'N/A'} {data?.category || 'N/A'} for {data?.purpose}
-          </Text>
-          <View style={styles.amenitiesMainView}>
-            <View style={styles.amenitiesSubView}>
+            <View style={styles.locationPinView}>
               <Icon
-                name={'scan1'}
-                type={'antdesign'}
-                color={colors.primary}
-                size={hp(3)}
-              />
-              <Text style={styles.amenitiesText}>
-                {data?.size} {data?.size_unit}
-              </Text>
-            </View>
-            <View style={styles.seperator}></View>
-            <View style={styles.amenitiesSubView}>
-              <Icon
-                name={'bed'}
+                name={'location'}
                 type={'ionicon'}
                 color={colors.primary}
                 size={hp(3)}
               />
-              <Text style={styles.amenitiesText}>{data?.bed} Bedroom</Text>
             </View>
-            <View style={styles.seperator}></View>
-            <View style={styles.amenitiesSubView}>
-              <Icon
-                name={'bath'}
-                type={'font-awesome-5'}
-                color={colors.primary}
-                size={hp(2.5)}
-              />
-              <Text style={styles.amenitiesText}>{data?.bath}</Text>
+            <Text style={styles.locationText}>{data?.location || 'N/A'}</Text>
+            <Text style={[styles.titleText]}>
+              {data?.type || 'N/A'} {data?.category || 'N/A'} for{' '}
+              {data?.purpose}
+            </Text>
+            <Text style={styles.priceStyle}>Price: {data?.price}</Text>
+            <View style={styles.amenitiesMainView}>
+              <View style={styles.amenitiesSubView}>
+                <Icon
+                  name={'scan1'}
+                  type={'antdesign'}
+                  color={colors.primary}
+                  size={hp(3)}
+                />
+                <Text style={styles.amenitiesText}>
+                  {data?.size} {data?.size_unit}
+                </Text>
+              </View>
+              <View style={styles.seperator}></View>
+              <View style={styles.amenitiesSubView}>
+                <Icon
+                  name={'bed'}
+                  type={'ionicon'}
+                  color={colors.primary}
+                  size={hp(3)}
+                />
+                <Text style={styles.amenitiesText}>{data?.bed} Bedroom</Text>
+              </View>
+              <View style={styles.seperator}></View>
+              <View style={styles.amenitiesSubView}>
+                <Icon
+                  name={'bath'}
+                  type={'font-awesome-5'}
+                  color={colors.primary}
+                  size={hp(2.5)}
+                />
+                <Text style={styles.amenitiesText}>{data?.bath}</Text>
+              </View>
             </View>
-          </View>
-          <Text style={styles.addTitle}>{data?.title}</Text>
-          <Text style={styles.descText}>Description</Text>
-          <Text style={styles.descDetailsText}>{data?.description}</Text>
-          {/* <Text style={styles.descText}>Location</Text>
+            <Text style={styles.addTitle}>{data?.title}</Text>
+            <Text style={styles.descText}>Description</Text>
+            <Text style={styles.descDetailsText}>{data?.description}</Text>
+            {/* <Text style={styles.descText}>Location</Text>
           <TouchableOpacity>
             <Image
               source={allImages.map}
@@ -193,6 +244,7 @@ export default function ClassifiedDetails(props) {
               />
             </View>
           </TouchableOpacity> */}
+          </ViewShot>
         </View>
       </ScrollView>
     </View>
@@ -336,6 +388,16 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     color: colors.white,
     fontSize: hp(1.5),
+  },
+  priceStyle: {
+    fontFamily: fonts.semiBold,
+    color: colors.white,
+    fontSize: 14,
+    backgroundColor: colors.primary,
+    paddingVertical: hp(0.5),
+    paddingHorizontal: wp(4),
+    marginBottom: hp(1),
+    borderRadius: hp(0.5),
   },
   fabImage: {
     width: hp(5),

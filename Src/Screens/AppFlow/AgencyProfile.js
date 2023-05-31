@@ -93,17 +93,17 @@ export default function AgencyProfile(props) {
             />
             <View style={{marginLeft: wp(5), marginBottom: hp(1.5)}}>
               <Text style={styles.agencyNameText}>
-                {agencyData?.name || 'Loading'}
+                {agencyData?.user?.name || 'Loading'}
               </Text>
               <Text style={styles.postByText}>
-                By {agencyData?.ceo_name || 'Loading'}
+                {agencyData?.user?.phone || 'Loading'}
               </Text>
             </View>
             <View style={styles.topTextView}>
               <TouchableOpacity
                 onPress={() =>
                   Linking.openURL(
-                    `tel:${agencyData?.ceo_mobile1 || '00000000'}`,
+                    `tel:${agencyData?.user?.phone || '00000000'}`,
                   )
                 }>
                 <Image
@@ -136,7 +136,7 @@ export default function AgencyProfile(props) {
             </View>
           </View>
           <Text style={styles.descText}>Location</Text>
-          <Text style={{...styles.descDetailsText, marginBottom:hp(2)}}>
+          <Text style={{...styles.descDetailsText, marginBottom: hp(2)}}>
             {agencyData?.address || 'Loading'}{' '}
           </Text>
           {/* <Image
@@ -212,6 +212,55 @@ export default function AgencyProfile(props) {
             </TouchableOpacity>
           </View>
           <View style={styles.seperator} />
+          {agencyData?.ceo_name != null || '' ? (
+            <>
+              <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
+                CEO
+              </Text>
+              <View style={styles.listMainView}>
+                <Image
+                  source={
+                    agencyData?.file?.length
+                      ? {uri: URL.imageURL + agencyData.file[0].file}
+                      : allImages.agencydummy
+                  }
+                  style={styles.agencyTeamImage}
+                />
+                <View style={styles.listNameView}>
+                  <View style={{justifyContent: 'space-around'}}>
+                    <Text style={styles.agentNameText}>
+                      {agencyData?.ceo_name || 'Loading'}
+                    </Text>
+                    <Text style={styles.agentDesgText}>
+                      {agencyData?.ceo_mobile1 || 'Loading'}
+                    </Text>
+                  </View>
+                  <View style={styles.teamContIcons}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(`tel:${agencyData?.ceo_mobile1}`)
+                      }>
+                      <Image
+                        source={allImages.call}
+                        style={{width: hp(6), height: hp(6)}}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          `whatsapp://send?phone=${agencyData?.ceo_mobile1}`,
+                        )
+                      }>
+                      <Image
+                        source={allImages.whatsapp}
+                        style={{width: hp(6), height: hp(6)}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </>
+          ) : null}
           {agencyData?.team?.length ? (
             <Text style={[styles.connectionsText, {marginVertical: hp(2)}]}>
               Team
@@ -224,7 +273,7 @@ export default function AgencyProfile(props) {
                     <Image
                       source={
                         agencyData?.file?.length
-                      ? {uri: URL.imageURL + agencyData.file[0].file}
+                          ? {uri: URL.imageURL + agencyData.file[0].file}
                           : allImages.agencydummy
                       }
                       style={styles.agencyTeamImage}

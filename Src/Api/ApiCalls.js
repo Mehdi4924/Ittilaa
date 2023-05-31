@@ -55,7 +55,7 @@ export const AppFlow = {
   inventoryFilter: data => requests.post('inventory/filter', data),
   forgot: data => requests.post('auth/forget-password', data),
   getCity: () => requests.get('city'),
-  getSociety: (id) => requests.get(`society/${id}`),
+  getSociety: id => requests.get(`society/${id}`),
   getNewsDetails: id => requests.get(`news/${id}`),
   getAllFeatured: () => requests.get('featured'),
   getSingleFeatured: id => requests.get(`featured/${id}`),
@@ -76,15 +76,16 @@ export const GetCities = {
     }),
 };
 
+let config = {
+  method: 'post',
+  maxBodyLength: Infinity,
+  url: 'https://fcm.googleapis.com/fcm/send',
+  headers: {
+    Authorization:
+      'key=AAAASgglM3Y:APA91bF_38sdSr9XOkEXS6jV86TCfNs8deWMTLnvJdPTfbIBlg3cYYCinYD9KHBGMHPyGdoh34mQLHFpsHwFV0EhAMDX1aGylboINjgfrF8JNk0k5J1SpTm2JoN_7UQR0ZyPTCDv4N68',
+    'Content-Type': 'application/json',
+  },
+};
 export const FCMNotification = {
-  not: data =>
-    axios({
-      method: 'post',
-      url: 'https://fcm.googleapis.com/fcm/send',
-      headers: {
-        Authorization:
-          'key=AAAAtBeKKck:APA91bGl6DnMOG4ynoYMGYDX3s-a7UHVTE4f_IwylJALynRx13Sidtg3UlY8JrpDlUMJ79jT3utGDUOX6VxBxmcCJKe4TdRBzFlsHgy5Nqk41kaKtEQ4pPbYCA3_fQedCVOcp8CDcTKG',
-      },
-      data,
-    }),
+  sendNotificationToAll: data => axios.request({...config, data: data}),
 };
