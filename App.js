@@ -42,35 +42,7 @@ export default function App() {
     }
   }
   async function SubscribeToTopic() {
-    await messaging()
-      .subscribeToTopic('nots')
-      .then(res => {
-        console.log('response subscribing', res);
-      })
-      .catch(err => {
-        console.log('error subscribing', err);
-      });
-      //yahan sy
-    axios.defaults.headers['Content-Type'] = 'application/json';
-    let data = JSON.stringify({
-      to: '/topics/nots',
-      priority: 'high',
-      content_available: true,
-      notification: {
-        title: 'Title',
-        body: 'Body',
-      },
-    });
-    FCMNotification.sendNotificationToAll(data)
-      .then(res => {
-        console.log('res sending not', res);
-      })
-      .catch(err => {
-        console.log('error ', err);
-      })
-      .finally(function () {
-        axios.defaults.headers['Content-Type'] = 'multipart/form-data';
-      });
+    await messaging().subscribeToTopic('nots');
   }
   return <Routes />;
 }

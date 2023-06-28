@@ -255,7 +255,7 @@ export default function InventoriesFilter(props) {
                     {low} - {high}
                   </Text>
                 </View>
-                <View
+                {/* <View
                   style={{
                     width: wp(90),
                     justifyContent: 'space-between',
@@ -285,7 +285,7 @@ export default function InventoriesFilter(props) {
                       fontWeight: 'bold',
                     }}
                   />
-                </View>
+                </View> */}
                 <Slider
                   style={styles.slider}
                   min={0}

@@ -108,7 +108,7 @@ export default function HomeScreen(props) {
         />
         {isLoading ? null : (
           <>
-            {Platform.OS == 'android' &&
+            {/* {Platform.OS == 'android' &&
             screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
@@ -123,7 +123,7 @@ export default function HomeScreen(props) {
                   <Text style={styles.clickHere}>Click Here</Text>
                 </TouchableOpacity>
               </View>
-            ) : null}
+            ) : null} */}
             <TouchableOpacity
               style={styles.createAdBtn}
               onPress={() =>
