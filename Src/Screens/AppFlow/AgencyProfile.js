@@ -114,7 +114,7 @@ export default function AgencyProfile(props) {
               <TouchableOpacity
                 onPress={() =>
                   Linking.openURL(
-                    `whatsapp://send?text=Hi&phone=${agencyData?.whatapp_no}`,
+                    `whatsapp://send?text=Hi&phone=${agencyData?.user?.phone}`,
                   )
                 }>
                 <Image

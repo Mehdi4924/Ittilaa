@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MBXAccessToken</key>
-	<string>sk.eyJ1IjoiaWZ0aWtoYXJpZmZpIiwiYSI6ImNsZ2tnNmc1MzBydnMzaWx2cThydTY5azEifQ.5C3wgofGALyU99exTVPUNA</string>
+	<string>pk.eyJ1IjoiaWZ0aWtoYXJpZmZpIiwiYSI6ImNsam9qa2U5aDA0aWcza29lOWpqNzZmc2oifQ.Abu5xhgT9TDpOHEsBvE0Eg</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<false/>
 	<key>UIAppFonts</key>

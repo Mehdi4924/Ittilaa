@@ -29,10 +29,12 @@ import CustomDropdown from '../../Components/CustomDropdown';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import {Icon} from '@rneui/themed';
-import {AppFlow} from '../../Api/ApiCalls';
+import {AppFlow, FCMNotification} from '../../Api/ApiCalls';
 import axios from 'axios';
 import {FlatList} from 'react-native';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 export default function AddInventoriesClassified(props) {
   const [inventory, setInventory] = useState(true);
@@ -68,7 +70,42 @@ export default function AddInventoriesClassified(props) {
   const [inventDataToAdd, setInventDataToAdd] = useState({});
   const [cities, setCities] = useState([]);
   const [societyItem, setSocietyItem] = useState([]);
+  const [myAgency, setMyAgency] = useState({});
 
+  useEffect(() => {
+    getCities();
+    getAsyncData();
+  }, []);
+  const getCities = async () => {
+    setCities([]);
+    setSocietyItem([]);
+    await AppFlow.getCity()
+      .then(res => {
+        console.log(res.data);
+        setCities(res?.data?.data);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+  };
+  const getSocieties = async city => {
+    await AppFlow.getSociety(city.id)
+      .then(res => {
+        console.log(res.data);
+        setSocietyItem(res?.data?.data);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => {});
+  };
+  async function getAsyncData() {
+    const data = await AsyncStorage.getItem('AuthUser');
+    setMyAgency(JSON.parse(data));
+  }
+  async function SubscribeToTopic() {
+    await messaging().subscribeToTopic('nots');
+  }
+  async function UnSubscribeToTopic() {
+    await messaging().unsubscribeFromTopic('nots');
+  }
   const submitClassified = () => {
     if (typeValue == null) {
       Toast.show('Please select type', Toast.SHORT);
@@ -122,6 +159,10 @@ export default function AddInventoriesClassified(props) {
         .then(function (response) {
           Toast.show('Classified Submited Successfuly', Toast.SHORT);
           props.navigation.navigate('HomeScreen');
+          UnSubscribeToTopic();
+          const notTitle = `${myAgency?.agency?.name} posted a new classified`;
+          const notBody = `${myAgency?.agency?.name} is having ${clsTitle} at ${location} in Rs${clsPrice}.`;
+          sendNotification(notTitle, notBody);
           console.log('responseeee', response);
         })
         .catch(function (error) {
@@ -129,32 +170,12 @@ export default function AddInventoriesClassified(props) {
         })
         .finally(function () {
           setClsIndicator(false);
+          SubscribeToTopic();
         });
     }
   };
-  useEffect(() => {
-    getCities();
-  }, []);
-  const getCities = async () => {
-    setCities([]);
-    setSocietyItem([]);
-    await AppFlow.getCity()
-      .then(res => {
-        console.log(res.data);
-        setCities(res?.data?.data);
-      })
-      .catch(error => console.log('error', error))
-      .finally(() => {});
-  };
-  const getSocieties = async city => {
-    await AppFlow.getSociety(city.id)
-      .then(res => {
-        console.log(res.data);
-        setSocietyItem(res?.data?.data);
-      })
-      .catch(error => console.log('error', error))
-      .finally(() => {});
-  };
+  console.log(myAgency);
+
   async function submitBulkInventories() {
     if (typeValue == '') {
       Toast.show('Please select type', Toast.SHORT);
@@ -175,7 +196,7 @@ export default function AddInventoriesClassified(props) {
     } else {
       setIndicator(true);
       let data = [];
-     let errCheck = false
+      let errCheck = false;
       const bulkNewDetails = bulkDetails.trim();
       const a = bulkNewDetails.split('\n');
       console.log('bulk data length', a);
@@ -186,13 +207,13 @@ export default function AddInventoriesClassified(props) {
           console.log('item details', itemDetails);
           if (itemDetails.length != 7) {
             Toast.show('Invalid Format', Toast.SHORT);
-            errCheck=true
-            setIndicator(false)
+            errCheck = true;
+            setIndicator(false);
             break;
           } else if (itemDetails[4].includes('@') == false) {
             Toast.show('Please Include @ Before Price', Toast.SHORT);
-            errCheck=true
-            setIndicator(false)
+            errCheck = true;
+            setIndicator(false);
             break;
           } else {
             const priceData = itemDetails[4].split('@')[1];
@@ -216,23 +237,29 @@ export default function AddInventoriesClassified(props) {
           }
         }
       }
-      console.log('Bulk data',data);
-      if(errCheck==false){
-      axios.defaults.headers['Content-Type'] = 'application/json';
-      AppFlow.createEnventory(data)
-        .then(function (response) {
-          console.log('responseeee', JSON.stringify(response, null, 2));
-          Toast.show('Inventory Submited Successfuly', Toast.SHORT);
-          props.navigation.navigate('HomeScreen');
-        })
-        .catch(function (error) {
-          console.log('responseeee', JSON.stringify(error, null, 2));
-          console.log(error);
-        })
-        .finally(function () {
-          axios.defaults.headers['Content-Type'] = 'multipart/form-data';
-          setIndicator(false);
-        });}
+      console.log('Bulk data', data);
+      if (errCheck == false) {
+        axios.defaults.headers['Content-Type'] = 'application/json';
+        AppFlow.createEnventory(data)
+          .then(function (response) {
+            console.log('responseeee', JSON.stringify(response, null, 2));
+            UnSubscribeToTopic();
+            Toast.show('Inventory Submited Successfuly', Toast.SHORT);
+            props.navigation.navigate('HomeScreen');
+            const notTitle = `${myAgency?.agency?.name} posted a new inventory`;
+            const notBody = `${myAgency?.agency?.name} is having ${data[0].category} for ${data[0].purpose} in Rs${data[0].price} ${data[0].price_unit} and many more.`;
+            sendNotification(notTitle, notBody);
+          })
+          .catch(function (error) {
+            console.log('responseeee', JSON.stringify(error, null, 2));
+            console.log(error);
+          })
+          .finally(function () {
+            axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+            setIndicator(false);
+            SubscribeToTopic();
+          });
+      }
     }
   }
   async function submitSingleInventory() {
@@ -283,9 +310,13 @@ export default function AddInventoriesClassified(props) {
       AppFlow.createEnventory(data)
         .then(function (response) {
           console.log('responseeee', JSON.stringify(response, null, 2));
+          UnSubscribeToTopic();
           Toast.show('Inventory Submited Successfuly', Toast.SHORT);
           axios.defaults.headers['Content-Type'] = 'multipart/form-data';
           props.navigation.navigate('HomeScreen');
+          const notTitle = `${myAgency?.agency?.name} posted a new inventory`;
+          const notBody = `${myAgency?.agency?.name} is having ${data[0].category} for ${data[0].purpose} in Rs${data[0].price} ${data[0].price_unit}.`;
+          sendNotification(notTitle, notBody);
         })
         .catch(function (error) {
           console.log('responseeee', JSON.stringify(error, null, 2));
@@ -293,6 +324,7 @@ export default function AddInventoriesClassified(props) {
         })
         .finally(function () {
           setIndicator(false);
+          SubscribeToTopic();
         });
     }
   }
@@ -326,6 +358,30 @@ export default function AddInventoriesClassified(props) {
       }
     });
   };
+
+  async function sendNotification(title, body) {
+    axios.defaults.headers['Content-Type'] = 'application/json';
+    let data = JSON.stringify({
+      to: '/topics/nots',
+      priority: 'high',
+      content_available: true,
+      time_to_live: 10,
+      notification: {
+        title: title,
+        body: body,
+      },
+    });
+    FCMNotification.sendNotificationToAll(data)
+      .then(res => {
+        console.log('res sending not', res);
+      })
+      .catch(err => {
+        console.log('error ', err);
+      })
+      .finally(function () {
+        axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+      });
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
@@ -446,10 +502,14 @@ export default function AddInventoriesClassified(props) {
               />
               {bulk ? (
                 <>
-                <View>
-                <Text style={{...styles.bulkText, color:colors.secondary}}>Format example:</Text>
-                <Text style={styles.bulkText}>187 5 Marla B @100 Lac PUP</Text>
-                </View>
+                  <View>
+                    <Text style={{...styles.bulkText, color: colors.secondary}}>
+                      Format example:
+                    </Text>
+                    <Text style={styles.bulkText}>
+                      187 5 Marla B @100 Lac PUP
+                    </Text>
+                  </View>
                   <CustomTextInput
                     topText="Bulk Details"
                     iconType="material"
@@ -557,6 +617,7 @@ export default function AddInventoriesClassified(props) {
                           return {...prev, inventPrice: e};
                         });
                       }}
+                      keyboardType='numeric'
                     />
                     <TouchableOpacity
                       style={
@@ -684,7 +745,7 @@ export default function AddInventoriesClassified(props) {
                   ...styles.submitBtnContainer,
                   alignSelf: 'center',
                 }}
-                disabled={indicator}
+                // disabled={indicator}
                 btnText="Submit"
                 btnTextStyles={styles.btnTextStyles}
                 indicator={indicator}
@@ -708,7 +769,6 @@ export default function AddInventoriesClassified(props) {
                   <FlatList
                     data={imageUri}
                     horizontal={true}
-          
                     contentContainerStyle={{
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -962,9 +1022,10 @@ export default function AddInventoriesClassified(props) {
               iconName="local-offer"
               iconSize={26}
               placeholder="Enter Price"
-              keyboardType={'number-pad'}
               value={clsPrice}
               onChangeText={t => setClsPrice(t)}
+              keyboardType='numeric'
+
             />
             <CustomTextInput
               topText="Details"
@@ -1107,7 +1168,7 @@ const styles = StyleSheet.create({
   priceTypeActice: {
     width: wp(10),
     // height: hp(5),
-    aspectRatio:1,
+    aspectRatio: 1,
     borderRadius: hp(5),
     backgroundColor: colors.primary,
     alignItems: 'center',
@@ -1115,7 +1176,7 @@ const styles = StyleSheet.create({
   },
   priceTypeInactice: {
     width: wp(10),
-    aspectRatio:1,
+    aspectRatio: 1,
     borderRadius: hp(5),
     backgroundColor: colors.grey,
     alignItems: 'center',
@@ -1170,8 +1231,7 @@ const styles = StyleSheet.create({
   amenitiesInputView: {
     flexDirection: 'row',
     alignItems: 'center',
-    width:wp(25),
-
+    width: wp(25),
   },
   plNoTxtInpContainer: {
     width: wp(30),
@@ -1217,9 +1277,9 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     color: colors.grey,
   },
-  bulkText:{
-    fontFamily:fonts.medium,
-    fontSize:12,
-    color:colors.grey
-  }
+  bulkText: {
+    fontFamily: fonts.medium,
+    fontSize: 12,
+    color: colors.grey,
+  },
 });

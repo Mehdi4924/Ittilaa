@@ -197,9 +197,9 @@ export default function InventoryDetails(props) {
                         : 'Block'}
                     </Text>
                     <Text style={styles.priceText}>
-                      {inventoryData?.price || 'Loading'}
+                      {inventoryData?.price>0? inventoryData?.price:'Offer' || 'Loading'}
                       {''}
-                      {inventoryData?.price_unit}
+                      {inventoryData?.price>0?inventoryData?.price_unit:null}
                     </Text>
                   </View>
                   <Text style={styles.normalText}>
@@ -252,7 +252,7 @@ export default function InventoryDetails(props) {
                           {invent?.block?.toLowerCase().includes('block')
                             ? ''
                             : 'Block'}{' '}
-                          @{invent?.price} {invent?.price_unit}{' '}
+                          @{invent?.price>0?invent?.price:'Offer'} {invent?.price>0?invent?.price_unit: null}{' '}
                           {invent?.feature} {invent?.size} {invent?.size_unit}{' '}
                           {'\n'}
                         </Text>
