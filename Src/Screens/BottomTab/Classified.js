@@ -39,7 +39,7 @@ export default function Classified(props) {
   const getData = () => {
     AppFlow.getAllClassifieds()
       .then(function (response) {
-        console.log('Response data', JSON.stringify(response.data, null, 2));
+        // console.log('Response data', JSON.stringify(response.data, null, 2));
         setData(response?.data?.data);
         dataCopy = response?.data?.data;
       })
@@ -70,14 +70,14 @@ export default function Classified(props) {
     data.append('max_price', filterData?.high || '');
     data.append('size', filterData?.clsPlotArea || '');
     data.append('size_unit', filterData?.sizeUnit || '');
-    console.log('responseeee', JSON.stringify(filterData, null, 2));
+    // console.log('responseeee', JSON.stringify(filterData, null, 2));
     AppFlow.classifiedFilter(data)
       .then(function (response) {
-        console.log(
-          'responseeee',
-          // JSON.stringify(response?.data?.data, null, 2),
-          JSON.stringify(response, null, 2),
-        );
+        // console.log(
+        //   'responseeee',
+        //   // JSON.stringify(response?.data?.data, null, 2),
+        //   JSON.stringify(response, null, 2),
+        // );
         setData(response?.data?.data);
       })
       .catch(function (error) {

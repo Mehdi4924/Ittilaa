@@ -30,10 +30,10 @@ export default function AgencyProperties(props) {
   const getData = () => {
     AppFlow.agencyProperties(id)
       .then(function (response) {
-        console.log(
-          'success getting agency data',
-          JSON.stringify(response.data, null, 2),
-        );
+        // console.log(
+        //   'success getting agency data',
+        //   JSON.stringify(response.data, null, 2),
+        // );
         setInventData(response.data.data.inventory);
       })
       .catch(function (error) {

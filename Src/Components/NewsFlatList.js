@@ -5,7 +5,7 @@ import EmptyComponent from './EmptyComponent';
 import {hp, wp} from '../Constants/Responsive';
 import Carousel from 'react-native-snap-carousel';
 
-export default function CustomFlatList(props) {
+export default function NewsFlatList(props) {
   const renderItem = ({item, index}) => {
     return (
       <Pressable key={index} onPress={() => props.onPress(item)}>
@@ -13,7 +13,7 @@ export default function CustomFlatList(props) {
           <Image
             source={
               item?.file
-                ? {uri: URL.imageURL + item?.file[0]?.file}
+                ? {uri: URL.imageURL + item.file[0]?.file}
                 : require('../Assets/Images/feature1.jpg')
             }
             style={props.featureImageStyle}

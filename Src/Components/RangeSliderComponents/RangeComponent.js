@@ -21,9 +21,9 @@ const RangeComponent = () => {
   const renderLabel = useCallback(value => <Label text={value} />, []);
   const renderNotch = useCallback(() => <Notch />, []);
   const handleValueChange = useCallback((lowValue, highValue) => {
-    console.log('====================================');
-    console.log(lowValue, highValue);
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log(lowValue, highValue);
+    // console.log('====================================');
     setLow(lowValue);
     setHigh(highValue);
   }, []);

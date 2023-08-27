@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ScrollView,
@@ -23,9 +24,11 @@ export default function FeaturedDetails(props) {
   const {data} = props.route.params;
   const [screenData, setScreenData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [featureImages, setfeatureImages] = useState();
   useEffect(() => {
     getProjectDetails();
   }, []);
+
   async function getProjectDetails() {
     AppFlow.getSingleFeatured(data.id)
       .then(res => {
@@ -34,6 +37,12 @@ export default function FeaturedDetails(props) {
           'respose getting featured details',
           res,
         );
+        const initialImages = res?.data?.data?.file.map((item, index) => {
+          return {
+            [item?.type]: item?.file,
+          };
+        });
+        setfeatureImages(initialImages);
         setScreenData(res?.data);
       })
       .catch(err => {
@@ -44,20 +53,27 @@ export default function FeaturedDetails(props) {
       });
   }
 
-  const carouselRef = useRef();
-  const _renderItem = ({item, index}) => {
-    return (
-      <View style={styles.slide}>
-        <Image source={{uri: item}} style={{width: wp(100), height: hp(30)}} />
-      </View>
-    );
-  };
+  // const carouselRef = useRef();
+  // const _renderItem = ({item, index}) => {
+  //   return (
+  //     <View style={styles.slide}>
+  //       <Image source={{uri: item}} style={{width: wp(100), height: hp(30)}} />
+  //     </View>
+  //   );
+  // };
+  // console.log('screendata', screenData);
+  console.log('images', featureImages);
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={isLoading} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={[styles.container, {marginBottom: wp(5)}]}>
-          <Carousel
+      {isLoading ? (
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: hp(5)}}>
+          <View style={[styles.container, {marginBottom: wp(5)}]}>
+            {/* <Carousel
             ref={c => {
               carouselRef.current = c;
             }}
@@ -71,8 +87,13 @@ export default function FeaturedDetails(props) {
             itemWidth={wp(100)}
             autoplay={true}
             loop={true}
-          />
-          <View style={styles.bothChevronsView}>
+          /> */}
+            <Image
+              source={{uri: URL.imageURL + screenData?.data?.file[3]?.file}}
+              style={{width: wp(100), height: hp(40)}}
+              resizeMode="cover"
+            />
+            {/* <View style={styles.bothChevronsView}>
             <TouchableOpacity
               onPress={() => carouselRef.current.snapToPrev()}
               style={styles.chevron}>
@@ -93,21 +114,21 @@ export default function FeaturedDetails(props) {
                 size={hp(2)}
               />
             </TouchableOpacity>
-          </View>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => props.navigation.goBack()}>
-              <Icon
-                name={'arrow-back-circle'}
-                type={'ionicon'}
-                color={colors.primary}
-                size={hp(5)}
-              />
-            </TouchableOpacity>
-            <Text style={styles.headingText}>
-              {screenData?.data?.title || ''} -{' '}
-              {screenData?.data?.developer_name || ''}
-            </Text>
-            <View style={styles.societyTextView}>
+          </View> */}
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <Icon
+                  name={'arrow-back-circle'}
+                  type={'ionicon'}
+                  color={colors.primary}
+                  size={hp(5)}
+                />
+              </TouchableOpacity>
+              <Text style={styles.headingText}>
+                {screenData?.data?.title || ''} -{' '}
+                {screenData?.data?.developer_name || ''}
+              </Text>
+              {/* <View style={styles.societyTextView}>
               <Icon
                 name={'building-o'}
                 type={'font-awesome'}
@@ -120,94 +141,55 @@ export default function FeaturedDetails(props) {
                 {', '}
                 {screenData?.data?.address || ''}
               </Text>
+            </View> */}
             </View>
-          </View>
-          <View style={styles.developersView}>
-            <View style={{alignItems: 'center'}}>
-              <Image source={allImages.agencydummy} style={styles.userImage} />
-              <Text style={styles.developersText}>
-                {screenData?.data?.title || ''}
+            <View style={styles.locationTextView}>
+              <Icon
+                name={'building-o'}
+                type={'font-awesome'}
+                color={colors.primary}
+                size={hp(2)}
+                style={{marginRight: 10}}
+              />
+              <Text style={styles.locationText}>
+                {screenData?.data?.society.name || ''}
+                {', '}
+                {screenData?.data?.address || ''}
               </Text>
             </View>
-            <View style={styles.centeralLine} />
-            <View style={{alignItems: 'center'}}>
-              <Image source={allImages.user} style={styles.userImage} />
-              <Text style={styles.developersText}>
-                {screenData?.data?.developer_name || ''}
-              </Text>
+            <View style={styles.developersView}>
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={{uri: URL.imageURL + screenData?.data?.file[1]?.file}}
+                  style={styles.userImage}
+                  resizeMode="contain"
+                />
+                <Text style={styles.developersText}>
+                  {screenData?.data?.title || ''}
+                </Text>
+              </View>
+              <View style={styles.centeralLine} />
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={{uri: URL.imageURL + screenData?.data?.file[2]?.file}}
+                  style={styles.userImage}
+                  resizeMode="contain"
+                />
+                <Text style={styles.developersText}>
+                  {screenData?.data?.developer_name || ''}
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.locationTextView}>
-            <Icon
-              name={'building-o'}
-              type={'font-awesome'}
-              color={colors.primary}
-              size={hp(2)}
-              style={{marginRight: 10}}
+
+            <Text style={styles.plansText}>Payment Plan</Text>
+            <Image
+              source={{uri: URL.imageURL + screenData?.data?.file[0]?.file}}
+              style={{width: wp(90), height: hp(40)}}
+              resizeMode="cover"
             />
-            <Text style={styles.locationText}>
-              {screenData?.data?.society.name || ''}
-              {', '}
-              {screenData?.data?.address || ''}
-            </Text>
           </View>
-          <Text style={styles.plansText}>Plan</Text>
-          <FlatList
-            data={screenData?.data?.payment_plan}
-          
-            contentContainerStyle={{
-              paddingHorizontal: wp(5),
-              marginVertical: hp(0.5),
-            }}
-            numColumns={2}
-            renderItem={({item, index}) => {
-              const a = index % 2;
-              return (
-                <TouchableOpacity
-                  style={[
-                    styles.listContainer,
-                    {backgroundColor: a == 1 ? colors.white : colors.black},
-                  ]}
-                  onPress={() =>
-                    props.navigation.navigate('AppFlow', {
-                      screen: 'PackageDetails',
-                      params: {planId: item},
-                    })
-                  }>
-                  <Image
-                    source={allImages.agencydummy}
-                    style={
-                      a == 1
-                        ? styles.agencyProfileImage
-                        : styles.agencyProfileImage1
-                    }
-                  />
-                  <View style={styles.listTextView}>
-                    <Text style={styles.vendorName}>Standard</Text>
-                    <Text
-                      style={[
-                        styles.developerName,
-                        {color: a == 1 ? colors.black : colors.white},
-                      ]}>
-                      5 Marla
-                    </Text>
-                    <View style={styles.locationView}>
-                      <Icon
-                        name={'pricetag'}
-                        type={'ionicon'}
-                        color={colors.primary}
-                        size={hp(2)}
-                        style={{marginRight: wp(2)}}
-                      />
-                      <Text style={styles.priceText}>10,000,000</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 }
@@ -249,10 +231,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(5),
     borderRadius: hp(8),
-    position: 'absolute',
-    bottom: hp(-26),
-    left: wp(23),
-    zIndex: 100,
+    // position: 'absolute',
+    // bottom: hp(-26),
+    // left: wp(23),
+    // zIndex: 100,
   },
   locationText: {
     color: colors.black,
@@ -264,6 +246,8 @@ const styles = StyleSheet.create({
     width: hp(12),
     height: hp(12),
     borderRadius: hp(8),
+    borderWidth: 0.5,
+    borderColor: colors.grey,
   },
   developersView: {
     width: wp(90),

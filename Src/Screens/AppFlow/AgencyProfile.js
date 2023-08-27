@@ -32,11 +32,11 @@ export default function AgencyProfile(props) {
     setIsLoading(true);
     AppFlow.getAgencyDetail(agency?.id)
       .then(res => {
-        console.log(
-          'response getting agency details',
-          JSON.stringify(res, null, 2),
-          // res,
-        );
+        // console.log(
+        //   'response getting agency details',
+        //   JSON.stringify(res, null, 2),
+        //   // res,
+        // );
         setAgencyData(res?.data?.data);
       })
       .catch(err => {

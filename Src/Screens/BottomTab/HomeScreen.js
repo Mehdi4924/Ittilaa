@@ -22,18 +22,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomLoader from '../../Components/CustomLoader';
 import {Linking} from 'react-native';
 import {Icon} from '@rneui/base';
+import NewsFlatList from '../../Components/NewsFlatList';
+import BannerCrousal from '../../Components/BannerCrousal';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [agenciesData, setAgenciesData] = useState([]);
+  const [topClassified, setTopClassified] = useState([]);
+  const [featured, setFeatured] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
       getData();
       GetUser();
       getAllAgencies();
+      getTopClassified();
     }, []),
   );
   // useEffect(() => {
@@ -46,11 +51,7 @@ export default function HomeScreen(props) {
   async function getAllAgencies() {
     AppFlow.getAllAgencies()
       .then(res => {
-        // console.log(
-        //   'response getting all agences',
-        //   JSON.stringify(res.data, null, 2),
-        //   // res,
-        // );
+        // console.log('response getting all agences', res);
         setAgenciesData(res?.data?.data);
       })
       .catch(err => {
@@ -58,15 +59,23 @@ export default function HomeScreen(props) {
       })
       .finally(() => {});
   }
+  async function getTopClassified() {
+    AppFlow.getTopClassified()
+      .then(res => {
+        console.log('response getting top classified', res);
+        setTopClassified(res?.data?.data);
+      })
+      .catch(err => {
+        console.log('error getting top classified', err);
+      })
+      .finally(() => {});
+  }
   const getData = () => {
     AppFlow.dashboard()
       .then(function (response) {
-        // console.log(
-        //   'Response data',
-        //   JSON.stringify(response?.data.data.agency, null, 2),
-        //   // response.data.data,
-        // );
+        console.log('Response data', response?.data);
         setScreenData(response.data.data);
+        setFeatured(response.data?.data?.featured);
       })
       .catch(function (error) {
         console.log('Dashboard Error', error.response);
@@ -81,6 +90,7 @@ export default function HomeScreen(props) {
     });
     return newArr;
   }
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <CustomLoader isLoading={isLoading} />
@@ -124,6 +134,7 @@ export default function HomeScreen(props) {
                 </TouchableOpacity>
               </View>
             ) : null} */}
+            <BannerCrousal data={screenData?.banner} />
             <TouchableOpacity
               style={styles.createAdBtn}
               onPress={() =>
@@ -205,7 +216,7 @@ export default function HomeScreen(props) {
               </TouchableOpacity>
             </View>
             <TopClassifiedComp
-              data={screenData?.classified.length ? screenData.classified : []}
+              data={topClassified?.length ? topClassified : []}
               // data={[]}
               horizontal={true}
               classifiedFlatListStyle={styles.flatListStyle}
@@ -240,7 +251,7 @@ export default function HomeScreen(props) {
             </View>
             <CustomFlatList
               animation={false}
-              data={screenData?.featured?.length ? screenData?.featured : []}
+              data={featured ? featured : []}
               // data={[]}
               horizontal={true}
               featureCard={styles.featureCard}
@@ -266,7 +277,7 @@ export default function HomeScreen(props) {
                 <Text style={styles.viewAllText}>View all</Text>
               </TouchableOpacity>
             </View>
-            <CustomFlatList
+            <NewsFlatList
               data={screenData?.news?.length ? screenData?.news : []}
               // data={[]}
               horizontal={true}

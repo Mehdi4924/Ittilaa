@@ -232,17 +232,17 @@ export default function AddInventoriesClassified(props) {
               purpose: propPurpose.toLowerCase(),
               category: category.toLowerCase(),
             };
-            console.log('responseeee', JSON.stringify(dtaaa, null, 2));
+            // console.log('responseeee', JSON.stringify(dtaaa, null, 2));
             data.push(dtaaa);
           }
         }
       }
-      console.log('Bulk data', data);
+      // console.log('Bulk data', data);
       if (errCheck == false) {
         axios.defaults.headers['Content-Type'] = 'application/json';
         AppFlow.createEnventory(data)
           .then(function (response) {
-            console.log('responseeee', JSON.stringify(response, null, 2));
+            // console.log('responseeee', JSON.stringify(response, null, 2));
             UnSubscribeToTopic();
             Toast.show('Inventory Submited Successfuly', Toast.SHORT);
             props.navigation.navigate('HomeScreen');
@@ -251,7 +251,7 @@ export default function AddInventoriesClassified(props) {
             sendNotification(notTitle, notBody);
           })
           .catch(function (error) {
-            console.log('responseeee', JSON.stringify(error, null, 2));
+            // console.log('responseeee', JSON.stringify(error, null, 2));
             console.log(error);
           })
           .finally(function () {
@@ -262,6 +262,10 @@ export default function AddInventoriesClassified(props) {
       }
     }
   }
+  const isInt = num => {
+    console.log('inttttt', num % 1 === 0);
+    return num % 1 === 0;
+  };
   async function submitSingleInventory() {
     if (typeValue == '') {
       Toast.show('Please select type', Toast.SHORT);
@@ -277,14 +281,16 @@ export default function AddInventoriesClassified(props) {
       Toast.show('Please enter society name', Toast.SHORT);
     } else if (typeValue == '') {
       Toast.show('Please select type', Toast.SHORT);
-    } else if (!inventDataToAdd.propNo) {
+    } else if (inventDataToAdd.propNo=='') {
       Toast.show('Please Add Property Number', Toast.SHORT);
-    } else if (!inventDataToAdd.plotSize) {
+    } else if (inventDataToAdd.plotSize=='') {
       Toast.show('Please Add Property Size', Toast.SHORT);
-    } else if (!inventDataToAdd.block) {
+    } else if (inventDataToAdd.block=='') {
       Toast.show('Please Add Block Number', Toast.SHORT);
-    } else if (!inventDataToAdd.inventPrice) {
+    } else if (inventDataToAdd.inventPrice=='') {
       Toast.show('Please Add Inventory Price', Toast.SHORT);
+    } else if (isInt(inventDataToAdd.inventPrice)==false) {
+      Toast.show('Please Enter a valid price', Toast.SHORT);
     } else if (!priceLac && !priceCr && !priceTh) {
       Toast.show('Please Add Inventory Price Unit', Toast.SHORT);
     } else {
@@ -309,7 +315,7 @@ export default function AddInventoriesClassified(props) {
       ];
       AppFlow.createEnventory(data)
         .then(function (response) {
-          console.log('responseeee', JSON.stringify(response, null, 2));
+          // console.log('responseeee', JSON.stringify(response, null, 2));
           UnSubscribeToTopic();
           Toast.show('Inventory Submited Successfuly', Toast.SHORT);
           axios.defaults.headers['Content-Type'] = 'multipart/form-data';
@@ -319,7 +325,7 @@ export default function AddInventoriesClassified(props) {
           sendNotification(notTitle, notBody);
         })
         .catch(function (error) {
-          console.log('responseeee', JSON.stringify(error, null, 2));
+          // console.log('responseeee', JSON.stringify(error, null, 2));
           // console.log(error);
         })
         .finally(function () {
@@ -617,7 +623,7 @@ export default function AddInventoriesClassified(props) {
                           return {...prev, inventPrice: e};
                         });
                       }}
-                      keyboardType='numeric'
+                      keyboardType="numeric"
                     />
                     <TouchableOpacity
                       style={
@@ -1024,8 +1030,7 @@ export default function AddInventoriesClassified(props) {
               placeholder="Enter Price"
               value={clsPrice}
               onChangeText={t => setClsPrice(t)}
-              keyboardType='numeric'
-
+              keyboardType="numeric"
             />
             <CustomTextInput
               topText="Details"

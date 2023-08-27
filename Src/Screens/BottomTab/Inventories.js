@@ -50,11 +50,11 @@ export default function Inventories(props) {
     setLoading(true);
     AppFlow.allInventories()
       .then(function (response) {
-        console.log(
-          'Response data',
-          JSON.stringify(response.data, null, 2),
-          // response,
-        );
+        // console.log(
+        //   'Response data',
+        //   JSON.stringify(response.data, null, 2),
+        //   // response,
+        // );
         if (response?.data?.data?.hot_inventory.length) {
           const filteredData = response?.data?.data?.hot_inventory.filter(
             item => item.inventory_data.length > 0,
@@ -89,10 +89,10 @@ export default function Inventories(props) {
     data.append('price_unit', filterData?.priceUnit || '');
     AppFlow.inventoryFilter(data)
       .then(function (response) {
-        console.log(
-          'responseeee filtering data',
-          JSON.stringify(response?.data, null, 2),
-        );
+        // console.log(
+        //   'responseeee filtering data',
+        //   JSON.stringify(response?.data, null, 2),
+        // );
         setListData(response?.data?.data);
       })
       .catch(function (error) {

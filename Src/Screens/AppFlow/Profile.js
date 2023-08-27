@@ -23,8 +23,8 @@ export default function Profile(props) {
     const b = JSON.parse(a);
     AppFlow.getAgencyDetail(b?.agency.id)
       .then(function (response) {
-        console.log(
-          'Response getting agency details',JSON.stringify( response, null, 2))
+        // console.log(
+        //   'Response getting agency details',JSON.stringify( response, null, 2))
         setParseUser({
           ...b,
           ...response.data.data,

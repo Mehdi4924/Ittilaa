@@ -45,18 +45,18 @@ export default function InventoryDetails(props) {
   const Inventories = () => {
     AppFlow.InventoryDetails(inventory[0]?.id)
       .then(function (response) {
-        console.log(
-          'Response getting inventory details',
-          JSON.stringify(response.data.data, null, 2),
-          // response,
-        );
+        // console.log(
+        //   'Response getting inventory details',
+        //   JSON.stringify(response.data.data, null, 2),
+        //   // response,
+        // );
         setInventoryData(response.data.data);
         if (
           inventory[0]?.agency?.id == null ||
           inventory[0]?.agency?.id == undefined
         ) {
           inventory[0].agency = response?.data?.data?.agency;
-          console.log('Inventoryyy', JSON.stringify(inventory[0], null, 2));
+          // console.log('Inventoryyy', JSON.stringify(inventory[0], null, 2));
         }
       })
       .catch(function (error) {

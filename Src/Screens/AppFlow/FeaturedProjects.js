@@ -24,10 +24,10 @@ export default function TopClassified(props) {
   async function getFeatured() {
     AppFlow.getAllFeatured()
       .then(res => {
-        console.log(
-          'success getting featured products',
-          JSON.stringify(res.data, null, 2),
-        );
+        // console.log(
+        //   'success getting featured products',
+        //   JSON.stringify(res.data, null, 2),
+        // );
         setScreenData(res.data.data);
       })
       .catch(err => {

@@ -12,7 +12,7 @@ export const configureAxiosHeaders = async () => {
   axios.defaults.headers['Accept'] = 'application/json';
   const userData = await AsyncStorage.getItem('AuthUser');
   const parsedData = JSON.parse(userData);
-  console.log('Async User Data', JSON.stringify(parsedData, null, 2));
+  // console.log('Async User Data', JSON.stringify(parsedData, null, 2));
   axios.defaults.headers['Authorization'] = 'Bearer '.concat(
     parsedData?.accessToken || '',
   );
@@ -47,6 +47,7 @@ export const AppFlow = {
   InventoryDetails: id => requests.get(`inventory/${id}`),
   GetClassiffiedDetails: id => requests.get(`classified/${id}`),
   getAllAgencies: () => requests.get('agency'),
+  getTopClassified: () => requests.get('classified-feature'),
   getAgencyDetail: id => requests.get(`agency/${id}`),
   agencyProperties: id => requests.get(`agency/inventory/${id}`),
   createEnventory: data => requests.post('inventory/store', data),

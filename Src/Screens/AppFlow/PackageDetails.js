@@ -29,7 +29,7 @@ export default function PackageDetails(props) {
   async function getPlan() {
     AppFlow.getPaymentPlan(planId?.id || 1)
       .then(res => {
-        console.log(JSON.stringify(res.data, null, 2), 'respose');
+        // console.log(JSON.stringify(res.data, null, 2), 'respose');
         setScreenData(res?.data);
       })
       .catch(err => {

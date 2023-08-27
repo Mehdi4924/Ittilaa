@@ -60,7 +60,7 @@ export default function UpdateProfile(props) {
       }
     });
   };
-  console.log('Logo uri===>>', logoUri);
+  console.log('Logo uri===>>', logoUri.uri);
 
   const Register = () => {
     if (dataToSend?.agencyName == '') {
@@ -162,7 +162,8 @@ export default function UpdateProfile(props) {
           : '',
       );
       if (logoUri?.uri && logoUri?.uri != '') {
-        data.append('agency_photo[]', {
+        console.log('imgeeeee', logoUri?.uri);
+        data.append('photo[]', {
           uri: logoUri?.uri,
           name: logoUri?.fileName,
           type: logoUri?.type,
@@ -191,13 +192,17 @@ export default function UpdateProfile(props) {
         data.append('team_update', JSON.stringify(updatedTeam));
       }
       axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+      // console.log('====================================');
+      // console.log('form dataaaa', data);
+      // console.log('====================================');
       Auth.editAgencyData(data)
         .then(async function (response) {
-          console.log(
-            'Success updating',
-            JSON.stringify(response, null, 2),
-            // response,
-          );
+          console.log('updateee profile', response);
+          // console.log(
+          //   'Success updating',
+          //   JSON.stringify(response, null, 2),
+          //   // response,
+          // );
           const userData = await AsyncStorage.getItem('AuthUser');
           const parsedData = JSON.parse(userData);
           const data = {
@@ -211,11 +216,11 @@ export default function UpdateProfile(props) {
           props.navigation.navigate('BottomNavigator');
         })
         .catch(function (error) {
-          console.log(
-            'error registering agency',
-            JSON.stringify(error, null, 2),
-            // error,
-          );
+          // console.log(
+          //   'error registering agency',
+          //   JSON.stringify(error, null, 2),
+          //   // error,
+          // );
           Toast.show(
             error?.response?.data?.message || 'Error Occured Creating',
             Toast.SHORT,
@@ -226,7 +231,7 @@ export default function UpdateProfile(props) {
         });
     }
   };
-  console.log(JSON.stringify(dataToSend, null, 2));
+  // console.log(JSON.stringify(dataToSend, null, 2));
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

@@ -64,12 +64,12 @@ export default function Login(props) {
         <CustomTextInput
           iconName={'mobile-phone'}
           iconType="font-awesome"
-          topText="Phone"
-          placeholder="Please Enter Number"
+          topText="Phone/Email"
+          placeholder="Please mobile or email"
           value={phoneNumber}
           onChangeText={t => setPhoneNumber(t)}
           textInputContainer={{marginVertical: hp(2), marginTop: hp(4)}}
-          keyboardType="phone-pad"
+          // keyboardType="phone-pad"
         />
         <CustomTextInput
           iconName={'lock'}

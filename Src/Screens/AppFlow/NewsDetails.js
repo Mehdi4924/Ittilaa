@@ -40,7 +40,7 @@ export default function NewsDetails(props) {
     <View style={styles.mainContainer}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flex: 1, alignItems: 'center'}}>
+        contentContainerStyle={{ alignItems: 'center', paddingBottom:hp(10)}}>
         <View style={styles.headerView}>
           <TouchableOpacity onPress={() => props.navigation.goBack()}>
             <View style={styles.iconBackground}>
@@ -58,7 +58,7 @@ export default function NewsDetails(props) {
         <Image
           source={
             screenData?.file
-              ? {uri: URL.imageURL + screenData?.file?.file}
+              ? {uri: URL.imageURL + screenData?.file[0]?.file}
               : require('../../Assets/Images/news1.jpg')
           }
           style={{width: wp(90), height: hp(26), borderRadius: hp(2)}}
@@ -107,8 +107,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.semiBold,
     fontSize: hp(2.5),
     color: colors.black,
-    alignSelf: 'flex-start',
-    marginLeft: wp(8),
     marginTop: hp(1),
   },
   newsHeadingStyle: {

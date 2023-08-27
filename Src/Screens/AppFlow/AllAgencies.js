@@ -28,11 +28,11 @@ export default function AllAgencies(props) {
   async function getAllAgencies() {
     AppFlow.getAllAgencies()
       .then(res => {
-        console.log(
-          'response getting all agences',
-          JSON.stringify(res.data, null, 2),
-          // res,
-        );
+        // console.log(
+        //   'response getting all agences',
+        //   JSON.stringify(res.data, null, 2),
+        //   // res,
+        // );
         setAgencies(res?.data?.data);
         dataCopy = res?.data?.data;
       })
