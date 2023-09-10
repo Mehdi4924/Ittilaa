@@ -19,13 +19,13 @@ export default function BannerCrousal(props) {
   const carouselRef = useRef();
   const _renderItem = ({item, index}) => {
     return (
-      <View style={{marginTop: hp(30), alignSelf: 'center'}}>
+      <View style={{marginTop: hp(2), alignSelf: 'center'}}>
         
         <Image
           source={{uri: URL.imageURL + item?.file}}
           style={{
-            width: wp(90),
-            height: hp(30),
+            width: 350,
+            height: 630,
             borderWidth: 1,
             borderColor: colors.primary,
             borderRadius: hp(1),

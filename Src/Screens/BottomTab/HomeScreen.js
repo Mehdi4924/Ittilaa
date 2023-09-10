@@ -1,7 +1,10 @@
 import {
+  Image,
   Modal,
+  Platform,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,7 +20,6 @@ import {fonts} from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
 import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
-import {useFocusEffect} from '@react-navigation/native';
 import {AppFlow} from '../../Api/ApiCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomLoader from '../../Components/CustomLoader';
@@ -25,6 +27,7 @@ import {Linking} from 'react-native';
 import {Icon} from '@rneui/base';
 import NewsFlatList from '../../Components/NewsFlatList';
 import BannerCrousal from '../../Components/BannerCrousal';
+import {useFocusEffect} from '@react-navigation/core';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
@@ -92,6 +95,11 @@ export default function HomeScreen(props) {
     });
     return newArr;
   }
+  useFocusEffect(() => {
+    Platform.OS == 'android' && StatusBar.setBackgroundColor(colors.white);
+    StatusBar.setBarStyle('light-content');
+  });
+
   console.log('banner modal', bannerModal);
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -139,16 +147,26 @@ export default function HomeScreen(props) {
             {bannerModal ? (
               <Modal visible={bannerModal}>
                 <View>
-                  <TouchableOpacity
-                    style={styles.closeBtn}
-                    onPress={() => setBannerModal(false)}>
-                    <Icon
-                      type="material"
-                      name="close"
-                      color={colors.white}
-                      size={wp(7)}
-                    />
-                  </TouchableOpacity>
+                  <View style={styles.bannerLogoCont}>
+                    <View style={{alignItems:'flex-start'}}>
+                    <Text style={styles.poweredText}>Powered By:</Text>
+                      <Image
+                        source={require('../../Assets/Images/logo.png')}
+                        style={{width: wp(35), height: hp(5), opacity: 0.7}}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <TouchableOpacity
+                      style={styles.closeBtn}
+                      onPress={() => setBannerModal(false)}>
+                      <Icon
+                        type="material"
+                        name="close"
+                        color={colors.white}
+                        size={wp(7)}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   <BannerCrousal
                     data={screenData?.banner}
                     onCrossPress={() => setBannerModal(false)}
@@ -569,14 +587,24 @@ const styles = StyleSheet.create({
     marginTop: hp(2),
   },
   closeBtn: {
-    width: wp(12),
-    height: wp(12),
-    borderRadius: wp(10),
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(5),
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-end',
-    marginRight:wp(4),
-    marginTop:hp(2)
   },
+  bannerLogoCont: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    width: wp(90),
+    alignSelf: 'center',
+    marginTop:hp(1)
+  },
+  poweredText:{
+      fontFamily: fonts.medium,
+      fontSize: 14,
+      color: colors.primary,
+  }
 });
