@@ -139,8 +139,8 @@ android {
         applicationId "com.ittilaa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 33
-        versionCode 12
-        versionName "2.1"
+        versionCode 16
+        versionName "2.4"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {

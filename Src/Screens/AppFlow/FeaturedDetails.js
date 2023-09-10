@@ -24,25 +24,42 @@ export default function FeaturedDetails(props) {
   const {data} = props.route.params;
   const [screenData, setScreenData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [featureImages, setfeatureImages] = useState();
+  const [featureImages, setfeatureImages] = useState({});
+  const [images, setimages] = useState({});
+  const [paymentPlanImages, setPaymentPlanImages] = useState([]);
+  const [developerLogoImages, setDeveloperLogoImages] = useState([]);
+  const [marketedByImages, setMarketedByImages] = useState([])
+  const [photo, setPhoto] = useState([])
   useEffect(() => {
     getProjectDetails();
   }, []);
-
   async function getProjectDetails() {
     AppFlow.getSingleFeatured(data.id)
-      .then(res => {
+      .then(async res => {
         console.log(
           // JSON.stringify(res.data, null, 2),
           'respose getting featured details',
           res,
         );
-        const initialImages = res?.data?.data?.file.map((item, index) => {
-          return {
-            [item?.type]: item?.file,
-          };
-        });
-        setfeatureImages(initialImages);
+
+        const imagesData = res?.data?.data?.file || []; // Separate the images by their types
+        const paymentPlanImages = imagesData.filter(
+          (image) => image.type === 'payment_plan_image'
+        );
+        const developerLogoImages = imagesData.filter(
+          (image) => image.type === 'developer_logo_image'
+        );
+        const marketedByImages = imagesData.filter(
+          (image) => image.type === 'marketed_by_image'
+        );
+        const photo = imagesData.filter(
+          (image) => image.type === 'photo'
+        );
+        
+        setPaymentPlanImages(paymentPlanImages);
+        setDeveloperLogoImages(developerLogoImages);
+        setMarketedByImages(marketedByImages);
+        setPhoto(photo);
         setScreenData(res?.data);
       })
       .catch(err => {
@@ -52,17 +69,7 @@ export default function FeaturedDetails(props) {
         setIsLoading(false);
       });
   }
-
-  // const carouselRef = useRef();
-  // const _renderItem = ({item, index}) => {
-  //   return (
-  //     <View style={styles.slide}>
-  //       <Image source={{uri: item}} style={{width: wp(100), height: hp(30)}} />
-  //     </View>
-  //   );
-  // };
-  // console.log('screendata', screenData);
-  console.log('images', featureImages);
+console.log('images', paymentPlanImages);
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={isLoading} />
@@ -73,48 +80,12 @@ export default function FeaturedDetails(props) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: hp(5)}}>
           <View style={[styles.container, {marginBottom: wp(5)}]}>
-            {/* <Carousel
-            ref={c => {
-              carouselRef.current = c;
-            }}
-            data={
-              screenData?.data?.file
-                ? [URL.imageURL + screenData?.data?.file?.file]
-                : [allImages.homeImage]
-            }
-            renderItem={_renderItem}
-            sliderWidth={wp(100)}
-            itemWidth={wp(100)}
-            autoplay={true}
-            loop={true}
-          /> */}
             <Image
-              source={{uri: URL.imageURL + screenData?.data?.file[3]?.file}}
+              source={{uri: URL.imageURL + photo[0]?.file}}
               style={{width: wp(100), height: hp(40)}}
               resizeMode="cover"
             />
-            {/* <View style={styles.bothChevronsView}>
-            <TouchableOpacity
-              onPress={() => carouselRef.current.snapToPrev()}
-              style={styles.chevron}>
-              <Icon
-                name={'chevron-back-circle-outline'}
-                type={'ionicon'}
-                color={colors.white}
-                size={hp(2)}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => carouselRef.current.snapToNext()}
-              style={styles.chevron}>
-              <Icon
-                name={'chevron-forward-circle-outline'}
-                type={'ionicon'}
-                color={colors.white}
-                size={hp(2)}
-              />
-            </TouchableOpacity>
-          </View> */}
+
             <View style={styles.header}>
               <TouchableOpacity onPress={() => props.navigation.goBack()}>
                 <Icon
@@ -160,7 +131,7 @@ export default function FeaturedDetails(props) {
             <View style={styles.developersView}>
               <View style={{alignItems: 'center'}}>
                 <Image
-                  source={{uri: URL.imageURL + screenData?.data?.file[1]?.file}}
+                  source={{uri: URL.imageURL + developerLogoImages[0]?.file}}
                   style={styles.userImage}
                   resizeMode="contain"
                 />
@@ -171,7 +142,7 @@ export default function FeaturedDetails(props) {
               <View style={styles.centeralLine} />
               <View style={{alignItems: 'center'}}>
                 <Image
-                  source={{uri: URL.imageURL + screenData?.data?.file[2]?.file}}
+                  source={{uri: URL.imageURL + marketedByImages[0]?.file}}
                   style={styles.userImage}
                   resizeMode="contain"
                 />
@@ -183,7 +154,7 @@ export default function FeaturedDetails(props) {
 
             <Text style={styles.plansText}>Payment Plan</Text>
             <Image
-              source={{uri: URL.imageURL + screenData?.data?.file[0]?.file}}
+              source={{uri: URL.imageURL + paymentPlanImages[0]?.file}}
               style={{width: wp(90), height: hp(40)}}
               resizeMode="cover"
             />
@@ -261,6 +232,8 @@ const styles = StyleSheet.create({
     marginTop: hp(0.5),
     fontFamily: fonts.bold,
     color: colors.black,
+    width:wp(30),
+    textAlign:'center'
   },
   centeralLine: {
     height: 2,

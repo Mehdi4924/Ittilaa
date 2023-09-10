@@ -1,4 +1,5 @@
 import {
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -32,6 +33,7 @@ export default function HomeScreen(props) {
   const [agenciesData, setAgenciesData] = useState([]);
   const [topClassified, setTopClassified] = useState([]);
   const [featured, setFeatured] = useState([]);
+  const [bannerModal, setBannerModal] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -90,7 +92,7 @@ export default function HomeScreen(props) {
     });
     return newArr;
   }
-
+  console.log('banner modal', bannerModal);
   return (
     <SafeAreaView style={styles.mainContainer}>
       <CustomLoader isLoading={isLoading} />
@@ -118,7 +120,7 @@ export default function HomeScreen(props) {
         />
         {isLoading ? null : (
           <>
-            {/* {Platform.OS == 'android' &&
+            {Platform.OS == 'android' &&
             screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
@@ -133,170 +135,196 @@ export default function HomeScreen(props) {
                   <Text style={styles.clickHere}>Click Here</Text>
                 </TouchableOpacity>
               </View>
-            ) : null} */}
-            <BannerCrousal data={screenData?.banner} />
-            <TouchableOpacity
-              style={styles.createAdBtn}
-              onPress={() =>
-                props.navigation.navigate('AppFlow', {screen: 'AddInformation'})
-              }>
-              <Text style={styles.updateAppText}>Create Ad</Text>
-              <Icon
-                name={'home-group-plus'}
-                type={'material-community'}
-                color={colors.white}
-                size={hp(3)}
-              />
-            </TouchableOpacity>
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Agencies</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  props.navigation.navigate('AppFlow', {screen: 'AllAgencies'})
-                }>
-                <Text style={styles.viewAllText}>View all</Text>
-              </TouchableOpacity>
-            </View>
+            ) : null}
+            {bannerModal ? (
+              <Modal visible={bannerModal}>
+                <View>
+                  <TouchableOpacity
+                    style={styles.closeBtn}
+                    onPress={() => setBannerModal(false)}>
+                    <Icon
+                      type="material"
+                      name="close"
+                      color={colors.white}
+                      size={wp(7)}
+                    />
+                  </TouchableOpacity>
+                  <BannerCrousal
+                    data={screenData?.banner}
+                    onCrossPress={() => setBannerModal(false)}
+                  />
+                </View>
+              </Modal>
+            ) : (
+              <>
+                <TouchableOpacity
+                  style={styles.createAdBtn}
+                  onPress={() =>
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'AddInformation',
+                    })
+                  }>
+                  <Text style={styles.updateAppText}>Create Ad</Text>
+                  <Icon
+                    name={'home-group-plus'}
+                    type={'material-community'}
+                    color={colors.white}
+                    size={hp(3)}
+                  />
+                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>Agencies</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate('AppFlow', {
+                        screen: 'AllAgencies',
+                      })
+                    }>
+                    <Text style={styles.viewAllText}>View all</Text>
+                  </TouchableOpacity>
+                </View>
 
-            <TitaniumFlatlist
-              horizontal={true}
-              data={agenciesData.length ? sortArr(agenciesData) : []}
-              // data={[]}
-              cardStyle={styles.cardStyle}
-              listContainerstyle={styles.listContainerstyle}
-              flatListStyle={styles.flatListStyle}
-              listTitleStyle={styles.listTitleStyle}
-              onPress={item =>
-                props.navigation.navigate('AppFlow', {
-                  screen: 'AgencyProfile',
-                  params: {agency: item},
-                })
-              }
-            />
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Top Inventories</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  props.navigation.navigate('AppFlow', {
-                    screen: 'TopInventories',
-                  })
-                }>
-                <Text style={styles.viewAllText}>View all</Text>
-              </TouchableOpacity>
-            </View>
-            {/* <AutoScrollFlatList/> */}
-            <InventoriesComp
-              data={
-                screenData?.inventory?.length
-                  ? screenData?.inventory.reverse()
-                  : []
-              }
-              inventoryCard={styles.inventoryCard}
-              horizontal={true}
-              flatListStyle={styles.flatListStyle}
-              profileImgStyle={styles.profileImgStyle}
-              profileImgContainer={styles.profileImgContainer}
-              animation={false}
-              onPress={item =>
-                props.navigation.navigate('AppFlow', {
-                  screen: 'InventoryDetails',
-                  params: {inventory: item.inventory_data},
-                })
-              }
-            />
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Top Classified</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  props.navigation.navigate('AppFlow', {
-                    screen: 'TopClassified',
-                  })
-                }>
-                <Text style={styles.viewAllText}>View all</Text>
-              </TouchableOpacity>
-            </View>
-            <TopClassifiedComp
-              data={topClassified?.length ? topClassified : []}
-              // data={[]}
-              horizontal={true}
-              classifiedFlatListStyle={styles.flatListStyle}
-              classifiedCardStyle={styles.classifiedCardStyle}
-              classifiedImageStyle={styles.classifiedImageStyle}
-              classifiedTitlePrice={styles.classifiedTitlePrice}
-              classifiedTitleText={styles.classifiedTitleText}
-              classifiedPriceText={styles.classifiedPriceText}
-              classifiedAddressStyle={styles.classifiedAddressStyle}
-              classifiedAmenities={styles.classifiedAmenities}
-              classifiedAmenitiesText={styles.classifiedAmenitiesText}
-              amenitiesIconSize={10}
-              animation={false}
-              onPress={item =>
-                props.navigation.navigate('AppFlow', {
-                  screen: 'ClassifiedDetails',
-                  params: {classified: item},
-                })
-              }
-              // onPress={item => props.navigation.navigate('FeaturedDetails')}
-            />
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Featured Projects</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  props.navigation.navigate('AppFlow', {
-                    screen: 'FeaturedProjects',
-                  })
-                }>
-                <Text style={styles.viewAllText}>View all</Text>
-              </TouchableOpacity>
-            </View>
-            <CustomFlatList
-              animation={false}
-              data={featured ? featured : []}
-              // data={[]}
-              horizontal={true}
-              featureCard={styles.featureCard}
-              featureImageStyle={styles.featureImageStyle}
-              featureNameText={styles.featureNameText}
-              flatListStyle={styles.flatListStyle}
-              onPress={item =>
-                props.navigation.navigate('AppFlow', {
-                  screen: 'FeaturedDetails',
-                  params: {data: item},
-                })
-              }
-            />
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>News</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  props.navigation.navigate('AppFlow', {
-                    screen: 'News',
-                    params: {data: screenData?.news},
-                  })
-                }>
-                <Text style={styles.viewAllText}>View all</Text>
-              </TouchableOpacity>
-            </View>
-            <NewsFlatList
-              data={screenData?.news?.length ? screenData?.news : []}
-              // data={[]}
-              horizontal={true}
-              featureCard={styles.newsCard}
-              featureImageStyle={styles.newsImageStyle}
-              featureNameText={styles.newsNameText}
-              onPress={item =>
-                props.navigation.navigate('AppFlow', {
-                  screen: 'NewsDetails',
-                  params: {news: item},
-                })
-              }
-              flatListStyle={styles.flatListStyle}
-              news
-            />
-            <View style={{height: hp(4)}}></View>
+                <TitaniumFlatlist
+                  horizontal={true}
+                  data={agenciesData.length ? sortArr(agenciesData) : []}
+                  // data={[]}
+                  cardStyle={styles.cardStyle}
+                  listContainerstyle={styles.listContainerstyle}
+                  flatListStyle={styles.flatListStyle}
+                  listTitleStyle={styles.listTitleStyle}
+                  onPress={item =>
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'AgencyProfile',
+                      params: {agency: item},
+                    })
+                  }
+                />
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>Top Inventories</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate('AppFlow', {
+                        screen: 'TopInventories',
+                      })
+                    }>
+                    <Text style={styles.viewAllText}>View all</Text>
+                  </TouchableOpacity>
+                </View>
+                {/* <AutoScrollFlatList/> */}
+                <InventoriesComp
+                  data={
+                    screenData?.inventory?.length
+                      ? screenData?.inventory.reverse()
+                      : []
+                  }
+                  inventoryCard={styles.inventoryCard}
+                  horizontal={true}
+                  flatListStyle={styles.flatListStyle}
+                  profileImgStyle={styles.profileImgStyle}
+                  profileImgContainer={styles.profileImgContainer}
+                  animation={false}
+                  onPress={item =>
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'InventoryDetails',
+                      params: {inventory: item.inventory_data},
+                    })
+                  }
+                />
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>Top Classified</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate('AppFlow', {
+                        screen: 'TopClassified',
+                      })
+                    }>
+                    <Text style={styles.viewAllText}>View all</Text>
+                  </TouchableOpacity>
+                </View>
+                <TopClassifiedComp
+                  data={topClassified?.length ? topClassified : []}
+                  // data={[]}
+                  horizontal={true}
+                  classifiedFlatListStyle={styles.flatListStyle}
+                  classifiedCardStyle={styles.classifiedCardStyle}
+                  classifiedImageStyle={styles.classifiedImageStyle}
+                  classifiedTitlePrice={styles.classifiedTitlePrice}
+                  classifiedTitleText={styles.classifiedTitleText}
+                  classifiedPriceText={styles.classifiedPriceText}
+                  classifiedAddressStyle={styles.classifiedAddressStyle}
+                  classifiedAmenities={styles.classifiedAmenities}
+                  classifiedAmenitiesText={styles.classifiedAmenitiesText}
+                  amenitiesIconSize={10}
+                  animation={false}
+                  onPress={item =>
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'ClassifiedDetails',
+                      params: {classified: item},
+                    })
+                  }
+                  // onPress={item => props.navigation.navigate('FeaturedDetails')}
+                />
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>Featured Projects</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate('AppFlow', {
+                        screen: 'FeaturedProjects',
+                      })
+                    }>
+                    <Text style={styles.viewAllText}>View all</Text>
+                  </TouchableOpacity>
+                </View>
+                <CustomFlatList
+                  animation={false}
+                  data={featured ? featured : []}
+                  // data={[]}
+                  horizontal={true}
+                  featureCard={styles.featureCard}
+                  featureImageStyle={styles.featureImageStyle}
+                  featureNameText={styles.featureNameText}
+                  flatListStyle={styles.flatListStyle}
+                  onPress={item =>
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'FeaturedDetails',
+                      params: {data: item},
+                    })
+                  }
+                />
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>News</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate('AppFlow', {
+                        screen: 'News',
+                        params: {data: screenData?.news},
+                      })
+                    }>
+                    <Text style={styles.viewAllText}>View all</Text>
+                  </TouchableOpacity>
+                </View>
+                <NewsFlatList
+                  data={screenData?.news?.length ? screenData?.news : []}
+                  // data={[]}
+                  horizontal={true}
+                  featureCard={styles.newsCard}
+                  featureImageStyle={styles.newsImageStyle}
+                  featureNameText={styles.newsNameText}
+                  onPress={item =>
+                    props.navigation.navigate('AppFlow', {
+                      screen: 'NewsDetails',
+                      params: {news: item},
+                    })
+                  }
+                  flatListStyle={styles.flatListStyle}
+                  news
+                />
+                <View style={{height: hp(4)}}></View>
+              </>
+            )}
+            <View style={{height: hp(8)}}></View>
           </>
         )}
-        <View style={{height: hp(8)}}></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -539,5 +567,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: hp(2),
+  },
+  closeBtn: {
+    width: wp(12),
+    height: wp(12),
+    borderRadius: wp(10),
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
+    marginRight:wp(4),
+    marginTop:hp(2)
   },
 });
