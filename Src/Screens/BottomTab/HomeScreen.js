@@ -10,24 +10,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import CustomHeader from '../../Components/CustomHeader';
-import {hp, wp} from '../../Constants/Responsive';
-import {colors} from '../../Constants/Colors';
-import {allImages} from '../../Constants/Images';
+import { hp, wp } from '../../Constants/Responsive';
+import { colors } from '../../Constants/Colors';
+import { allImages } from '../../Constants/Images';
 import TitaniumFlatlist from '../../Components/TitaniumFlatlist';
-import {fonts} from '../../Constants/Fonts';
+import { fonts } from '../../Constants/Fonts';
 import InventoriesComp from '../../Components/InventoriesComp';
 import CustomFlatList from '../../Components/CustomFlatList';
 import TopClassifiedComp from '../../Components/TopClassifiedComp';
-import {AppFlow} from '../../Api/ApiCalls';
+import { AppFlow } from '../../Api/ApiCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomLoader from '../../Components/CustomLoader';
-import {Linking} from 'react-native';
-import {Icon} from '@rneui/base';
+import { Linking } from 'react-native';
+import { Icon } from '@rneui/base';
 import NewsFlatList from '../../Components/NewsFlatList';
 import BannerCrousal from '../../Components/BannerCrousal';
-import {useFocusEffect} from '@react-navigation/core';
+import { useFocusEffect } from '@react-navigation/core';
 
 export default function HomeScreen(props) {
   const [screenData, setScreenData] = useState();
@@ -62,7 +62,7 @@ export default function HomeScreen(props) {
       .catch(err => {
         console.log(err);
       })
-      .finally(() => {});
+      .finally(() => { });
   }
   async function getTopClassified() {
     AppFlow.getTopClassified()
@@ -73,7 +73,7 @@ export default function HomeScreen(props) {
       .catch(err => {
         console.log('error getting top classified', err);
       })
-      .finally(() => {});
+      .finally(() => { });
   }
   const getData = () => {
     AppFlow.dashboard()
@@ -108,7 +108,7 @@ export default function HomeScreen(props) {
         <CustomHeader
           headerStyle={styles.headerStyle}
           leftImage={allImages.logo2}
-          leftImageStyle={{width: wp(36), height: hp(8)}}
+          leftImageStyle={{ width: wp(36), height: hp(8) }}
           rightIconName={'account-circle'}
           loginText={user ? null : true}
           rightIconType="material"
@@ -116,20 +116,20 @@ export default function HomeScreen(props) {
           rightIconSize={35}
           onRighttIconPress={() => {
             user
-              ? props.navigation.navigate('AppFlow', {screen: 'Profile'})
-              : props.navigation.navigate('AuthStack', {screen: 'Login'});
+              ? props.navigation.navigate('AppFlow', { screen: 'Profile' })
+              : props.navigation.navigate('AuthStack', { screen: 'Login' });
           }}
           inputViewStyle={styles.inputViewStyle}
           textInputStyle={styles.textInputStyle}
           placeholder="Search"
           placeholderTextColor={colors.grey}
           iconContainer={styles.iconContainer}
-          onChangeText={t => {}}
+          onChangeText={t => { }}
         />
         {isLoading ? null : (
           <>
             {Platform.OS == 'android' &&
-            screenData?.app_update?.update == '1' ? (
+              screenData?.app_update?.update == '1' ? (
               <View style={styles.updateAppBanner}>
                 <Text style={styles.updateAppText}>
                   New stable Version of this app has released. To install
@@ -146,13 +146,13 @@ export default function HomeScreen(props) {
             ) : null}
             {bannerModal ? (
               <Modal visible={bannerModal}>
-                <View>
+                <View style={{ marginTop: Platform.OS == 'ios' ? hp(5) : 0 }}>
                   <View style={styles.bannerLogoCont}>
-                    <View style={{alignItems:'flex-start'}}>
-                    <Text style={styles.poweredText}>Powered By:</Text>
+                    <View style={{ alignItems: 'flex-start' }}>
+                      <Text style={styles.poweredText}>Powered By:</Text>
                       <Image
                         source={require('../../Assets/Images/logo.png')}
-                        style={{width: wp(35), height: hp(5), opacity: 0.7}}
+                        style={{ width: wp(35), height: hp(5), opacity: 0.7 }}
                         resizeMode="contain"
                       />
                     </View>
@@ -213,7 +213,7 @@ export default function HomeScreen(props) {
                   onPress={item =>
                     props.navigation.navigate('AppFlow', {
                       screen: 'AgencyProfile',
-                      params: {agency: item},
+                      params: { agency: item },
                     })
                   }
                 />
@@ -244,7 +244,7 @@ export default function HomeScreen(props) {
                   onPress={item =>
                     props.navigation.navigate('AppFlow', {
                       screen: 'InventoryDetails',
-                      params: {inventory: item.inventory_data},
+                      params: { inventory: item.inventory_data },
                     })
                   }
                 />
@@ -277,10 +277,10 @@ export default function HomeScreen(props) {
                   onPress={item =>
                     props.navigation.navigate('AppFlow', {
                       screen: 'ClassifiedDetails',
-                      params: {classified: item},
+                      params: { classified: item },
                     })
                   }
-                  // onPress={item => props.navigation.navigate('FeaturedDetails')}
+                // onPress={item => props.navigation.navigate('FeaturedDetails')}
                 />
                 <View style={styles.titleContainer}>
                   <Text style={styles.titleText}>Featured Projects</Text>
@@ -305,7 +305,7 @@ export default function HomeScreen(props) {
                   onPress={item =>
                     props.navigation.navigate('AppFlow', {
                       screen: 'FeaturedDetails',
-                      params: {data: item},
+                      params: { data: item },
                     })
                   }
                 />
@@ -315,7 +315,7 @@ export default function HomeScreen(props) {
                     onPress={() =>
                       props.navigation.navigate('AppFlow', {
                         screen: 'News',
-                        params: {data: screenData?.news},
+                        params: { data: screenData?.news },
                       })
                     }>
                     <Text style={styles.viewAllText}>View all</Text>
@@ -331,16 +331,16 @@ export default function HomeScreen(props) {
                   onPress={item =>
                     props.navigation.navigate('AppFlow', {
                       screen: 'NewsDetails',
-                      params: {news: item},
+                      params: { news: item },
                     })
                   }
                   flatListStyle={styles.flatListStyle}
                   news
                 />
-                <View style={{height: hp(4)}}></View>
+                <View style={{ height: hp(4) }}></View>
               </>
             )}
-            <View style={{height: hp(8)}}></View>
+            <View style={{ height: hp(8) }}></View>
           </>
         )}
       </ScrollView>
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     // marginHorizontal:wp(5),
     marginTop: hp(2),
   },
-  flatListStyle: {marginHorizontal: wp(5), paddingRight: wp(6)},
+  flatListStyle: { marginHorizontal: wp(5), paddingRight: wp(6) },
   listTitleStyle: {
     maxWidth: wp(20),
     fontFamily: fonts.regular,
@@ -600,11 +600,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: wp(90),
     alignSelf: 'center',
-    marginTop:hp(1)
+    marginTop: hp(1)
   },
-  poweredText:{
-      fontFamily: fonts.medium,
-      fontSize: 14,
-      color: colors.primary,
+  poweredText: {
+    fontFamily: fonts.medium,
+    fontSize: 14,
+    color: colors.primary,
   }
 });

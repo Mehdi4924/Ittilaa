@@ -7,11 +7,11 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomHeader from '../../Components/CustomHeader';
-import {colors} from '../../Constants/Colors';
-import {hp, wp} from '../../Constants/Responsive';
-import {fonts} from '../../Constants/Fonts';
+import { colors } from '../../Constants/Colors';
+import { hp, wp } from '../../Constants/Responsive';
+import { fonts } from '../../Constants/Fonts';
 import CustomButton from '../../Components/CustomButton';
 import CustomTextInput from '../../Components/CustomTextInput';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -26,13 +26,13 @@ import {
   typeItem,
 } from '../../Constants/dummyData';
 import CustomDropdown from '../../Components/CustomDropdown';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
-import {Icon} from '@rneui/themed';
-import {AppFlow, FCMNotification} from '../../Api/ApiCalls';
+import { Icon } from '@rneui/themed';
+import { AppFlow, FCMNotification } from '../../Api/ApiCalls';
 import axios from 'axios';
-import {FlatList} from 'react-native';
-import {SafeAreaView} from 'react-native';
+import { FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 
@@ -85,7 +85,7 @@ export default function AddInventoriesClassified(props) {
         setCities(res?.data?.data);
       })
       .catch(error => console.log('error', error))
-      .finally(() => {});
+      .finally(() => { });
   };
   const getSocieties = async city => {
     await AppFlow.getSociety(city.id)
@@ -94,7 +94,7 @@ export default function AddInventoriesClassified(props) {
         setSocietyItem(res?.data?.data);
       })
       .catch(error => console.log('error', error))
-      .finally(() => {});
+      .finally(() => { });
   };
   async function getAsyncData() {
     const data = await AsyncStorage.getItem('AuthUser');
@@ -281,16 +281,18 @@ export default function AddInventoriesClassified(props) {
       Toast.show('Please enter society name', Toast.SHORT);
     } else if (typeValue == '') {
       Toast.show('Please select type', Toast.SHORT);
-    } else if (inventDataToAdd.propNo=='') {
+    } else if (inventDataToAdd.propNo == '') {
       Toast.show('Please Add Property Number', Toast.SHORT);
-    } else if (inventDataToAdd.plotSize=='') {
+    } else if (inventDataToAdd.plotSize == '') {
       Toast.show('Please Add Property Size', Toast.SHORT);
-    } else if (inventDataToAdd.block=='') {
+    } else if (inventDataToAdd.block == '') {
       Toast.show('Please Add Block Number', Toast.SHORT);
-    } else if (inventDataToAdd.inventPrice=='') {
+    } else if (inventDataToAdd.inventPrice == '') {
       Toast.show('Please Add Inventory Price', Toast.SHORT);
-    } else if (isInt(inventDataToAdd.inventPrice)==false) {
+    } else if (isInt(inventDataToAdd.inventPrice) == false) {
       Toast.show('Please Enter a valid price', Toast.SHORT);
+    } else if (inventDataToAdd?.inventPrice.split(".").length > 1) {
+      Toast.show('Please Enter a valid price without decimals', Toast.SHORT);
     } else if (!priceLac && !priceCr && !priceTh) {
       Toast.show('Please Add Inventory Price Unit', Toast.SHORT);
     } else {
@@ -313,6 +315,7 @@ export default function AddInventoriesClassified(props) {
           feature: featuredPaid,
         },
       ];
+      console.log(data);
       AppFlow.createEnventory(data)
         .then(function (response) {
           // console.log('responseeee', JSON.stringify(response, null, 2));
@@ -326,7 +329,7 @@ export default function AddInventoriesClassified(props) {
         })
         .catch(function (error) {
           // console.log('responseeee', JSON.stringify(error, null, 2));
-          // console.log(error);
+          console.log(error);
         })
         .finally(function () {
           setIndicator(false);
@@ -392,7 +395,7 @@ export default function AddInventoriesClassified(props) {
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{alignItems: 'center'}}>
+        contentContainerStyle={{ alignItems: 'center' }}>
         <CustomHeader
           headerStyle={styles.headerStyle}
           iconContainer={styles.iconContainer}
@@ -444,7 +447,7 @@ export default function AddInventoriesClassified(props) {
                 }}
               />
               <CustomDropdown
-                data={[...societyItem, {name: 'Other', id: -1}]}
+                data={[...societyItem, { name: 'Other', id: -1 }]}
                 topLabelText={'Society'}
                 labelFieldName={'name'}
                 valueFieldName={'id'}
@@ -468,7 +471,7 @@ export default function AddInventoriesClassified(props) {
                   value={inventDataToAdd.other || ''}
                   onChangeText={e => {
                     setInventDataToAdd(prev => {
-                      return {...prev, other: e};
+                      return { ...prev, other: e };
                     });
                   }}
                 />
@@ -509,7 +512,7 @@ export default function AddInventoriesClassified(props) {
               {bulk ? (
                 <>
                   <View>
-                    <Text style={{...styles.bulkText, color: colors.secondary}}>
+                    <Text style={{ ...styles.bulkText, color: colors.secondary }}>
                       Format example:
                     </Text>
                     <Text style={styles.bulkText}>
@@ -531,12 +534,12 @@ export default function AddInventoriesClassified(props) {
                     // onChangeText={e => setBulkDetails(e)}
                     onChangeText={e => setBulkDetails(e)}
                   />
-                  <View style={{marginTop: hp(2)}}>
+                  <View style={{ marginTop: hp(2) }}>
                     <Text style={styles.bulkText}>
                       Do you want to upload Single Inventories?
                     </Text>
                     <TouchableOpacity onPress={() => setBulk(false)}>
-                      <Text style={{...styles.bulkText, color: colors.primary}}>
+                      <Text style={{ ...styles.bulkText, color: colors.primary }}>
                         Click Here
                       </Text>
                     </TouchableOpacity>
@@ -562,7 +565,7 @@ export default function AddInventoriesClassified(props) {
                       valu={inventDataToAdd.propNo || ''}
                       onChangeText={e => {
                         setInventDataToAdd(prev => {
-                          return {...prev, propNo: e};
+                          return { ...prev, propNo: e };
                         });
                       }}
                     />
@@ -578,7 +581,7 @@ export default function AddInventoriesClassified(props) {
                       valu={inventDataToAdd.plotSize || ''}
                       onChangeText={e => {
                         setInventDataToAdd(prev => {
-                          return {...prev, plotSize: e};
+                          return { ...prev, plotSize: e };
                         });
                       }}
                     />
@@ -594,7 +597,7 @@ export default function AddInventoriesClassified(props) {
                     />
                   </View>
                   <CustomTextInput
-                    textInputContainer={{marginTop: hp(2), borderRadius: 8}}
+                    textInputContainer={{ marginTop: hp(2), borderRadius: 8 }}
                     topText="Block"
                     iconType="material"
                     iconName="grid-view"
@@ -603,7 +606,7 @@ export default function AddInventoriesClassified(props) {
                     valu={inventDataToAdd.block || ''}
                     onChangeText={e => {
                       setInventDataToAdd(prev => {
-                        return {...prev, block: e};
+                        return { ...prev, block: e };
                       });
                     }}
                   />
@@ -620,7 +623,7 @@ export default function AddInventoriesClassified(props) {
                       valu={inventDataToAdd.inventPrice || ''}
                       onChangeText={e => {
                         setInventDataToAdd(prev => {
-                          return {...prev, inventPrice: e};
+                          return { ...prev, inventPrice: e };
                         });
                       }}
                       keyboardType="numeric"
@@ -659,9 +662,9 @@ export default function AddInventoriesClassified(props) {
                       <Text style={styles.priceTypeTextStyle}>Cr</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{marginTop: hp(4)}}>
+                  <View style={{ marginTop: hp(4) }}>
                     <Text>Feature/Paid</Text>
-                    <View style={{flexDirection: 'row', marginTop: hp(1)}}>
+                    <View style={{ flexDirection: 'row', marginTop: hp(1) }}>
                       <TouchableOpacity
                         style={
                           featuredPaid == 'PUP'
@@ -733,12 +736,12 @@ export default function AddInventoriesClassified(props) {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{marginTop: hp(2)}}>
+                  <View style={{ marginTop: hp(2) }}>
                     <Text style={styles.bulkText}>
                       Do you want to upload Inventories in Bulk?
                     </Text>
                     <TouchableOpacity onPress={() => setBulk(true)}>
-                      <Text style={{...styles.bulkText, color: colors.primary}}>
+                      <Text style={{ ...styles.bulkText, color: colors.primary }}>
                         Click Here
                       </Text>
                     </TouchableOpacity>
@@ -783,7 +786,7 @@ export default function AddInventoriesClassified(props) {
                       if (imageUri.length < 3) {
                         return (
                           <TouchableOpacity
-                            style={{alignSelf: 'center'}}
+                            style={{ alignSelf: 'center' }}
                             onPress={() => {
                               openGallery(true);
                             }}>
@@ -800,7 +803,7 @@ export default function AddInventoriesClassified(props) {
                         return null;
                       }
                     }}
-                    renderItem={({item, index}) => {
+                    renderItem={({ item, index }) => {
                       return (
                         <ImageBackground
                           source={{
@@ -811,7 +814,7 @@ export default function AddInventoriesClassified(props) {
                             height: hp(18),
                             borderRadius: 8,
                           }}
-                          imageStyle={{borderRadius: 8}}
+                          imageStyle={{ borderRadius: 8 }}
                           resizeMode="contain">
                           <TouchableOpacity
                             style={styles.delIconContainer}
@@ -903,7 +906,7 @@ export default function AddInventoriesClassified(props) {
               onChangeText={item => setContactNo(item)}
             />
             <CustomDropdown
-              container={{marginTop: hp(4)}}
+              container={{ marginTop: hp(4) }}
               data={typeItem}
               topLabelText={'Type'}
               labelFieldName={'label'}
@@ -915,7 +918,7 @@ export default function AddInventoriesClassified(props) {
               onChange={item => setClsTypeValue(item.value)}
             />
             <CustomDropdown
-              container={{marginTop: hp(2.5)}}
+              container={{ marginTop: hp(2.5) }}
               data={purpose}
               topLabelText={'Purpose'}
               labelFieldName={'label'}
@@ -927,7 +930,7 @@ export default function AddInventoriesClassified(props) {
               onChange={item => setclsProPurpose(item.value)}
             />
             <CustomDropdown
-              container={{marginTop: hp(2.5)}}
+              container={{ marginTop: hp(2.5) }}
               data={invenCategories}
               topLabelText={'Category'}
               labelFieldName={'label'}
@@ -1047,7 +1050,7 @@ export default function AddInventoriesClassified(props) {
               onChangeText={t => setClsDetails(t)}
             />
             <CustomButton
-              btnContainer={{...styles.submitBtnContainer, alignSelf: 'center'}}
+              btnContainer={{ ...styles.submitBtnContainer, alignSelf: 'center' }}
               btnText="Submit"
               btnTextStyles={styles.btnTextStyles}
               indicator={clsIndicator}
@@ -1057,7 +1060,7 @@ export default function AddInventoriesClassified(props) {
           </View>
         )}
 
-        <View style={{height: hp(8)}}></View>
+        <View style={{ height: hp(8) }}></View>
       </ScrollView>
     </SafeAreaView>
   );
