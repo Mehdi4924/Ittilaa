@@ -11,7 +11,7 @@ import { hp } from './Src/Constants/Responsive';
 import { colors } from './Src/Constants/Colors';
 
 function StatusBarPlaceHolder() {
-  const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? hp('4.5%') : hp('0%');
+  const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? hp('6%') : hp('0%');
   return (
     <View
       style={{

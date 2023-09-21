@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ittilaa</string>
+    <string name="facebook_app_id">810293980560139</string>
+    <string name="facebook_client_token">fc30eb81151c91e17b5000bb2e06868a</string>
 </resources>
