@@ -21,7 +21,7 @@ export default function NewsFlatList(props) {
           />
           <Text style={props.featureNameText} numberOfLines={3}>
             {props?.news
-              ? `${item.description}`
+              ? `${item.description.replace(/<[^>]+>/g, '')}`
               : `${item?.title} working with ${item.developer_name}`}
           </Text>
         </View>

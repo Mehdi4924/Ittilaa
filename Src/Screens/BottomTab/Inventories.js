@@ -2,7 +2,9 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Platform,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -25,7 +27,7 @@ import EmptyComponent from '../../Components/EmptyComponent';
 import CustomLoader from '../../Components/CustomLoader';
 import FilterComp from '../../Components/FilterComp';
 import InventoriesFilter from '../../Components/InventoriesFilter';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView} from 'react-native';
 
 var dataCopy = [];
 export default function Inventories(props) {
@@ -46,6 +48,12 @@ export default function Inventories(props) {
     }, []),
   );
 
+  useFocusEffect(()=>{
+    StatusBar.setBarStyle('light-content')
+    if(Platform.OS=='android'){
+      StatusBar.setBackgroundColor(colors.primary)
+    }
+  })
   const Inventories = () => {
     setLoading(true);
     AppFlow.allInventories()
@@ -89,10 +97,7 @@ export default function Inventories(props) {
     data.append('price_unit', filterData?.priceUnit || '');
     AppFlow.inventoryFilter(data)
       .then(function (response) {
-        // console.log(
-        //   'responseeee filtering data',
-        //   JSON.stringify(response?.data, null, 2),
-        // );
+        console.log('responseeee filtering data', response?.data);
         setListData(response?.data?.data);
       })
       .catch(function (error) {
@@ -179,13 +184,15 @@ export default function Inventories(props) {
                       inventories[0]?.agency?.file.length
                         ? {
                             uri:
-                              URL.imageURL + inventories[0]?.agency?.file[0]?.file,
+                              URL.imageURL +
+                              inventories[0]?.agency?.file[0]?.file,
                           }
                         : {
                             uri:
-                              URL.imageURL + inventories[0]?.agency?.file[0]?.file,
+                              URL.imageURL +
+                              inventories[0]?.agency?.file[0]?.file,
                           }
-                        // allImages.logo1
+                      // allImages.logo1
                     }
                     style={styles.listImage}
                     resizeMode="contain"
@@ -273,7 +280,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(1),
-    height:hp(7)
+    height: hp(7),
   },
   textInputStyle: {
     width: wp(58),

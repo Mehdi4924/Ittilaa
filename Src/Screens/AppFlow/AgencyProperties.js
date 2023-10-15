@@ -30,10 +30,7 @@ export default function AgencyProperties(props) {
   const getData = () => {
     AppFlow.agencyProperties(id)
       .then(function (response) {
-        // console.log(
-        //   'success getting agency data',
-        //   JSON.stringify(response.data, null, 2),
-        // );
+        console.log('success getting agency data', response);
         setInventData(response.data.data.inventory);
       })
       .catch(function (error) {
@@ -64,7 +61,6 @@ export default function AgencyProperties(props) {
       <Text style={styles.titleText}>Agency Properties</Text>
       <FlatList
         data={inventData}
-          
         ListEmptyComponent={
           <EmptyComponent emptyContainer={{height: hp(10), width: wp(90)}} />
         }
@@ -76,7 +72,7 @@ export default function AgencyProperties(props) {
         }}
         renderItem={({item, index}) => {
           const inventories = item.inventory_data;
-          if (inventories.length > 0) {
+          if (inventories?.length > 0) {
             return (
               <View style={styles.listContainer}>
                 <View style={styles.listLeftView}>
@@ -175,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(2),
     marginTop: hp(1),
-    height:hp(7)
+    height: hp(7),
   },
   textInputStyle: {
     width: wp(75),

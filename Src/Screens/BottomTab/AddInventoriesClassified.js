@@ -318,7 +318,7 @@ export default function AddInventoriesClassified(props) {
       console.log(data);
       AppFlow.createEnventory(data)
         .then(function (response) {
-          // console.log('responseeee', JSON.stringify(response, null, 2));
+          console.log('responseeee', response);
           UnSubscribeToTopic();
           Toast.show('Inventory Submited Successfuly', Toast.SHORT);
           axios.defaults.headers['Content-Type'] = 'multipart/form-data';
@@ -328,8 +328,7 @@ export default function AddInventoriesClassified(props) {
           sendNotification(notTitle, notBody);
         })
         .catch(function (error) {
-          // console.log('responseeee', JSON.stringify(error, null, 2));
-          console.log(error);
+          console.log('error', error);
         })
         .finally(function () {
           setIndicator(false);

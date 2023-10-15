@@ -227,7 +227,7 @@ export default function ClassifiedDetails(props) {
             </View>
             <Text style={styles.addTitle}>{data?.title}</Text>
             <Text style={styles.descText}>Description</Text>
-            <Text style={styles.descDetailsText}>{data?.description}</Text>
+            <Text style={styles.descDetailsText}>{data?.description?.replace(/<[^>]+>/g, '')}</Text>
             {/* <Text style={styles.descText}>Location</Text>
           <TouchableOpacity>
             <Image

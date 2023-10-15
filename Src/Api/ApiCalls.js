@@ -63,6 +63,7 @@ export const AppFlow = {
   getPaymentPlan: id => requests.get(`payment-plan/${id}`),
   addFavourite: id => requests.get(`inventory/add-favourite/${id}`),
   getFavourites: () => requests.get(`inventory/get-favourite/list`),
+  userDeactive: () => requests.get(`user-block`),
 };
 
 export const GetCities = {

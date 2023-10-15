@@ -1,4 +1,11 @@
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Icon} from '@rneui/themed';
@@ -8,12 +15,14 @@ import {fonts} from '../../Constants/Fonts';
 import {color} from '@rneui/base';
 import {AppFlow} from '../../Api/ApiCalls';
 import CustomLoader from '../../Components/CustomLoader';
-
+import Modal from 'react-native-modal';
+import CustomButton from '../../Components/CustomButton';
 const dummUri =
   'https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic-300x300.jpg';
 export default function Profile(props) {
   const [parseUser, setParseUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteModal, setDeleteModal] = useState(false);
   useEffect(() => {
     getAgencyDetail();
   }, []);
@@ -34,7 +43,6 @@ export default function Profile(props) {
           setLogoFileName(
             'https://ittelaapp.com/' + response?.data?.data?.file[0]?.file,
           );
-
         }
       })
       .catch(function (error) {
@@ -44,11 +52,29 @@ export default function Profile(props) {
         setIsLoading(false);
       });
   };
+  const DeactiveUser = async () => {
+    await AppFlow.userDeactive()
+      .then(res => {
+        console.log('response while de activating user', res);
+        AsyncStorage.clear(),
+          props.navigation.navigate('AuthStack', {
+            screen: 'Login',
+            params: {data: {...parseUser, agencyImage: logoFileName}},
+          });
+      })
+      .then(err => {
+        console.log('error while de activating user', err);
+      });
+  };
   return (
     <View style={styles.container}>
       <CustomLoader isLoading={isLoading} />
 
-      <View style={[styles.header, Platform.OS=='ios'?{marginTop:hp(5)}:null]}>
+      <View
+        style={[
+          styles.header,
+          Platform.OS == 'ios' ? {marginTop: hp(5)} : null,
+        ]}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon
             name={'arrow-back-circle'}
@@ -116,6 +142,22 @@ export default function Profile(props) {
               </View>
             </TouchableOpacity>
           </View>
+          <View style={styles.itemContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                setDeleteModal(true);
+              }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
+                  name={'delete'}
+                  type={'meterial'}
+                  color={colors.primary}
+                  size={hp(3)}
+                />
+                <Text style={styles.text}>Deactivate Account</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
           <View style={{...styles.itemContainer, marginTop: hp(30)}}>
             <TouchableOpacity
               onPress={() => {
@@ -138,6 +180,39 @@ export default function Profile(props) {
           </View>
         </>
       )}
+      <Modal
+        animationType="slide"
+        // transparent={true}
+        visible={deleteModal}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setDeleteModal(false);
+        }}>
+        <View style={styles.modalView}>
+          <Text style={styles.text2}>
+            Do you want to de active your account?
+          </Text>
+          <View style={styles.btnsViewCont}>
+            <CustomButton
+              btnText="Cancel"
+              btnContainer={{
+                ...styles.btnContainer,
+                backgroundColor: colors.grey,
+              }}
+              btnTextStyles={styles.btnTextStyles}
+              onPress={() => setDeleteModal(false)}
+            />
+            <CustomButton
+              btnText="Confirm"
+              btnContainer={styles.btnContainer}
+              btnTextStyles={styles.btnTextStyles}
+              onPress={() => {
+                DeactiveUser(), setDeleteModal(false);
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -188,5 +263,39 @@ const styles = StyleSheet.create({
   editText: {
     fontFamily: fonts.medium,
     color: colors.white,
+  },
+  modalView: {
+    width: wp(90),
+    backgroundColor: colors.white,
+    alignSelf: 'center',
+    alignItems: 'center',
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(1.5),
+  },
+  text2: {
+    fontFamily: fonts.semiBold,
+    fontSize: 18,
+    color: colors.black,
+    textAlign: 'center',
+  },
+  btnsViewCont: {
+    flexDirection: 'row',
+    width: wp(80),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: hp(2),
+  },
+  btnContainer: {
+    width: wp(35),
+    height: hp(5),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+  },
+  btnTextStyles: {
+    color: colors.white,
+    fontFamily: fonts.regular,
+    fontSize: hp(2.2),
   },
 });

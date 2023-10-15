@@ -68,7 +68,7 @@ export default function NewsDetails(props) {
         <View style={{marginHorizontal: wp(5), marginTop: hp(2)}}>
           <Text style={styles.newsHeadingStyle}>{screenData?.title || ''}</Text>
           <Text style={styles.newsDetailsText}>
-            {screenData?.description || ''}
+            {screenData?.description.replace(/<[^>]+>/g, '') || ''}
           </Text>
         </View>
       </ScrollView>

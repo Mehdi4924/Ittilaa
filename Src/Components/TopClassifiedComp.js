@@ -34,7 +34,7 @@ export default function TopClassifiedComp(props) {
         </View>
         <View></View>
         <Text style={props.classifiedAddressStyle} numberOfLines={3}>
-          {item?.description || 'Loading'}
+          {item?.description?.replace(/<[^>]+>/g, '') || 'Loading'}
         </Text>
         <View style={styles.classifiedAmenitiesContainer}>
           <View style={props.classifiedAmenities}>
