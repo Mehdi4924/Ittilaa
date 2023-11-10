@@ -25,20 +25,20 @@
 		0464E59129D59BED00574F45 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 044DDB1B29D2CC5500257BD4 /* SimpleLineIcons.ttf */; };
 		0464E59229D59BED00574F45 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 044DDB1C29D2CC5500257BD4 /* MaterialIcons.ttf */; };
 		04C38EBE29D40F0000C3F00A /* Mapbox in Frameworks */ = {isa = PBXBuildFile; productRef = B456EE6B1796CE555CAF9AC3 /* Mapbox */; };
-		0A9EAC8EC9FD03D47A8D0522 /* Pods_Ittilaa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3612C16AA723EE3AFCB4027D /* Pods_Ittilaa.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2342B7CEBFB0076867941F44 /* libPods-Ittilaa-IttilaaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BA0FC5F13CDFB2B1F93803 /* libPods-Ittilaa-IttilaaTests.a */; };
 		2A53DC53099240508433F0D8 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72C935807D1849BC8CB645C5 /* Poppins-Regular.ttf */; };
 		44FE53C8A47F4B28BA714B31 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EB2CB3A939545B7B789F4C4 /* Poppins-Light.ttf */; };
 		570D42E82A673210003A5E8F /* Mapbox in Frameworks */ = {isa = PBXBuildFile; productRef = 570D42E72A673210003A5E8F /* Mapbox */; };
 		5AA06F129E474A0BA134AD79 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 181DB946FF1248C0BA56569D /* Poppins-Medium.ttf */; };
+		7FC98B4BE9BE34AD411CBB4C /* libPods-Ittilaa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09940633B2836AB4CDDE7707 /* libPods-Ittilaa.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		904F797D933FC879CAC83464 /* Pods_Ittilaa_IttilaaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0B90AFC32A0D86B689F1131 /* Pods_Ittilaa_IttilaaTests.framework */; };
 		AD9BB36B575641F8AF01DCA4 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8A5E645679494FB5A1409E0F /* Poppins-Bold.ttf */; };
 		E5C495D6DE9D44DFBC769DE6 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50FA0FA8202C41F19228098B /* Poppins-SemiBold.ttf */; };
 		FA309A062AAB406100720807 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = FA309A042AAB402500720807 /* main.jsbundle */; };
-		FA5C0FB12AAF8CFA00E0C96C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA5C0FB02AAF8CFA00E0C96C /* GoogleService-Info.plist */; };
+		FA58890C2AFE89C600416E07 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA58890B2AFE89C600416E07 /* GoogleService-Info.plist */; };
 		FA8FBFE62AB0B4CC007E6E09 /* agency-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FA8FBFD12AB0B4CC007E6E09 /* agency-icon.png */; };
 		FA8FBFE72AB0B4CC007E6E09 /* feature1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA8FBFD22AB0B4CC007E6E09 /* feature1.jpg */; };
 		FA8FBFE82AB0B4CC007E6E09 /* feature2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA8FBFD32AB0B4CC007E6E09 /* feature2.jpg */; };
@@ -98,6 +98,7 @@
 		044DDB4329D2D50D00257BD4 /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNShare.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		04C38EC929D40F8A00C3F00A /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNShare.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0520EDCD117C4502B7C19CE7 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = ../android/app/src/main/assets/fonts/MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		09940633B2836AB4CDDE7707 /* libPods-Ittilaa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Ittilaa.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Ittilaa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ittilaa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Ittilaa/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Ittilaa/AppDelegate.mm; sourceTree = "<group>"; };
@@ -107,7 +108,6 @@
 		181DB946FF1248C0BA56569D /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		1C3BA34931454F004F8229FB /* Pods-Ittilaa-IttilaaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ittilaa-IttilaaTests.debug.xcconfig"; path = "Target Support Files/Pods-Ittilaa-IttilaaTests/Pods-Ittilaa-IttilaaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2C0CEE71E6524122B24CA710 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../android/app/src/main/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
-		3612C16AA723EE3AFCB4027D /* Pods_Ittilaa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ittilaa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		422C46FF16D145F0820AC85E /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = ../android/app/src/main/assets/fonts/AntDesign.ttf; sourceTree = "<group>"; };
 		4E5C73C04B9A4E1381676F19 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = ../android/app/src/main/assets/fonts/Ionicons.ttf; sourceTree = "<group>"; };
 		50FA0FA8202C41F19228098B /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 		AD580AE582A6437E914C7E3A /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../android/app/src/main/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		B2B2B344907441879BD7F37A /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../android/app/src/main/assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
 		B2F1921FADA144F182789A5F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = ../android/app/src/main/assets/fonts/Octicons.ttf; sourceTree = "<group>"; };
-		C0B90AFC32A0D86B689F1131 /* Pods_Ittilaa_IttilaaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ittilaa_IttilaaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6BA0FC5F13CDFB2B1F93803 /* libPods-Ittilaa-IttilaaTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Ittilaa-IttilaaTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C423A0C7CB570BCE230FF75A /* Pods-Ittilaa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ittilaa.release.xcconfig"; path = "Target Support Files/Pods-Ittilaa/Pods-Ittilaa.release.xcconfig"; sourceTree = "<group>"; };
 		C6C08398A5B8491AA393C12C /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = ../android/app/src/main/assets/fonts/Entypo.ttf; sourceTree = "<group>"; };
 		D76F4BEB61BA40539BB3A32B /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = ../android/app/src/main/assets/fonts/Fontisto.ttf; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		F2D6894F321949AB9562987F /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = ../android/app/src/main/assets/fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
 		F65F0910ADC5464F92B0E1C6 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = ../android/app/src/main/assets/fonts/Zocial.ttf; sourceTree = "<group>"; };
 		FA309A042AAB402500720807 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		FA5C0FB02AAF8CFA00E0C96C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FA58890B2AFE89C600416E07 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA8FBFD12AB0B4CC007E6E09 /* agency-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agency-icon.png"; sourceTree = "<group>"; };
 		FA8FBFD22AB0B4CC007E6E09 /* feature1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = feature1.jpg; sourceTree = "<group>"; };
 		FA8FBFD32AB0B4CC007E6E09 /* feature2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = feature2.jpg; sourceTree = "<group>"; };
@@ -168,7 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04C38EBE29D40F0000C3F00A /* Mapbox in Frameworks */,
-				904F797D933FC879CAC83464 /* Pods_Ittilaa_IttilaaTests.framework in Frameworks */,
+				2342B7CEBFB0076867941F44 /* libPods-Ittilaa-IttilaaTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,7 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				570D42E82A673210003A5E8F /* Mapbox in Frameworks */,
-				0A9EAC8EC9FD03D47A8D0522 /* Pods_Ittilaa.framework in Frameworks */,
+				7FC98B4BE9BE34AD411CBB4C /* libPods-Ittilaa.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,8 +248,8 @@
 				044DDB0829D2C95300257BD4 /* Social.framework */,
 				044DDB0629D2C90800257BD4 /* libRNShare.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				3612C16AA723EE3AFCB4027D /* Pods_Ittilaa.framework */,
-				C0B90AFC32A0D86B689F1131 /* Pods_Ittilaa_IttilaaTests.framework */,
+				09940633B2836AB4CDDE7707 /* libPods-Ittilaa.a */,
+				B6BA0FC5F13CDFB2B1F93803 /* libPods-Ittilaa-IttilaaTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -264,8 +264,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FA58890B2AFE89C600416E07 /* GoogleService-Info.plist */,
 				FA8FBFCF2AB0B4CC007E6E09 /* Assets */,
-				FA5C0FB02AAF8CFA00E0C96C /* GoogleService-Info.plist */,
 				044DDB0C29D2CC5500257BD4 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* Ittilaa */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -479,7 +479,6 @@
 				FA8FBFF42AB0B4CD007E6E09 /* logo22.png in Resources */,
 				FA8FBFF22AB0B4CD007E6E09 /* classified.jpeg in Resources */,
 				FA8FBFF82AB0B4CD007E6E09 /* social.png in Resources */,
-				FA5C0FB12AAF8CFA00E0C96C /* GoogleService-Info.plist in Resources */,
 				0464E58529D59BED00574F45 /* Feather.ttf in Resources */,
 				0464E58629D59BED00574F45 /* Entypo.ttf in Resources */,
 				0464E58729D59BED00574F45 /* FontAwesome5_Brands.ttf in Resources */,
@@ -494,6 +493,7 @@
 				FA8FBFF12AB0B4CD007E6E09 /* agency-dummy.png in Resources */,
 				0464E58C29D59BED00574F45 /* FontAwesome5_Solid.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				FA58890C2AFE89C600416E07 /* GoogleService-Info.plist in Resources */,
 				FA8FBFF92AB0B4CD007E6E09 /* bg.png in Resources */,
 				FA8FBFE82AB0B4CC007E6E09 /* feature2.jpg in Resources */,
 				0464E58D29D59BED00574F45 /* FontAwesome5_Regular.ttf in Resources */,
@@ -777,7 +777,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 325F9S2M56;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -858,7 +858,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -882,7 +882,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 325F9S2M56;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
@@ -964,7 +964,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {fonts} from '../../Constants/Fonts';
-import {hp, wp} from '../../Constants/Responsive';
-import {colors} from '../../Constants/Colors';
+import { fonts } from '../../Constants/Fonts';
+import { hp, wp } from '../../Constants/Responsive';
+import { colors } from '../../Constants/Colors';
 import CustomTextInput from '../../Components/CustomTextInput';
 import CustomButton from '../../Components/CustomButton';
-import {useState} from 'react';
+import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Auth} from '../../Api/ApiCalls';
+import { Auth } from '../../Api/ApiCalls';
 import Toast from 'react-native-simple-toast';
 import axios from 'axios';
 export default function Login(props) {
@@ -44,11 +44,19 @@ export default function Login(props) {
           props.navigation.navigate('BottomNavigator');
         })
         .catch(function (error) {
-          console.log(error);
-          Toast.show(
-            error?.response?.data?.message || 'Error Occured Logging In',
-            Toast.SHORT,
-          );
+          console.log(error.response);
+          if (error?.response?.data?.message == 'Your Account is suspended, please contact with Admin!') {
+
+            Toast.show(
+              'Invalid Credentials',
+              Toast.SHORT,
+            );
+          } else {
+            Toast.show(
+              error?.response?.data?.message || 'Error Occured Logging In',
+              Toast.SHORT,
+            );
+          }
         })
         .finally(function () {
           setIndicator(false);
@@ -68,8 +76,8 @@ export default function Login(props) {
           placeholder="Please mobile or email"
           value={phoneNumber}
           onChangeText={t => setPhoneNumber(t)}
-          textInputContainer={{marginVertical: hp(2), marginTop: hp(4)}}
-          // keyboardType="phone-pad"
+          textInputContainer={{ marginVertical: hp(2), marginTop: hp(4) }}
+        // keyboardType="phone-pad"
         />
         <CustomTextInput
           iconName={'lock'}
@@ -78,7 +86,7 @@ export default function Login(props) {
           topText="Password"
           value={password}
           onChangeText={t => setPassword(t)}
-          textInputContainer={{marginVertical: hp(1)}}
+          textInputContainer={{ marginVertical: hp(1) }}
           iconSize={hp(4)}
           secureTextEntry={confPasswordSecure}
           rightIcon
@@ -87,16 +95,16 @@ export default function Login(props) {
           rightIconPress={() => setConfPasswordSecure(!confPasswordSecure)}
         />
         <TouchableOpacity
-          style={{width: wp(90), alignItems: 'flex-end'}}
+          style={{ width: wp(90), alignItems: 'flex-end' }}
           onPress={() => props.navigation.navigate('ForgotPass')}>
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <CustomButton
             btnText="Login"
             indicator={indicator}
             onPress={Login}
-            btnContainer={{marginTop: hp(20)}}
+            btnContainer={{ marginTop: hp(20) }}
           />
           <Text style={styles.orText}>- OR -</Text>
           <CustomButton
@@ -112,9 +120,9 @@ export default function Login(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.tertiary, alignItems: 'center'},
-  continueText: {fontFamily: fonts.regular, fontSize: hp(2), marginTop: hp(1)},
-  welcomeText: {fontFamily: fonts.bold, fontSize: hp(2.5), marginTop: hp(20)},
+  container: { flex: 1, backgroundColor: colors.tertiary, alignItems: 'center' },
+  continueText: { fontFamily: fonts.regular, fontSize: hp(2), marginTop: hp(1) },
+  welcomeText: { fontFamily: fonts.bold, fontSize: hp(2.5), marginTop: hp(20) },
   btnContainer: {
     backgroundColor: colors.secondary,
   },

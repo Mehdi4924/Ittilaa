@@ -18,7 +18,7 @@ target 'Ittilaa' do
   pod 'React', :path => '../node_modules/react-native/'
   pod 'React-Core/DevSupport', :path => '../node_modules/react-native/'
   
-  use_frameworks! :linkage => :static
+  # use_frameworks! :linkage => :static
   use_react_native!(
     :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
